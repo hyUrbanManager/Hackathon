@@ -1,0 +1,141 @@
+// sdk自动化构建脚本。
+// author: hy
+// date: 2018/2/22
+//
+// 说明：
+// 执行任务：
+// windows：gradlew.bat -q -b buildSdk.gradle buildSdk
+// linux： gradle -q -b buildSdk.gradle buildSdk
+// 以防止缺少相应文件而造成构建失败，请先执行build操作，生成release版apk文件。即 gradlew.bat app:assembleRelease。
+//
+// 如果需要多个sdk构建脚本，复制本文件即可。
+
+apply plugin: 'java'
+
+///////////////////////////////////////////////////////////////////////////////
+// 手动配置区
+
+// 版本。
+def version = '1.0.0'
+
+// 打包哪些Android module。
+def projectsName = [
+        'hackathon1',
+        'hackathon2',
+        'niukewang',
+        'security',
+]
+
+// 打包的jar包名称。
+def jarName = 'hy-hackathon'
+
+// 额外需要打包的jar包路径，常为工程libs目录下的jar。
+def jarInclude = [
+]
+
+// jar包过滤的目录以及文件。*通配符，*表示目录下所有文件（不包括子目录），**表示目录下所有文件（包括子目录）。
+def jarExclude = [
+]
+
+// javadoc过滤的目录以及文件。*通配符，*表示目录下所有文件（不包括子目录），**表示目录下所有文件（包括子目录）。
+def javadocExclude = [
+]
+///////////////////////////////////////////////////////////////////////////////
+
+
+def classesDir = '/build/intermediates/classes/release'
+def jniLibDir = '/build/intermediates/jniLibs/release'
+def cmakeLibDir = '/build/intermediates/cmake/release/obj'
+def jarFileName = jarName + '_' + version + '.jar'
+def desSdkDir = 'build/sdk/'
+
+task cleanJar(type: Delete) {
+    delete desSdkDir + 'jar'
+}
+
+// 生成Jar包。
+task makeJar(dependsOn: [cleanBuild], type: Jar) {
+    doFirst {
+        println 'start makeJar. projects name: ' + projectsName
+    }
+
+    def src = []
+    for (int i = 0; i < projectsName.size(); i++) {
+        def file = new File(projectsName[i], classesDir)
+        if (!file.exists()) {
+            throw new Exception(file.absolutePath + ' is not exist. please build java first.')
+        }
+        src.add(file)
+    }
+
+    for (int i = 0; i < jarInclude.size(); i++) {
+        from project.zipTree(jarInclude[i])
+    }
+
+    exclude 'android/', 'test/', '**/BuildConfig.class', 'R.class',
+            '**/R.class', '**/R$**.class'
+    exclude jarExclude
+
+    // set.
+    archiveName = jarFileName
+    from src
+    destinationDir = new File(desSdkDir, 'jar')
+    setVersion version
+}
+
+task cleanSoLib(type: Delete) {
+    delete desSdkDir + 'so'
+}
+
+task moveSoLib(dependsOn: [cleanSoLib], type: Copy) {
+    doFirst {
+        println 'start move so lib. projects name: ' + projectsName
+    }
+
+    for (int i = 0; i < projectsName.size(); i++) {
+        from projectsName[i] + cmakeLibDir
+        from projectsName[i] + jniLibDir
+    }
+    into desSdkDir + 'so'
+}
+
+task cleanJavaDocs(type: Delete) {
+    delete desSdkDir + 'javadoc'
+}
+
+// 生成JavaDoc. protected级别。
+task generateJavaDocs(dependsOn: [cleanJavaDocs], type: Javadoc) {
+    def srcFiles = []
+    for (int i = 0; i < projectsName.size(); i++) {
+        srcFiles.add(projectsName[i] + '/src/main/java/')
+    }
+    source = project.files srcFiles
+
+    // 加入Android包 android.jar引用，以防止找不到符号。使用sdk25。
+    Properties pro = new Properties()
+    pro.load(project.file('local.properties').newInputStream())
+    classpath += project.files pro.get('sdk.dir') + '\\platforms\\android-25\\android.jar'
+
+    exclude javadocExclude
+
+    options.encoding 'utf-8'
+    options.charSet 'utf-8'
+    options.author false
+    options.docTitle 'hy'
+    options.footer 'hy'
+
+    title = 'hy'
+
+    destinationDir = new File(desSdkDir + 'javadoc/')
+}
+
+task cleanBuildSdk(type: Delete) {
+    delete desSdkDir
+}
+
+// 生成sdk包。
+task buildSdk(dependsOn: [cleanBuildSdk, makeJar, moveSoLib, generateJavaDocs]) {
+    doLast {
+        println 'build sdk success.'
+    }
+}
