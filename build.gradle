@@ -1,0 +1,148 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext.kotlin_version = '1.1.51'
+    repositories {
+        jcenter()
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.0'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        google()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+def jarName = 'hackathon'
+def version = '1.0.0'
+def fileName = jarName + '_' + version + '.jar'
+def path = '/libs/'
+
+task cleanJar(type: Delete) {
+    doFirst {
+        println 'hy clean jar.'
+    }
+    delete rootProject.buildDir.absolutePath + path + fileName
+}
+
+task makeJar(dependsOn: [getTasksByName('compileJava', false), cleanJar], type: Jar) {
+    doFirst {
+        println 'hy make jar'
+    }
+
+    def buildPath = '/classes/java/main/'
+    def projectsName = [
+            'hackathon1',
+            'hackathon2',
+            'niukewang'
+    ]
+    def src = []
+
+    for (int i = 0; i < projectsName.size(); i++) {
+        src.add(rootProject.childProjects[projectsName[i]].buildDir.absolutePath + buildPath)
+    }
+
+    // set.
+    archiveName = fileName
+    from src
+    destinationDir new File(rootProject.buildDir, path)
+}
+
+//task proJar(type: Proguard) {
+//
+//}
+
+
+def content = 'hello, world!'
+
+// 练习。
+
+// dynamic task
+5.times { counter ->
+    task "dynamicTask$counter" {
+        doLast {
+            println "$content $counter"
+        }
+    }
+}
+dynamicTask4.dependsOn dynamicTask0, dynamicTask1, dynamicTask3
+
+ext {
+    versionCode = 10
+}
+
+task t1 {
+    ext.versionCode = 12
+}
+
+task t2(dependsOn: [t1]) {
+    doLast {
+        println "versionCode: $versionCode"
+    }
+}
+
+task argTask1 { arg ->
+    print "arg: $arg"
+}
+
+
+task(copyTask, type: Copy) {
+
+}
+
+//Task.create(name: 'copyTask2', type: Copy) {
+//
+//}
+
+task copyMyFile(type: Copy) {
+    from 'folder1', {
+        exclude '**/*.xml'
+    }
+
+    from 'folder2', {
+        exclude '**/*.properties'
+    }
+
+    from 'folder3'
+    into 'folder4'
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

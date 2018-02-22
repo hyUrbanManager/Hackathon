@@ -1,0 +1,46 @@
+apply plugin: 'java'
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'junit:junit:4.12'
+}
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+// 执行java主函数。
+task execJavaMain(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+
+    main = 'com.SortMain'
+
+    args = ['123', '456', 'arg4']
+}
+
+configurations {
+    jaxDoclet
+}
+
+task cleanJavaDocs(type: Delete) {
+    delete project.buildDir.absolutePath + '/docs/javadoc/'
+}
+
+// 生成JavaDoc
+task generateJavaDocs(dependsOn: [cleanJavaDocs], type: Javadoc) {
+    source = sourceSets.main.allJava
+
+    options.encoding = 'UTF-8'
+
+    exclude 'com/ListMain.java', 'com/FastPrint.java', 'com/MyTest.java'
+    exclude 'com/disjointset/*.java'
+
+//    destinationDir = reporting.file("rest-api-docs")
+//
+//    options.docletpath = configurations.jaxDoclet.files.asType(List)
+//    options.doclet = "com.lunatech.doclets.jax.jaxrs.JAXRSDoclet"
+//    options.addStringOption("jaxrscontext", "http://localhost:8080/myapp")
+}
