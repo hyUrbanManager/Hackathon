@@ -89,8 +89,8 @@ public class Formatter {
      * 转换字符。
      *
      * @param b
-     * @param code 0->unicode,
-     *             1->ascii。
+     * @param code 0-&gt;unicode,
+     *             1-&gt;ascii。
      * @return string
      */
     public static String newString(byte[] b, int code) {
@@ -107,7 +107,7 @@ public class Formatter {
      * 2个字节按照大端方式组合。
      * 因为以下代码执行时在byte大于0x80时高位会出现反码，不能达到要求，封装一个方法来实现字节组合。
      * <p>
-     * int totalItem = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | (data[3]);
+     * int totalItem = (data[0] &lt;&lt; 24) | (data[1] &lt;&lt; 16) | (data[2] &lt;&lt; 8) | (data[3]);
      *
      * @param b1
      * @param b2
@@ -121,7 +121,7 @@ public class Formatter {
      * 4个字节按照大端方式组合。
      * 因为以下代码执行时在byte大于0x80时高位会出现反码，不能达到要求，封装一个方法来实现字节组合。
      * <p>
-     * int totalItem = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | (data[3]);
+     * int totalItem = (data[0] &lt;&lt; 24) | (data[1] &lt;&lt; 16) | (data[2] &lt;&lt; 8) | (data[3]);
      *
      * @param b1
      * @param b2

@@ -39,11 +39,13 @@ def jarExclude = [
 
 // javadoc过滤的目录以及文件。*通配符，*表示目录下所有文件（不包括子目录），**表示目录下所有文件（包括子目录）。
 def javadocExclude = [
+        'com/hy/niukewang/**.txt',
+        'com/hy/niukewang/**.dat'
 ]
 ///////////////////////////////////////////////////////////////////////////////
 
 
-def classesDir = '/build/intermediates/classes/release'
+def classesDir = '/build/classes/java/main'
 def jniLibDir = '/build/intermediates/jniLibs/release'
 def cmakeLibDir = '/build/intermediates/cmake/release/obj'
 def jarFileName = jarName + '_' + version + '.jar'

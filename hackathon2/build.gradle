@@ -1,5 +1,4 @@
 apply plugin: 'java'
-apply plugin: 'kotlin'
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
@@ -8,19 +7,14 @@ tasks.withType(JavaCompile) {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'junit:junit:4.12'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     compile 'org.jetbrains.anko:anko-sdk15:0.8.3'
 }
 
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 buildscript {
-    ext.kotlin_version = '1.1.51'
     repositories {
         mavenCentral()
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 repositories {
