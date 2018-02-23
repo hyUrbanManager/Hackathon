@@ -259,5 +259,180 @@ public class HtmlRequest {
 
     // Warning 关于消息实体的警告信息 Warn:199Miscellaneous warning
     public String Warning;
+
+    // 请求头第一句 GET /video1.wmv HTTP/1.1
+    public String head;
+
+    /**
+     * 解析html语句。
+     *
+     * @param raw
+     * @return
+     */
+    public static HtmlRequest parseString(String raw) throws HtmlParseException {
+        if (!raw.endsWith("\r\n\r\n")) {
+            throw new HtmlParseException("raw is not end with \\r\\n\\r\\n");
+        }
+        raw = raw.substring(0, raw.length() - 2);
+
+        HtmlRequest hr = new HtmlRequest();
+
+        String[] map = raw.split("\r\n");
+        try {
+            hr.head = map[0];
+            for (int i = 1; i < map.length; i++) {
+                String entry = map[i];
+                String[] ss = entry.split(": ");
+                String key = ss[0];
+                String content = ss[1];
+                switch (key) {
+                    case "Accept":
+                        hr.Accept = content;
+                        break;
+                    case "Accept-Charset":
+                        hr.AcceptCharset = content;
+                        break;
+                    case "Accept-Encoding":
+                        hr.AcceptEncoding = content;
+                        break;
+                    case "Accept-Language":
+                        hr.AcceptLanguage = content;
+                        break;
+                    case "Accept-Ranges":
+                        hr.AcceptRanges = content;
+                        break;
+                    case "Authorization":
+                        hr.Authorization = content;
+                        break;
+                    case "Cache-Control":
+                        hr.CacheControl = content;
+                        break;
+                    case "Connection":
+                        hr.Connection = content;
+                        break;
+                    case "Cookie":
+                        hr.Cookie = content;
+                        break;
+                    case "Content-Length":
+                        hr.ContentLength = content;
+                        break;
+                    case "Content-Type":
+                        hr.ContentType = content;
+                        break;
+                    case "Date":
+                        hr.Date = content;
+                        break;
+                    case "Expect":
+                        hr.Expect = content;
+                        break;
+                    case "From":
+                        hr.From = content;
+                        break;
+                    case "Host":
+                        hr.Host = content;
+                        break;
+                    case "If-Match":
+                        hr.IfMatch = content;
+                        break;
+                    case "If-Modified-Since":
+                        hr.IfModifiedSince = content;
+                        break;
+                    case "If-None-Match":
+                        hr.IfNoneMatch = content;
+                        break;
+                    case "If-Range":
+                        hr.IfRange = content;
+                        break;
+                    case "If-Unmodified-Since":
+                        hr.IfUnmodifiedSince = content;
+                        break;
+                    case "Max-Forwards":
+                        hr.MaxForwards = content;
+                        break;
+                    case "Pragma":
+                        hr.Pragma = content;
+                        break;
+                    case "Proxy-Authorization":
+                        hr.ProxyAuthorization = content;
+                        break;
+                    case "Range":
+                        hr.Range = content;
+                        break;
+                    case "Referer":
+                        hr.Referer = content;
+                        break;
+                    case "TE":
+                        hr.TE = content;
+                        break;
+                    case "Upgrade":
+                        hr.Upgrade = content;
+                        break;
+                    case "User-Agent":
+                        hr.UserAgent = content;
+                        break;
+                    case "Via":
+                        hr.Via = content;
+                        break;
+                    case "Warning":
+                        hr.Warning = content;
+                        break;
+                    default:
+                        throw new HtmlParseException("un recognize. key: " + key);
+                }
+            }
+        } catch (Exception e) {
+            throw new HtmlParseException("illegal raw", e);
+        }
+
+        return hr;
+    }
+
+    /**
+     * 数据模型生成html语句。
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        // head不能为空。
+        sb = head == null ? sb : sb.append(head).append("\r\n");
+
+        sb = Accept == null ? sb : sb.append("Accept").append(Accept).append("\r\n");
+        sb = AcceptCharset == null ? sb : sb.append("Accept-Charset: ").append(AcceptCharset).append("\r\n");
+        sb = AcceptEncoding == null ? sb : sb.append("Accept-Encoding: ").append(AcceptEncoding).append("\r\n");
+        sb = AcceptLanguage == null ? sb : sb.append("Accept-Language: ").append(AcceptLanguage).append("\r\n");
+        sb = AcceptRanges == null ? sb : sb.append("Accept-Ranges: ").append(AcceptRanges).append("\r\n");
+        sb = Authorization == null ? sb : sb.append("Authorization: ").append(Authorization).append("\r\n");
+        sb = CacheControl == null ? sb : sb.append("Cache-Control: ").append(CacheControl).append("\r\n");
+        sb = Connection == null ? sb : sb.append("Connection: ").append(Connection).append("\r\n");
+        sb = Cookie == null ? sb : sb.append("Cookie: ").append(Cookie).append("\r\n");
+        sb = ContentLength == null ? sb : sb.append("Content-Length: ").append(ContentLength).append("\r\n");
+        sb = ContentType == null ? sb : sb.append("Content-Type: ").append(ContentType).append("\r\n");
+        sb = Date == null ? sb : sb.append("Date: ").append(Date).append("\r\n");
+        sb = Expect == null ? sb : sb.append("Expect: ").append(Expect).append("\r\n");
+        sb = From == null ? sb : sb.append("From: ").append(From).append("\r\n");
+        sb = Host == null ? sb : sb.append("Host: ").append(Host).append("\r\n");
+        sb = IfMatch == null ? sb : sb.append("If-Match: ").append(IfMatch).append("\r\n");
+        sb = IfModifiedSince == null ? sb : sb.append("If-Modified-Since: ").append(IfModifiedSince).append("\r\n");
+        sb = IfNoneMatch == null ? sb : sb.append("If-None-Match: ").append(IfNoneMatch).append("\r\n");
+        sb = IfRange == null ? sb : sb.append("If-Range: ").append(IfRange).append("\r\n");
+        sb = IfUnmodifiedSince == null ? sb : sb.append("If-Unmodified-Since: ").append(IfUnmodifiedSince).append("\r\n");
+        sb = MaxForwards == null ? sb : sb.append("Max-Forwards: ").append(MaxForwards).append("\r\n");
+        sb = Pragma == null ? sb : sb.append("Pragma: ").append(Pragma).append("\r\n");
+        sb = ProxyAuthorization == null ? sb : sb.append("Proxy-Authorization: ").append(ProxyAuthorization).append("\r\n");
+        sb = Range == null ? sb : sb.append("Range: ").append(Range).append("\r\n");
+        sb = Referer == null ? sb : sb.append("Referer: ").append(Referer).append("\r\n");
+        sb = TE == null ? sb : sb.append("TE: ").append(TE).append("\r\n");
+        sb = Upgrade == null ? sb : sb.append("Upgrade: ").append(Upgrade).append("\r\n");
+        sb = UserAgent == null ? sb : sb.append("User-Agent: ").append(UserAgent).append("\r\n");
+        sb = Via == null ? sb : sb.append("Via: ").append(Via).append("\r\n");
+        sb = Warning == null ? sb : sb.append("Warning: ").append(Warning).append("\r\n");
+        sb.append("\r\n");
+        return sb.toString();
+    }
+
+
 }
 

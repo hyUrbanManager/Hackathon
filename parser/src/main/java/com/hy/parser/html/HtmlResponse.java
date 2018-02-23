@@ -161,7 +161,6 @@ package com.hy.parser.html;
  */
 public class HtmlResponse {
 
-
     // Accept-Ranges	表明服务器是否支持指定范围请求及哪种类型的分段请求	Accept-Ranges: bytes
     public String AcceptRanges;
 
@@ -248,5 +247,197 @@ public class HtmlResponse {
 
     // WWW-Authenticate	表明客户端请求实体应该使用的授权方案	WWW-Authenticate: Basic
     public String WWWAuthenticate;
+
+    // 响应头的第一句 HTTP/1.1 200 OK
+    public String head;
+
+    // 结项响应头第一句的结果。
+    public String protocol;
+
+    /**
+     * 状态码：100~199：表示成功接收请求，要求客户端继续提交下一次请求才能完成整个处理过程。
+     * 200~299：表示成功接收请求并已完成整个处理过程。常用200
+     * 300~399：为完成请求，客户需进一步细化请求。例如：请求的资源已经移动一个新地址、常用302（意味着你请求我，我让你去找别人）,307和304（我不给你这个资源，自己拿缓存）
+     * 400~499：客户端的请求有错误，常用404（意味着你请求的资源在web服务器中没有）403（服务器拒绝访问，权限不够）
+     * 500~599：服务器端出现错误，常用500
+     */
+    public int responseCode;
+
+    // 增加Connection字段 Connection: close
+    public String Connection;
+
+    /**
+     * 解析html语句。
+     *
+     * @param raw
+     * @return
+     */
+    public static HtmlResponse parseString(String raw) throws HtmlParseException {
+        if (!raw.contains("\r\n\r\n")) {
+            throw new HtmlParseException("raw is not contains \\r\\n\\r\\n");
+        }
+
+        int index = raw.indexOf("\r\n\r\n");
+        raw = raw.substring(0, index + 4);
+
+        HtmlResponse hr = new HtmlResponse();
+
+        String[] map = raw.split("\r\n");
+        try {
+            hr.head = map[0];
+
+            String[] headList = hr.head.split(" ");
+            hr.protocol = headList[0];
+            hr.responseCode = Integer.parseInt(headList[1]);
+
+            for (int i = 1; i < map.length; i++) {
+                String entry = map[i];
+                String[] ss = entry.split(": ");
+                String key = ss[0];
+                String content = ss[1];
+                switch (key) {
+                    case "Accept-Ranges":
+                        hr.AcceptRanges = content;
+                        break;
+                    case "Age":
+                        hr.Age = content;
+                        break;
+                    case "Allow":
+                        hr.Allow = content;
+                        break;
+                    case "Cache-Control":
+                        hr.CacheControl = content;
+                        break;
+                    case "Content-Encoding":
+                        hr.ContentEncoding = content;
+                        break;
+                    case "Content-Language":
+                        hr.ContentLanguage = content;
+                        break;
+                    case "Content-Length":
+                        hr.ContentLength = content;
+                        break;
+                    case "Content-Location":
+                        hr.ContentLocation = content;
+                        break;
+                    case "Content-MD5":
+                        hr.ContentMD5 = content;
+                        break;
+                    case "Content-Range":
+                        hr.ContentRange = content;
+                        break;
+                    case "Content-Type":
+                        hr.ContentType = content;
+                        break;
+                    case "Date":
+                        hr.Date = content;
+                        break;
+                    case "ETag":
+                        hr.ETag = content;
+                        break;
+                    case "Expires":
+                        hr.Expires = content;
+                        break;
+                    case "Last-Modified":
+                        hr.LastModified = content;
+                        break;
+                    case "Location":
+                        hr.Location = content;
+                        break;
+                    case "Pragma":
+                        hr.Pragma = content;
+                        break;
+                    case "Proxy-Authenticate":
+                        hr.ProxyAuthenticate = content;
+                        break;
+                    case "refresh":
+                        hr.refresh = content;
+                        break;
+                    case "Retry-After":
+                        hr.RetryAfter = content;
+                        break;
+                    case "Server":
+                        hr.Server = content;
+                        break;
+                    case "Set-Cookie":
+                        hr.SetCookie = content;
+                        break;
+                    case "Trailer":
+                        hr.Trailer = content;
+                        break;
+                    case "Transfer-Encoding":
+                        hr.TransferEncoding = content;
+                        break;
+                    case "Vary":
+                        hr.Vary = content;
+                        break;
+                    case "Via":
+                        hr.Via = content;
+                        break;
+                    case "Warning":
+                        hr.Warning = content;
+                        break;
+                    case "WWW-Authenticate":
+                        hr.WWWAuthenticate = content;
+                        break;
+                    case "Connection":
+                        hr.Connection = content;
+                        break;
+                    default:
+                        throw new HtmlParseException("un recognize. key: " + key);
+                }
+            }
+        } catch (Exception e) {
+            throw new HtmlParseException("illegal raw. " + e.getMessage());
+        }
+
+        return hr;
+    }
+
+    /**
+     * 数据模型生成html语句。
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        // head不能为空。
+        sb = head == null ? sb : sb.append(head).append("\r\n");
+
+        sb = AcceptRanges == null ? sb : sb.append("Accept-Ranges: ").append(AcceptRanges).append("\r\n");
+        sb = Age == null ? sb : sb.append("Age: ").append(Age).append("\r\n");
+        sb = Allow == null ? sb : sb.append("Allow: ").append(Allow).append("\r\n");
+        sb = CacheControl == null ? sb : sb.append("Cache-Control: ").append(CacheControl).append("\r\n");
+        sb = ContentEncoding == null ? sb : sb.append("Content-Encoding: ").append(ContentEncoding).append("\r\n");
+        sb = ContentLanguage == null ? sb : sb.append("Content-Language: ").append(ContentLanguage).append("\r\n");
+        sb = ContentLength == null ? sb : sb.append("Content-Length: ").append(ContentLength).append("\r\n");
+        sb = ContentLocation == null ? sb : sb.append("Content-Location: ").append(ContentLocation).append("\r\n");
+        sb = ContentMD5 == null ? sb : sb.append("ContentMD5: ").append(ContentMD5).append("\r\n");
+        sb = ContentRange == null ? sb : sb.append("Content-Range: ").append(ContentRange).append("\r\n");
+        sb = ContentType == null ? sb : sb.append("Content-Type: ").append(ContentType).append("\r\n");
+        sb = Date == null ? sb : sb.append("Date: ").append(Date).append("\r\n");
+        sb = ETag == null ? sb : sb.append("ETag: ").append(ETag).append("\r\n");
+        sb = Expires == null ? sb : sb.append("Expires: ").append(Expires).append("\r\n");
+        sb = LastModified == null ? sb : sb.append("Last-Modified: ").append(LastModified).append("\r\n");
+        sb = Location == null ? sb : sb.append("Location: ").append(Location).append("\r\n");
+        sb = Pragma == null ? sb : sb.append("Pragma: ").append(Pragma).append("\r\n");
+        sb = ProxyAuthenticate == null ? sb : sb.append("Proxy-Authenticate: ").append(ProxyAuthenticate).append("\r\n");
+        sb = refresh == null ? sb : sb.append("refresh: ").append(refresh).append("\r\n");
+        sb = RetryAfter == null ? sb : sb.append("Retry-After: ").append(RetryAfter).append("\r\n");
+        sb = Server == null ? sb : sb.append("Server: ").append(Server).append("\r\n");
+        sb = SetCookie == null ? sb : sb.append("Set-Cookie: ").append(SetCookie).append("\r\n");
+        sb = Trailer == null ? sb : sb.append("Trailer: ").append(Trailer).append("\r\n");
+        sb = TransferEncoding == null ? sb : sb.append("Transfer-Encoding: ").append(TransferEncoding).append("\r\n");
+        sb = Vary == null ? sb : sb.append("Vary: ").append(Vary).append("\r\n");
+        sb = Via == null ? sb : sb.append("Via: ").append(Via).append("\r\n");
+        sb = Warning == null ? sb : sb.append("Warning: ").append(Warning).append("\r\n");
+        sb = WWWAuthenticate == null ? sb : sb.append("WWW-Authenticate: ").append(WWWAuthenticate).append("\r\n");
+
+        sb = Connection == null ? sb : sb.append("Connection: ").append(Connection).append("\r\n");
+        sb.append("\r\n");
+        return sb.toString();
+    }
 
 }
