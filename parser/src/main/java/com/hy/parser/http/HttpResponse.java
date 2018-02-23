@@ -387,7 +387,7 @@ public class HttpResponse {
                         hr.KeepAlive = content;
                         break;
                     default:
-                        throw new HttpParseException("un recognize. key: " + key);
+//                        throw new HttpParseException("un recognize. key: " + key);
                 }
             }
         } catch (Exception e) {

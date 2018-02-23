@@ -377,11 +377,11 @@ public class HttpRequest {
                         hr.Warning = content;
                         break;
                     default:
-                        throw new HttpParseException("un recognize. key: " + key);
+//                        throw new HttpParseException("un recognize. key: " + key);
                 }
             }
         } catch (Exception e) {
-            throw new HttpParseException("illegal raw", e);
+            throw new HttpParseException("illegal raw. " + e.getMessage());
         }
 
         return hr;
