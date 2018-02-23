@@ -159,7 +159,7 @@ package com.hy.parser.html;
  *
  * @author hy 2018/2/23
  */
-public class HtmlResponse {
+public class HttpResponse {
 
     // Accept-Ranges	表明服务器是否支持指定范围请求及哪种类型的分段请求	Accept-Ranges: bytes
     public String AcceptRanges;
@@ -272,15 +272,15 @@ public class HtmlResponse {
      * @param raw
      * @return
      */
-    public static HtmlResponse parseString(String raw) throws HtmlParseException {
+    public static HttpResponse parseString(String raw) throws HttpParseException {
         if (!raw.contains("\r\n\r\n")) {
-            throw new HtmlParseException("raw is not contains \\r\\n\\r\\n");
+            throw new HttpParseException("raw is not contains \\r\\n\\r\\n");
         }
 
         int index = raw.indexOf("\r\n\r\n");
         raw = raw.substring(0, index + 4);
 
-        HtmlResponse hr = new HtmlResponse();
+        HttpResponse hr = new HttpResponse();
 
         String[] map = raw.split("\r\n");
         try {
@@ -384,11 +384,11 @@ public class HtmlResponse {
                         hr.Connection = content;
                         break;
                     default:
-                        throw new HtmlParseException("un recognize. key: " + key);
+                        throw new HttpParseException("un recognize. key: " + key);
                 }
             }
         } catch (Exception e) {
-            throw new HtmlParseException("illegal raw. " + e.getMessage());
+            throw new HttpParseException("illegal raw. " + e.getMessage());
         }
 
         return hr;

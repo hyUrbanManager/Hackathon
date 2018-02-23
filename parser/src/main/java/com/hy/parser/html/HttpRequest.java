@@ -168,7 +168,7 @@ package com.hy.parser.html;
  *
  * @author hy 2018/2/23
  */
-public class HtmlRequest {
+public class HttpRequest {
 
     // Accept 指定客户端能够接收的内容类型	Accept:text/plain,text/html
     public String Accept;
@@ -269,13 +269,13 @@ public class HtmlRequest {
      * @param raw
      * @return
      */
-    public static HtmlRequest parseString(String raw) throws HtmlParseException {
+    public static HttpRequest parseString(String raw) throws HttpParseException {
         if (!raw.endsWith("\r\n\r\n")) {
-            throw new HtmlParseException("raw is not end with \\r\\n\\r\\n");
+            throw new HttpParseException("raw is not end with \\r\\n\\r\\n");
         }
         raw = raw.substring(0, raw.length() - 2);
 
-        HtmlRequest hr = new HtmlRequest();
+        HttpRequest hr = new HttpRequest();
 
         String[] map = raw.split("\r\n");
         try {
@@ -377,11 +377,11 @@ public class HtmlRequest {
                         hr.Warning = content;
                         break;
                     default:
-                        throw new HtmlParseException("un recognize. key: " + key);
+                        throw new HttpParseException("un recognize. key: " + key);
                 }
             }
         } catch (Exception e) {
-            throw new HtmlParseException("illegal raw", e);
+            throw new HttpParseException("illegal raw", e);
         }
 
         return hr;
