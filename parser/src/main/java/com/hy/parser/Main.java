@@ -1,8 +1,8 @@
 package com.hy.parser;
 
-import com.hy.parser.html.HttpParseException;
-import com.hy.parser.html.HttpRequest;
-import com.hy.parser.html.HttpResponse;
+import com.hy.parser.http.HttpParseException;
+import com.hy.parser.http.HttpRequest;
+import com.hy.parser.http.HttpResponse;
 
 import org.junit.Test;
 

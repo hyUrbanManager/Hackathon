@@ -1,4 +1,4 @@
-package com.hy.parser.html;
+package com.hy.parser.http;
 
 /**
  * html响应头。
@@ -215,11 +215,8 @@ public class HttpResponse {
     // Proxy-Authenticate	它指出认证方案和可应用到代理的该URL上的参数	Proxy-Authenticate: Basic
     public String ProxyAuthenticate;
 
-    // refresh	应用于重定向或一个新的资源被创造，在5秒之后重定向（由网景提出，被大部分浏览器支持）
+    // refresh	应用于重定向或一个新的资源被创造，在5秒之后重定向（由网景提出，被大部分浏览器支持）5; url=http://www.atool.org/httptest.php
     public String refresh;
-
-    // Refresh: 5; url=http://www.atool.org/httptest.php
-    public String Refresh;
 
     // Retry-After	如果实体暂时不可取，通知客户端在指定时间之后再次尝试	Retry-After: 120
     public String RetryAfter;
@@ -265,6 +262,9 @@ public class HttpResponse {
 
     // 增加Connection字段 Connection: close
     public String Connection;
+
+    // 增加Keep-Alive字段 Keep-Alive: timeout=5, max=100
+    public String KeepAlive;
 
     /**
      * 解析html语句。
@@ -383,6 +383,9 @@ public class HttpResponse {
                     case "Connection":
                         hr.Connection = content;
                         break;
+                    case "Keep-Alive":
+                        hr.KeepAlive = content;
+                        break;
                     default:
                         throw new HttpParseException("un recognize. key: " + key);
                 }
@@ -436,6 +439,7 @@ public class HttpResponse {
         sb = WWWAuthenticate == null ? sb : sb.append("WWW-Authenticate: ").append(WWWAuthenticate).append("\r\n");
 
         sb = Connection == null ? sb : sb.append("Connection: ").append(Connection).append("\r\n");
+        sb = KeepAlive == null ? sb : sb.append("Keep-Alive").append(KeepAlive).append("\r\n");
         sb.append("\r\n");
         return sb.toString();
     }

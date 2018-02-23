@@ -1,4 +1,4 @@
-package com.hy.parser.html;
+package com.hy.parser.http;
 
 /**
  * html解析错误
