@@ -1,1 +1,1 @@
-include ':app', ':hackathon1', ':hackathon2', ':security', ':security', ':niukewang'
+include ':app', ':hackathon1', ':hackathon2', ':security', ':security', ':niukewang', ':parser'
