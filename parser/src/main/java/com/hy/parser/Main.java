@@ -28,9 +28,6 @@ public class Main {
         InputStream is = socket.getInputStream();
         OutputStream os = socket.getOutputStream();
 
-        // 修改Request
-        request.Range = "bytes=100~300";
-
         String writeThing = request.toString();
         os.write(writeThing.getBytes());
 
@@ -60,22 +57,36 @@ public class Main {
 
     @Test
     public void test2() throws HttpParseException, IOException {
-        String raw = "GET /video1.wmv HTTP/1.1\r\n" +
-                "Cache-Control: no-cache\r\n" +
-                "Connection: keep-alive\r\n" +
-                "Host: 139.199.170.98\r\n" +
-                "User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.2; WOW64; Trident/7.0; .NET4.0E; .NET4.0C; .NET CLR 3.5.30729; .NET CLR 2.0.50727; .NET CLR 3.0.30729)\r\n" +
-                "\r\n";
+//        String raw = "GET /video1.wmv HTTP/1.1\r\n" +
+//                "Cache-Control: no-cache\r\n" +
+//                "Connection: keep-alive\r\n" +
+//                "Host: 139.199.170.98\r\n" +
+//                "User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.2; WOW64; Trident/7.0; .NET4.0E; .NET4.0C; .NET CLR 3.5.30729; .NET CLR 2.0.50727; .NET CLR 3.0.30729)\r\n" +
+//                "\r\n";
+
+//        String raw = "GET /group14/M0A/70/9A/wKgDY1c8Yqyw9y0SABn_YcHTKjM567.mp3 HTTP/1.1\r\n" +
+//                "Cache-Control: no-cache\r\n" +
+//                "Connection: keep-alive\r\n" +
+//                "Host: fdfs.xmcdn.com\r\n" +
+//                "User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.2; WOW64; Trident/7.0; .NET4.0E; .NET4.0C; .NET CLR 3.5.30729; .NET CLR 2.0.50727; .NET CLR 3.0.30729)\r\n" +
+//                "\r\n";
+
+        String raw = "GET /group34/M00/E0/64/wKgJYVqOIoWBaf8ZADxUXTDmcLw657.mp3 HTTP/1.1\r\n" +
+                "Accept-Encoding: gzip\r\n" +
+                "Connection: Keep-Alive\r\n" +
+                "Host: fdfs.xmcdn.com:80\r\n" +
+                "User-Agent: stagefright/1.2 (Linux;Android 7.1)\r\n\r\n";
 
         HttpRequest request = HttpRequest.parseString(raw);
 
-        Socket socket = new Socket("139.199.170.98", 80);
+//        Socket socket = new Socket("139.199.170.98", 80);
+        Socket socket = new Socket("183.232.189.137", 80);
         InputStream is = socket.getInputStream();
         OutputStream os = socket.getOutputStream();
 
         // 修改Request
-        request.Range = "bytes=201-500";
-        request.IfRange = "\"6223a-1907b8a-46ea3346b1440\"";
+        request.Range = "bytes=3953757-";
+//        request.IfRange = "\"6223a-1907b8a-46ea3346b1440\"";
 
         String writeThing = request.toString();
         System.out.println(writeThing);
