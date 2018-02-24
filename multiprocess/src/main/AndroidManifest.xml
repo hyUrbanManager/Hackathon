@@ -9,11 +9,36 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+
+        <activity
+            android:name=".mainprocess.MPActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+                <action android:name="com.hy.Mp"/>
 
+                <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".backgroundprocess1.BP1Activity"
+            android:launchMode="singleTask"
+            android:process=":bp1">
+            <intent-filter>
+                <action android:name="com.hy.Bp1"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".backgroundprocess2.BP2Activity"
+            android:launchMode="singleTask"
+            android:process=":bp2">
+            <intent-filter>
+                <action android:name="com.hy.Bp2"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
     </application>
