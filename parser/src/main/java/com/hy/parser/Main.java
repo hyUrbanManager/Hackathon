@@ -9,7 +9,9 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 
 public class Main {
 
@@ -75,17 +77,22 @@ public class Main {
                 "Accept-Encoding: gzip\r\n" +
                 "Connection: Keep-Alive\r\n" +
                 "Host: fdfs.xmcdn.com:80\r\n" +
-                "User-Agent: stagefright/1.2 (Linux;Android 7.1)\r\n\r\n";
+                "User-Agent: MediaPlayerProxy.java\r\n\r\n";
 
         HttpRequest request = HttpRequest.parseString(raw);
 
 //        Socket socket = new Socket("139.199.170.98", 80);
-        Socket socket = new Socket("183.232.189.137", 80);
+//        Socket socket = new Socket("fdfs.xmcdn.com", 80);
+
+        SocketAddress remoteAddress = new InetSocketAddress("fdfs.xmcdn.com", 80);
+        Socket socket = new Socket();
+        socket.connect(remoteAddress, 5000);
+
         InputStream is = socket.getInputStream();
         OutputStream os = socket.getOutputStream();
 
         // 修改Request
-        request.Range = "bytes=3953757-";
+        request.Range = "bytes=226872-";
 //        request.IfRange = "\"6223a-1907b8a-46ea3346b1440\"";
 
         String writeThing = request.toString();

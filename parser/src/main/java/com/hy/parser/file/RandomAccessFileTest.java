@@ -20,7 +20,7 @@ public class RandomAccessFileTest {
         File file = new File("F:\\AndroidStudioProject2\\Hackathon\\parser\\abc.txt");
         RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rws");
 
-        randomAccessFile.seek(5);
+        randomAccessFile.seek(14);
 
         char c = (char) randomAccessFile.read();
 
