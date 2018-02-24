@@ -1,0 +1,56 @@
+
+def content = 'hello, world!'
+
+// 练习。
+
+// dynamic task
+5.times { counter ->
+    task "dynamicTask$counter" {
+        doLast {
+            println "$content $counter"
+        }
+    }
+}
+dynamicTask4.dependsOn dynamicTask0, dynamicTask1, dynamicTask3
+
+ext {
+    versionCode = 10
+}
+
+task t1 {
+    ext.versionCode = 12
+}
+
+task t2(dependsOn: [t1]) {
+    doLast {
+        println "versionCode: $versionCode"
+    }
+}
+
+task argTask1 { arg ->
+    print "arg: $arg"
+}
+
+
+task(copyTask, type: Copy) {
+
+}
+
+//Task.create(name: 'copyTask2', type: Copy) {
+//
+//}
+
+task copyMyFile(type: Copy) {
+    from 'folder1', {
+        exclude '**/*.xml'
+    }
+
+    from 'folder2', {
+        exclude '**/*.properties'
+    }
+
+    from 'folder3'
+    into 'folder4'
+
+
+}

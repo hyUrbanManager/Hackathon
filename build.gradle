@@ -26,83 +26,34 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-def content = 'hello, world!'
+// 每个编译版本所对应的组合。
+def configList = [
+        ['sdkversion': 25, 'buildToolsVersion': '26.0.2', 'supportVersion': '25.4.0'],
+        ['sdkversion': 26, 'buildToolsVersion': '27.0.3', 'supportVersion': '26.0.2'],
+        ['sdkversion': 27, 'buildToolsVersion': '', 'supportVersion': ''],
+]
+def index = 0
 
-// 练习。
-
-// dynamic task
-5.times { counter ->
-    task "dynamicTask$counter" {
-        doLast {
-            println "$content $counter"
-        }
-    }
-}
-dynamicTask4.dependsOn dynamicTask0, dynamicTask1, dynamicTask3
-
+// 设置external额外属性。
 ext {
-    versionCode = 10
+    // 最小支持版本。
+    libMinSdkVersion = 18
+    appMinSdkVersion = 18
+
+    // 目标版本。
+    targetSdkVersion = configList[index].sdkversion
+    compileSdkVersion = configList[index].sdkversion
+
+    // 工具版本。
+    buildToolsVersion = configList[index].buildToolsVersion
+    supportVersion = configList[index].supportVersion
+
+    // 版本号。这里属性的版本号是主版本号，库可不引用此主版本号。
+    versionCode = 1
+    versionName = 1.0
+
+    // 是否混淆
+    minifyEnabled = true
+    shrinkResources = true
+    zipAlignEnabled = true
 }
-
-task t1 {
-    ext.versionCode = 12
-}
-
-task t2(dependsOn: [t1]) {
-    doLast {
-        println "versionCode: $versionCode"
-    }
-}
-
-task argTask1 { arg ->
-    print "arg: $arg"
-}
-
-
-task(copyTask, type: Copy) {
-
-}
-
-//Task.create(name: 'copyTask2', type: Copy) {
-//
-//}
-
-task copyMyFile(type: Copy) {
-    from 'folder1', {
-        exclude '**/*.xml'
-    }
-
-    from 'folder2', {
-        exclude '**/*.properties'
-    }
-
-    from 'folder3'
-    into 'folder4'
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

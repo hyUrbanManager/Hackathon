@@ -1,1 +1,1 @@
-include ':app', ':hackathon1', ':hackathon2', ':security', ':security', ':niukewang', ':parser', ':multiprocess'
+include ':app', ':hackathon1', ':hackathon2', ':security', ':security', ':niukewang', ':parser', ':multiprocess', ':androidlib'
