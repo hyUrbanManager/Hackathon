@@ -24,3 +24,8 @@ gradle脚本包括如下：
 + 打包jar包
 + 生成javadoc
 + groovy语法练习
+
+android工程如下：
+
++ 基础android库。
++ 多进程Android app。
