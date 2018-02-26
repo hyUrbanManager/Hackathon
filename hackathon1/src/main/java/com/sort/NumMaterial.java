@@ -23,6 +23,8 @@ public class NumMaterial {
         for (int i = 0; i < count; i++) {
             unSortNum[i] = random.nextInt(max - mix) + mix;
         }
+        sortNum = Arrays.copyOf(unSortNum, count);
+        Arrays.sort(sortNum);
 
         System.out.println("material:" + Arrays.toString(unSortNum));
 
@@ -33,8 +35,6 @@ public class NumMaterial {
         if (unSortNum == null) {
             throw new NullPointerException("unSortNum is null");
         }
-        sortNum = Arrays.copyOf(unSortNum, count);
-        Arrays.sort(sortNum);
 
         System.out.println("correct: " + Arrays.toString(sortNum));
         System.out.println("your re: " + Arrays.toString(result));
