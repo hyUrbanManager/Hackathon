@@ -5,7 +5,10 @@ import com.sort.SortUtils;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by Administrator on 2018/2/18.
@@ -26,6 +29,24 @@ public class SortMain {
         SortUtils.merge(arr);
 
         System.out.println(NumMaterial.isSortCorrect(arr));
+    }
+
+    @Test
+    public void quickSort() {
+
+        int[] arr = NumMaterial.unSortNum();
+        List<Integer> list = new ArrayList<>();
+        for (int i : arr) {
+            list.add(i);
+        }
+
+        SortUtils.quick(list);
+
+        int[] result = new int[arr.length];
+        for (int i = 0; i < list.size(); i++) {
+            result[i] = list.get(i);
+        }
+        System.out.println(NumMaterial.isSortCorrect(result));
     }
 
     @Test

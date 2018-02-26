@@ -1,5 +1,8 @@
 package com.sort;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Administrator on 2018/2/18.
  *
@@ -175,6 +178,41 @@ public class SortUtils {
             arr[c++] = arr1[a++];
         }
         return arr;
+    }
+
+    /**
+     * 快速排序。
+     *
+     * @param items
+     */
+    public static void quick(List<Integer> items) {
+        if (items.size() == 0) {
+            return;
+        }
+
+        List<Integer> small = new ArrayList<>();
+        List<Integer> large = new ArrayList<>();
+        List<Integer> same = new ArrayList<>();
+
+        Integer chosen = items.get(items.size() / 2);
+
+        for (Integer i : items) {
+            if (i > chosen) {
+                large.add(i);
+            } else if (i.equals(chosen)) {
+                same.add(i);
+            } else {
+                small.add(i);
+            }
+        }
+
+        quick(large);
+        quick(small);
+
+        items.clear();
+        items.addAll(small);
+        items.addAll(same);
+        items.addAll(large);
     }
 
 }
