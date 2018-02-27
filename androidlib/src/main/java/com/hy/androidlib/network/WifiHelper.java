@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * wifi管理器。{@link #getInstance(Context)}
+ * wifi管理器。{@link #getInstance()}
  *
  * @author hy 2017/12/5
  */
