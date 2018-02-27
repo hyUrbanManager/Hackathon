@@ -56,4 +56,14 @@ ext {
     minifyEnabled = true
     shrinkResources = true
     zipAlignEnabled = true
+
+    // app签名
+    storeFile = new File(project.projectDir, 'simplekey.jks')
+    storePassword = '12345678'
+    keyAlias = 'hy'
+    keyPassword = '12345678'
+    v1SigningEnabled = true
+    v2SigningEnabled = true
 }
+
+

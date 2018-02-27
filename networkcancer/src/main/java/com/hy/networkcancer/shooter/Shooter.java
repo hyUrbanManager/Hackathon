@@ -38,7 +38,7 @@ public class Shooter {
             throw new IllegalArgumentException("packet is " + packetSize);
         }
         if (port < 0 || port > 65535) {
-            throw new IllegalArgumentException("packet is " + packetSize);
+            throw new IllegalArgumentException("port is " + port);
         }
         if (sleepTime < 0) {
             throw new IllegalArgumentException("sleep time is " + packetSize);

@@ -4,6 +4,17 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion buildToolsVersion
 
+    signingConfigs {
+        hysign {
+            storeFile rootProject.ext.storeFile
+            storePassword rootProject.ext.storePassword
+            keyAlias rootProject.ext.keyAlias
+            keyPassword rootProject.ext.keyPassword
+            v1SigningEnabled v1SigningEnabled
+            v2SigningEnabled v2SigningEnabled
+        }
+    }
+
     defaultConfig {
         applicationId "com.hy.networkcancer"
 
@@ -17,8 +28,11 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources = true
+            zipAlignEnabled = true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.hysign
         }
     }
     compileOptions {
