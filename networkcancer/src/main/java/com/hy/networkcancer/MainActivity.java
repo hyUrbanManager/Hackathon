@@ -4,13 +4,19 @@ import android.net.wifi.WifiInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.GridLayout;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ScrollView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.hy.androidlib.network.WifiHelper;
 import com.hy.androidlib.utils.ToastUtil;
 import com.hy.androidlib.widget.ButtonsLayout;
+import com.hy.networkcancer.shooter.Shooter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,11 +27,25 @@ public class MainActivity extends AppCompatActivity {
     TextView mLog;
     @BindView(R.id.buttonsLayout)
     ButtonsLayout buttonsLayout;
+    @BindView(R.id.scrollView)
+    ScrollView scrollView;
 
     private Handler mMainHandler;
 
     private WifiHelper wifiHelper;
     private WifiCallback wifiCallback = new WifiCallback();
+
+    private Shooter shooter;
+    private Shooter.LogListener listener = (who, message) -> {
+        mMainHandler.post(() -> mLog.append(who + ": " + message + '\n'));
+        scrollView.fullScroll(View.FOCUS_DOWN);
+    };
+    private View dialogLayout;
+    private EditText mEditPort;
+    private EditText mEditPacketSize;
+    private SeekBar mSendSpeed;
+    private AlertDialog sendOptionDialog;
+    private EditText mEditSockets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,23 +69,48 @@ public class MainActivity extends AppCompatActivity {
         wifiHelper.registerBroadCastReceiver(getApplicationContext());
         wifiHelper.registerOnWifiCallback(wifiCallback);
 
-        buttonsLayout.addButtons("udp广播轰炸", v -> {
+        // 初始化。
+        dialogLayout = LayoutInflater.from(this).inflate(R.layout.layout_udp_option, null, false);
+        mEditPort = (EditText) dialogLayout.findViewById(R.id.mEditPortText);
+        mEditPort.setText("9999");
+        mEditPacketSize = (EditText) dialogLayout.findViewById(R.id.mEditPacketSize);
+        mEditPacketSize.setText("1024");
+        mEditSockets = (EditText) dialogLayout.findViewById(R.id.mEditSockets);
+        mEditSockets.setText("10");
+        mSendSpeed = (SeekBar) dialogLayout.findViewById(R.id.seekBar);
+        sendOptionDialog = new AlertDialog.Builder(this)
+                .setPositiveButton("确定", (dialog1, which) -> {
+                    int sockets = Integer.parseInt(String.valueOf(mEditSockets.getText()));
+                    int packetSize = Integer.parseInt(String.valueOf(mEditPacketSize.getText()));
+                    int port = Integer.parseInt(String.valueOf(mEditPort.getText()));
+                    int progress = mSendSpeed.getProgress();
+                    int sleepTime = mSendSpeed.getMax() - progress;
 
+                    if (shooter != null) {
+                        shooter.stopShoot();
+                    }
+                    try {
+                        shooter = new Shooter(sockets, packetSize, port, sleepTime);
+                        shooter.setLogListener(listener);
+                        shooter.startShoot();
+                    } catch (Exception e) {
+                        ToastUtil.showToastLong("参数非法." + e.getMessage());
+                    }
+                })
+                .setNegativeButton("取消", (dialog12, which) -> {
+
+                })
+                .setView(dialogLayout)
+                .setTitle("轰炸选项")
+                .create();
+
+        buttonsLayout.addButtons("udp广播轰炸", v -> {
+            sendOptionDialog.show();
         });
-        buttonsLayout.addButtons("udp广播轰炸", v -> {
-
-        });
-        buttonsLayout.addButtons("udp广播轰炸", v -> {
-
-        });
-        buttonsLayout.addButtons("udp广播轰炸", v -> {
-
-        });
-        buttonsLayout.addButtons("udp广播轰炸", v -> {
-
-        });
-        buttonsLayout.addButtons("udp广播轰炸", v -> {
-
+        buttonsLayout.addButtons("停止", v -> {
+            if (shooter != null) {
+                shooter.stopShoot();
+            }
         });
 
     }

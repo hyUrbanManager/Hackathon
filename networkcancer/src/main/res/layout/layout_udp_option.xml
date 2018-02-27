@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="端口"
+        android:textColor="@color/primary_text"
+        android:textSize="@dimen/material_button"/>
+
+    <EditText
+        android:id="@+id/mEditPortText"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/text1"
+        android:layout_margin="8dp"
+        android:layout_toEndOf="@+id/text2"
+        android:layout_toRightOf="@+id/text2"
+        android:hint="轰炸的端口号"
+        android:inputType="number"
+        android:textColor="@color/primary_text"
+        android:textSize="@dimen/material_button"/>
+
+    <TextView
+        android:id="@+id/text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text1"
+        android:layout_margin="8dp"
+        android:text="数据包大小"
+        android:textColor="@color/primary_text"
+        android:textSize="@dimen/material_button"/>
+
+    <EditText
+        android:id="@+id/mEditPacketSize"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/text2"
+        android:layout_alignEnd="@+id/mEditPortText"
+        android:layout_alignLeft="@+id/mEditPortText"
+        android:layout_alignRight="@+id/mEditPortText"
+        android:layout_alignStart="@+id/mEditPortText"
+        android:layout_toEndOf="@+id/text1"
+        android:layout_toRightOf="@+id/text1"
+        android:hint="数据包大小"
+        android:inputType="number"
+        android:textColor="@color/primary_text"
+        android:textSize="@dimen/material_button"/>
+
+    <TextView
+        android:id="@+id/text3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text2"
+        android:layout_margin="8dp"
+        android:text="线程"
+        android:textColor="@color/primary_text"
+        android:textSize="@dimen/material_button"/>
+
+    <EditText
+        android:id="@+id/mEditSockets"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/text3"
+        android:layout_alignEnd="@+id/mEditPortText"
+        android:layout_alignLeft="@+id/mEditPortText"
+        android:layout_alignRight="@+id/mEditPortText"
+        android:layout_alignStart="@+id/mEditPortText"
+        android:layout_toEndOf="@+id/text1"
+        android:layout_toRightOf="@+id/text1"
+        android:hint="线程数"
+        android:inputType="number"
+        android:textColor="@color/primary_text"
+        android:textSize="@dimen/material_button"/>
+
+    <TextView
+        android:id="@+id/text4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text3"
+        android:layout_margin="8dp"
+        android:text="发送速度"
+        android:textColor="@color/primary_text"
+        android:textSize="@dimen/material_button"/>
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+        android:max="1000"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text4"
+        android:layout_margin="8dp"/>
+
+</RelativeLayout>
