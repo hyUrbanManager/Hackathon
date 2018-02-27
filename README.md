@@ -19,6 +19,12 @@
 
 + 牛客网
 
+解析器包括如下：
+
++ http头部解析器。
++ http服务器。
++ udp服务器。
+
 gradle脚本包括如下：
 
 + 打包jar包
@@ -29,3 +35,4 @@ android工程如下：
 
 + 基础android库。
 + 多进程Android app。
++ 网络毒瘤，实现udp广播轰炸。
