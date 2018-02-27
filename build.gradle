@@ -37,7 +37,7 @@ def index = 0
 // 设置external额外属性。
 ext {
     // 最小支持版本。
-    libMinSdkVersion = 18
+    libMinSdkVersion = 15
     appMinSdkVersion = 18
 
     // 目标版本。
