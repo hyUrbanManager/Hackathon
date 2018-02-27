@@ -1,15 +1,26 @@
 package com.hy.networkcancer;
 
 import android.net.wifi.WifiInfo;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.widget.GridLayout;
+import android.widget.TextView;
 
 import com.hy.androidlib.network.WifiHelper;
 import com.hy.androidlib.utils.ToastUtil;
+import com.hy.androidlib.widget.ButtonsLayout;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
+
+    @BindView(R.id.mLog)
+    TextView mLog;
+    @BindView(R.id.buttonsLayout)
+    ButtonsLayout buttonsLayout;
 
     private Handler mMainHandler;
 
@@ -20,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         mMainHandler = new Handler(Looper.getMainLooper());
 
@@ -36,6 +48,26 @@ public class MainActivity extends AppCompatActivity {
         wifiHelper = WifiHelper.getInstance();
         wifiHelper.registerBroadCastReceiver(getApplicationContext());
         wifiHelper.registerOnWifiCallback(wifiCallback);
+
+        buttonsLayout.addButtons("udp广播轰炸", v -> {
+
+        });
+        buttonsLayout.addButtons("udp广播轰炸", v -> {
+
+        });
+        buttonsLayout.addButtons("udp广播轰炸", v -> {
+
+        });
+        buttonsLayout.addButtons("udp广播轰炸", v -> {
+
+        });
+        buttonsLayout.addButtons("udp广播轰炸", v -> {
+
+        });
+        buttonsLayout.addButtons("udp广播轰炸", v -> {
+
+        });
+
     }
 
     @Override

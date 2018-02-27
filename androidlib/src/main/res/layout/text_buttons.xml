@@ -11,7 +11,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/gridLayout"
+        android:layout_above="@+id/buttonsLayout"
         android:background="@drawable/stroke_primary">
 
         <TextView
@@ -22,13 +22,12 @@
             android:textSize="@dimen/material_caption"/>
     </ScrollView>
 
-    <GridLayout
+    <com.hy.androidlib.widget.ButtonsLayout
         android:layout_alignParentBottom="true"
-        android:id="@+id/gridLayout"
-        android:columnCount="3"
+        android:id="@+id/buttonsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    </GridLayout>
+    </com.hy.androidlib.widget.ButtonsLayout>
 
 </RelativeLayout>
