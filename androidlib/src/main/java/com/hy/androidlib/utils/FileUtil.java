@@ -5,7 +5,8 @@ import android.graphics.Bitmap;
 import android.os.Environment;
 import android.text.TextUtils;
 
-import com.jieli.component.Logcat;
+
+import com.hy.androidlib.Logcat;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

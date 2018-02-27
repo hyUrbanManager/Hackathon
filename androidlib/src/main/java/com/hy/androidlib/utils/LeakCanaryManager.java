@@ -2,8 +2,6 @@ package com.hy.androidlib.utils;
 
 import android.app.Application;
 
-import com.squareup.leakcanary.LeakCanary;
-import com.squareup.leakcanary.RefWatcher;
 
 /**
  * Created by chensenhua on 2017/12/2.
@@ -14,7 +12,7 @@ import com.squareup.leakcanary.RefWatcher;
 public class LeakCanaryManager {
 
     private static LeakCanaryManager mInstance;
-    private RefWatcher mRefWatcher;
+//    private RefWatcher mRefWatcher;
 
     private LeakCanaryManager() {
 
@@ -33,9 +31,9 @@ public class LeakCanaryManager {
      * @param application
      */
     public void openLeakCheck(Application application) {
-        if (mRefWatcher == null) {
-            mRefWatcher = LeakCanary.install(application);
-        }
+//        if (mRefWatcher == null) {
+//            mRefWatcher = LeakCanary.install(application);
+//        }
     }
 
     /**
@@ -43,9 +41,9 @@ public class LeakCanaryManager {
      * @param obj 实例对象
      */
     public void watch(Object obj) {
-        if (mRefWatcher != null) {
-            mRefWatcher.watch(obj);
-        }
+//        if (mRefWatcher != null) {
+//            mRefWatcher.watch(obj);
+//        }
     }
 
 }

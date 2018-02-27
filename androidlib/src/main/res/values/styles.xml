@@ -33,4 +33,12 @@
         <item name="android:popupBackground">@color/primary_dark</item>
     </style>
 
+    <!--通常按键样式-->
+    <style name="click_button">
+        <item name="android:textSize">@dimen/material_button</item>
+        <item name="android:textColor">@color/icons</item>
+        <item name="android:background">@drawable/button_background</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
 </resources>

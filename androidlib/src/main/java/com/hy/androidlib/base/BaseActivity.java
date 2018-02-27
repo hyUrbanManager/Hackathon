@@ -9,17 +9,15 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
-import com.jieli.component.utils.LeakCanaryManager;
+import com.hy.androidlib.utils.LeakCanaryManager;
 
 
 /**
  * @author zqjasonZhong
  *         date : 2017/11/10
  */
-public class Jl_BaseActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity {
     protected String TAG = getClass().getSimpleName();
-
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

@@ -56,20 +56,35 @@ public class WifiHelper {
     public final static int STATE_NETWORK_NOT_OPEN = 0xeef4;
     public final static int STATE_WIFI_IS_CONNECTED = 0xeef5;
 
-    public static WifiHelper getInstance(Context context) {
-        synchronized (WifiHelper.class) {
-            if (instance == null) {
-                instance = new WifiHelper(context.getApplicationContext());
+    /**
+     * 在Application里初始化。
+     *
+     * @param context
+     * @return
+     */
+    public static WifiHelper init(Context context) {
+        if (instance == null) {
+            synchronized (WifiHelper.class) {
+                if (instance == null) {
+                    instance = new WifiHelper(context.getApplicationContext());
+                }
             }
         }
         return instance;
     }
 
+    public static WifiHelper getInstance() {
+        if (instance == null) {
+            throw new NullPointerException("instance is null");
+        }
+        return instance;
+    }
+
+
     private WifiHelper(Context c) {
         if (c != null) {
             mWifiManager = (WifiManager) c.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             wifiCallBackSet = new HashSet<>();
-
             this.startScan();
         }
     }
@@ -82,6 +97,7 @@ public class WifiHelper {
 
     /**
      * 注册网络状态广播
+     *
      * @param context
      */
     public void registerBroadCastReceiver(Context context) {
@@ -96,6 +112,7 @@ public class WifiHelper {
 
     /**
      * 解注册网络状态广播
+     *
      * @param context
      */
     public void unregisterBroadcastReceiver(Context context) {

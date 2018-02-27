@@ -10,8 +10,7 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.widget.Toast;
 
-import com.jieli.component.utils.LeakCanaryManager;
-
+import com.hy.androidlib.utils.LeakCanaryManager;
 
 /**
  * Fragment的基类
@@ -19,7 +18,7 @@ import com.jieli.component.utils.LeakCanaryManager;
  * @author zqjasonZhong
  *         date : 2017/11/10
  */
-public class Jl_BaseFragment extends Fragment {
+public class BaseFragment extends Fragment {
     protected String TAG = getClass().getSimpleName();
     private Toast mToast;
     private Bundle bundle;

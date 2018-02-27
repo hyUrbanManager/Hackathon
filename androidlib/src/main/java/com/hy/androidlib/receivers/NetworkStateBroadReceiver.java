@@ -10,8 +10,8 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.text.TextUtils;
 
-import com.jieli.component.Logcat;
-import com.jieli.component.network.WifiHelper;
+import com.hy.androidlib.Logcat;
+import com.hy.androidlib.network.WifiHelper;
 
 /**
  * Created by chensenhua on 2018/2/24.
@@ -25,7 +25,7 @@ public class NetworkStateBroadReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (mWifiHelper == null) {
-            mWifiHelper = WifiHelper.getInstance(context.getApplicationContext());
+            mWifiHelper = WifiHelper.getInstance();
         }
         if (context != null && intent != null) {
             String action = intent.getAction();
