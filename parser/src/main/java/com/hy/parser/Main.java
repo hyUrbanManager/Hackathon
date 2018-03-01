@@ -13,6 +13,9 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+
 public class Main {
 
     @Test
@@ -133,6 +136,60 @@ public class Main {
         os.close();
         socket.close();
 
+    }
+
+
+    @Test
+    public void testOkHttp() throws IOException {
+        String url = "http://139.199.170.98/";
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(url).build();
+        okhttp3.Response response = client.newCall(request).execute();
+        if (response.isSuccessful()) {
+            System.out.println(response.body().string());
+        } else {
+            System.out.println(response.message());
+        }
+    }
+
+    @Test
+    public void testOkHttp2() throws IOException {
+        String url = "http://139.199.170.98/relocation.php";
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(url).build();
+        okhttp3.Response response = client.newCall(request).execute();
+        if (response.isSuccessful()) {
+            System.out.println(response.body().string());
+        } else if (response.isRedirect()) {
+            System.out.println(response.header("Location", "null location"));
+        } else {
+            System.out.println(response.message());
+        }
+    }
+
+    @Test
+    public void testLocation() throws IOException {
+        String url = "http://139.199.170.98/relocation.php";
+        HttpRequest request = new HttpRequest();
+        request.head = "GET /relocation.php HTTP/1.1";
+        request.Host = "139.199.170.98";
+        request.Connection = "Keep-alive";
+        request.UserAgent = "Main.java";
+
+        Socket socket = new Socket("139.199.170.98", 80);
+        InputStream is = socket.getInputStream();
+        OutputStream os = socket.getOutputStream();
+        os.write(request.toString().getBytes());
+
+        byte[] bytes = new byte[1024];
+        int len;
+        while ((len = is.read(bytes)) != -1) {
+            System.out.println(new String(bytes, 0, len));
+        }
+
+        is.close();
+        os.close();
+        socket.close();
     }
 
 }

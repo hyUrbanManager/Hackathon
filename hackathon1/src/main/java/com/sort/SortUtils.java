@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Administrator on 2018/2/18.
+ * 排序算法。
  *
  * @author hy 2018/2/18
  */
@@ -213,6 +213,21 @@ public class SortUtils {
         items.addAll(small);
         items.addAll(same);
         items.addAll(large);
+    }
+
+
+    /**
+     * 从数组中选择出第k个最小的数。
+     *
+     * @param arr
+     * @param left
+     * @param right
+     * @param k
+     * @return
+     */
+    public static int quickSelect(int[] arr, int left, int right, int k) {
+
+        return 0;
     }
 
 }

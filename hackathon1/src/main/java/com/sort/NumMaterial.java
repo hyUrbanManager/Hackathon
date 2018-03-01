@@ -13,7 +13,7 @@ public class NumMaterial {
     static int[] unSortNum;
     static int[] sortNum;
     static final int count = 20;
-    static final int max = 100;
+    static final int max = count *  3;
     static final int mix = 1;
 
     public static int[] unSortNum() {
