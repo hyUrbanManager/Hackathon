@@ -2,9 +2,8 @@
  * memleak.cpp
  * 提供内存泄漏检测的工具。
  */
-#include <string.h>
 #include "memleak.h"
-#include "include/log.h"
+#include <string.h>
 
 #define log(...)  LOGD("memleak", __VA_ARGS__)
 #define logi(...) LOGI("memleak", __VA_ARGS__)
@@ -74,12 +73,12 @@ void* scalloc(size_t item_size) {
  * p 内存指针。
  */
 void sfree(void* p) {
-    if (p == 0) {
+    if (p == null) {
         return;
     }
 
     if (head == null) {
-        loge("something wrong");
+        loge("head is null.u may have not been call scalloc.");
     } else {
         if (head->p == p) {
             MemInfo* pm = head;
@@ -92,14 +91,57 @@ void sfree(void* p) {
                 if (pm->p == p) {
                     last->next = pm->next;
                     free(pm);
-                    break;
+                    goto end;
                 }
                 last = pm;
                 pm = pm->next;
             }
+            loge("p: %lx is not exist in list.", p);
         }
     }
 
+    end:
     log_mem();
     free(p);
+}
+
+/*
+ * 安全分配内存，提供检测内存泄漏。
+ * 不调用系统的free释放。
+ * jbyteArray bytes = env->NewByteArray(len);
+ * env->SetByteArrayRegion(bytes, 0, len, (const jbyte*) buffer);
+ * 以上调用形式的不能再c层释放。
+ *
+ * p 内存指针。
+ */
+void sfree2(void* p) {
+    if (p == null) {
+        return;
+    }
+
+    if (head == null) {
+        loge("head is null.u may have not been call scalloc.");
+    } else {
+        if (head->p == p) {
+            MemInfo* pm = head;
+            head = head->next;
+            free(pm);
+        } else {
+            MemInfo* pm = head;
+            MemInfo* last = head;
+            while (pm != null) {
+                if (pm->p == p) {
+                    last->next = pm->next;
+                    free(pm);
+                    goto end;
+                }
+                last = pm;
+                pm = pm->next;
+            }
+            loge("p: %lx is not exist in list.", p);
+        }
+    }
+
+    end:
+    log_mem();
 }

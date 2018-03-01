@@ -5,8 +5,8 @@
 #ifndef MEMLEAK_H
 #define MEMLEAK_H
 
-#include "include/type.h"
 #include "include/log.h"
+#include "include/type.h"
 
 /*
  * 储存已经分配了的内存信息。
@@ -36,5 +36,16 @@ void* scalloc(size_t item_size);
  * p 内存指针。
  */
 void sfree(void* p);
+
+/*
+ * 安全分配内存，提供检测内存泄漏。
+ * 不调用系统的free释放。
+ * jbyteArray bytes = env->NewByteArray(len);
+ * env->SetByteArrayRegion(bytes, 0, len, (const jbyte*) buffer);
+ * 以上调用形式的不能再c层释放。
+ *
+ * p 内存指针。
+ */
+void sfree2(void* p);
 
 #endif //MEMLEAK_H
