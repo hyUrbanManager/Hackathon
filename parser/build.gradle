@@ -12,3 +12,26 @@ dependencies {
 
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
+
+// 混淆有问题。
+
+task cleanJar(type: Delete) {
+    delete 'build/jar/'
+}
+
+// 生成Jar包。
+task makeJar(dependsOn: [cleanJar, compileJava], type: Jar) {
+    // set.
+    archiveName = 'parser.jar'
+    from '/build/classes/java/main'
+    destinationDir = new File(projectDir, '/build/jar/')
+}
+
+import proguard.gradle.ProGuardTask
+
+task proJar(type: ProGuardTask) {
+    configuration new File(projectDir, 'proguard-rules.pro')
+
+    injars new File(projectDir, 'build/jar/parse.jar')
+    outjars new File(projectDir, 'build/jar/parse-min.jar')
+}
