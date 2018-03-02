@@ -56,7 +56,7 @@ task cleanJar(type: Delete) {
 }
 
 // 生成Jar包。
-task makeJar(dependsOn: [cleanBuild], type: Jar) {
+task makeJar(dependsOn: [cleanJar], type: Jar) {
     doFirst {
         println 'start makeJar. projects name: ' + projectsName
     }
