@@ -47,6 +47,7 @@ def javadocExclude = [
 
 def classesDir = '/build/classes/java/main'
 //def classesDir = '/build/intermediates/classes/release'
+def jniLibDir = '/build/intermediates/jniLibs/release'
 def cmakeLibDir = '/build/intermediates/cmake/release/obj'
 def jarFileName = jarName + '_' + version + '.jar'
 def desSdkDir = 'build/sdk/'
@@ -162,7 +163,9 @@ task proguard(type: Exec) {
             '-verbose',
             '-injars ' + srcJar,
             '-outjars ' + desJar,
-            '@' + projectDir.absolutePath + '/parser/proguard-rules.pro'
+            '-libraryjars \'%JAVA_HOME%/jre/lib/rt.jar\'',
+            '-libraryjars \'%ANDROID_HOME%/platforms/android-25/android.jar\'',
+            '@' + projectDir.absolutePath + '/parser/proguard-rules.pro',
             '@' + androidProguardRules
 
     standardOutput = new FileOutputStream(new File(projectDir, "/build/proguardLog.txt"))
