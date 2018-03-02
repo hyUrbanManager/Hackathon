@@ -46,10 +46,13 @@ def javadocExclude = [
 
 
 def classesDir = '/build/classes/java/main'
-def jniLibDir = '/build/intermediates/jniLibs/release'
+//def classesDir = '/build/intermediates/classes/release'
 def cmakeLibDir = '/build/intermediates/cmake/release/obj'
 def jarFileName = jarName + '_' + version + '.jar'
 def desSdkDir = 'build/sdk/'
+
+Properties pro = new Properties()
+pro.load(project.file('local.properties').newInputStream())
 
 task cleanJar(type: Delete) {
     delete desSdkDir + 'jar'
@@ -114,8 +117,6 @@ task generateJavaDocs(dependsOn: [cleanJavaDocs], type: Javadoc) {
     source = project.files srcFiles
 
     // 加入Android包 android.jar引用，以防止找不到符号。使用sdk25。
-    Properties pro = new Properties()
-    pro.load(project.file('local.properties').newInputStream())
     classpath += project.files pro.get('sdk.dir') + '\\platforms\\android-25\\android.jar'
 
     exclude javadocExclude
@@ -140,4 +141,29 @@ task buildSdk(dependsOn: [cleanBuildSdk, makeJar, moveSoLib, generateJavaDocs]) 
     doLast {
         println 'build sdk success.'
     }
+}
+
+// 混淆，使用proguard原生命令行执行方式。
+task proguard(type: Exec) {
+    def srcJar = projectDir.absolutePath + '/parser/build/jar/parser.jar'
+    def desJar = projectDir.absolutePath + '/parser/build/jar/parser-min.jar'
+
+    def sdkPath = pro.get('sdk.dir')
+    def androidProguardRules = sdkPath + '/tools/proguard/proguard-android.txt'
+
+    // proguard version is 4.7, too old.
+//    def proguardHome = sdkPath + '/tools/proguard'
+    // proguard download from proguard website, proguard version is 6.0.
+    def proguardHome = 'F:/proguard/proguard6.0'
+
+    commandLine 'cmd', '/c',
+            'java', '-jar',
+            proguardHome + '/lib/proguard.jar',
+            '-verbose',
+            '-injars ' + srcJar,
+            '-outjars ' + desJar,
+            '@' + projectDir.absolutePath + '/parser/proguard-rules.pro'
+            '@' + androidProguardRules
+
+    standardOutput = new FileOutputStream(new File(projectDir, "/build/proguardLog.txt"))
 }
