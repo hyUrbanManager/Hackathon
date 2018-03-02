@@ -15,6 +15,7 @@ android工程如下：
 + 基础material颜色配色，material字体大小，基础ui style。
 + c层基础数据结构定义。
 + c层内存泄漏检测工具。
++ MediaPlayer音乐缓存工具。
 
 数据结构包括如下：
 
