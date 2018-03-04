@@ -34,7 +34,7 @@ public class SortUtils {
      */
     public static void insert(int[] arr) {
 //        for (int i = 1; i < arr.length; i++) {
-//            int index = i;
+//            int index = i;55
 //            for (int j = i - 1; j >= 0; j--) {
 //                if (arr[j] > arr[index]) {
 //                    int tmp = arr[j];
@@ -220,12 +220,13 @@ public class SortUtils {
      * 从数组中选择出第k个最小的数。
      *
      * @param arr
-     * @param left
+     * @param left  [a,b)
      * @param right
      * @param k
-     * @return
+     * @returnj
      */
     public static int quickSelect(int[] arr, int left, int right, int k) {
+
 
         return 0;
     }
