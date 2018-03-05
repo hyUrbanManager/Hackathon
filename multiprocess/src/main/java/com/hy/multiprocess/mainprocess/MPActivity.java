@@ -2,6 +2,7 @@ package com.hy.multiprocess.mainprocess;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +31,8 @@ public class MPActivity extends AppCompatActivity {
     Button button3;
     @BindView(R.id.line1)
     LinearLayout line1;
+
+    Application mApplication;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -60,6 +63,9 @@ public class MPActivity extends AppCompatActivity {
         button1.setOnClickListener(v -> startActivity(new Intent("com.hy.Mp")));
         button2.setOnClickListener(v -> startActivity(new Intent("com.hy.Bp1")));
         button3.setOnClickListener(v -> startActivity(new Intent("com.hy.Bp2")));
+
+        mApplication = getApplication();
+
     }
 
     @Override
