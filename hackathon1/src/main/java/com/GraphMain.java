@@ -1,10 +1,13 @@
 package com;
 
-import com.graph.Point;
+import com.graph.Edge;
+import com.graph.Graph;
+import com.graph.GraphUtils;
+import com.graph.Vertex;
+import com.graph.VertexWrapper;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,30 +17,58 @@ import java.util.List;
  */
 public class GraphMain {
 
+    /**
+     * 构造一个图。// p365 9.8
+     *
+     * @return
+     */
+    public static Graph generateGraph() {
+        Graph graph = new Graph();
+
+        Vertex[] vs = new Vertex[8];
+        graph.vs.add(new Vertex(-1));
+        for (int i = 1; i < vs.length; i++) {
+            vs[i] = new Vertex(i);
+            graph.vs.add(vs[i]);
+        }
+
+        vs[3].edges.add(new Edge(4, vs[1]));
+        vs[3].edges.add(new Edge(5, vs[6]));
+        vs[4].edges.add(new Edge(2, vs[3]));
+        vs[1].edges.add(new Edge(1, vs[4]));
+        vs[4].edges.add(new Edge(8, vs[6]));
+        vs[1].edges.add(new Edge(2, vs[2]));
+        vs[7].edges.add(new Edge(1, vs[6]));
+        vs[2].edges.add(new Edge(3, vs[4]));
+        vs[4].edges.add(new Edge(4, vs[7]));
+        vs[4].edges.add(new Edge(2, vs[5]));
+        vs[2].edges.add(new Edge(10, vs[5]));
+        vs[5].edges.add(new Edge(6, vs[7]));
+
+        return graph;
+    }
+
     @Test
     public void test() {
-        Point[] ps = new Point[5];
-        for (int i = 0; i < ps.length; i++) {
-            ps[i] = new Point(i);
-        }
+        Graph graph = generateGraph();
 
-        ps[0].nextPs.add(ps[1]);
-        ps[1].nextPs.add(ps[2]);
-        ps[2].nextPs.add(ps[3]);
-        ps[3].nextPs.add(ps[4]);
-        ps[4].nextPs.add(ps[1]);
-        ps[0].nextPs.add(ps[2]);
+        List<VertexWrapper> list = GraphUtils.seaech1(graph, graph.vs.get(3));
 
-        Point p = ps[0];
-        List<Integer> list = new ArrayList<>();
-        while (p != ps[4]) {
-            list.add(p.value);
-            p = p.nextPs.get(0);
-        }
-
-        for (Integer i : list) {
-            System.out.print(i);
-        }
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

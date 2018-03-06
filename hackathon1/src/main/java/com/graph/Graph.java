@@ -10,10 +10,10 @@ import java.util.List;
  */
 public class Graph {
 
-    public List<Point> points;
+    public List<Vertex> vs;
 
     public Graph() {
-        this.points = new ArrayList<>();
+        this.vs = new ArrayList<>();
     }
 
 }
