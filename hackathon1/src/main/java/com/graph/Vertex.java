@@ -24,4 +24,14 @@ public class Vertex {
         this.value = value;
         this.edges = new ArrayList<>();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return seq == ((Vertex) obj).seq;
+    }
+
+    @Override
+    public int hashCode() {
+        return seq;
+    }
 }

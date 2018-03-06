@@ -16,4 +16,15 @@ public class VertexWrapper {
         this.weight = 0;
         this.vertex = vertex;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        VertexWrapper w = (VertexWrapper) obj;
+        return vertex.equals(w.vertex);
+    }
+
+    @Override
+    public int hashCode() {
+        return vertex.hashCode();
+    }
 }

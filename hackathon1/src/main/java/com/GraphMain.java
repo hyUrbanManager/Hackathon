@@ -52,7 +52,7 @@ public class GraphMain {
     public void test() {
         Graph graph = generateGraph();
 
-        List<VertexWrapper> list = GraphUtils.search1(graph, graph.vs.get(3));
+        List<VertexWrapper> list = GraphUtils.search2(graph, graph.vs.get(3));
 
     }
 
