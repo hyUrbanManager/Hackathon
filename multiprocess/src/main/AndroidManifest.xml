@@ -45,7 +45,14 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+
+        <!--静态注册时，每次接收到广播会创建一个新的实例。-->
+        <receiver android:name=".MyBroadCastReceiver">
+            <intent-filter>
+                <action android:name="hy.startCount"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
+
     </application>
-
-
 </manifest>

@@ -3,8 +3,10 @@ package com.hy.multiprocess.mainprocess;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.Application;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Process;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.hy.multiprocess.MyBroadCastReceiver;
 import com.hy.multiprocess.R;
 
 import java.util.List;
@@ -33,6 +36,8 @@ public class MPActivity extends AppCompatActivity {
     LinearLayout line1;
 
     Application mApplication;
+
+    BroadcastReceiver receiver;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -60,12 +65,31 @@ public class MPActivity extends AppCompatActivity {
 
         text.setText(sb.toString());
 
-        button1.setOnClickListener(v -> startActivity(new Intent("com.hy.Mp")));
+        button1.setOnClickListener(v -> {
+            startActivity(new Intent("com.hy.Mp"));
+//            sendBroadcast(new Intent(MyBroadCastReceiver.ACTION));
+        });
         button2.setOnClickListener(v -> startActivity(new Intent("com.hy.Bp1")));
         button3.setOnClickListener(v -> startActivity(new Intent("com.hy.Bp2")));
 
         mApplication = getApplication();
 
+        receiver = new MyBroadCastReceiver();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(MyBroadCastReceiver.ACTION);
+//        动态注册时，只有单实例。
+//        registerReceiver(receiver, intentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+//        unregisterReceiver(receiver);
     }
 
     @Override
