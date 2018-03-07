@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
  */
 public class JavaExec {
 
-    public static String className = "com.hy.niukewang.CharFragment";
+    public static String className = "com.hy.niukewang.Chorus";
 
     @Test
     public void start() throws Exception {
