@@ -16,7 +16,7 @@ public class FileRenameTest {
     @Test
     public void test() throws Exception {
         File f1 = new File("G:\\jvm\\a.txt");
-        File f2 = new File("G\\jvm\\b.txt");
+        File f2 = new File("G:\\jvm\\b.txt");
 
         if (f1.exists()) {
             System.out.println(f1.getPath() + " -> " + f2.getPath());
@@ -37,6 +37,17 @@ public class FileRenameTest {
         } else {
             System.out.println("no file");
         }
+
+    }
+
+    @Test
+    public void test2() {
+        String s = "zxcvbnm";
+        String a = "vbn";
+        if (s.contains(a)) {
+
+        }
+
 
     }
 
