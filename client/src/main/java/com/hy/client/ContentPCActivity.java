@@ -25,8 +25,8 @@ import java.util.concurrent.Executors;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "@MainActivity";
+public class ContentPCActivity extends AppCompatActivity {
+    private static final String TAG = "@ContentPCActivity";
 
     private static final Uri URI_GET_ACCOUT = Uri.parse("content://com.hy.provider.AccountProvider/getAccount");
 
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public H onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new H(LayoutInflater.from(MainActivity.this).inflate(R.layout.item_accout, parent, false));
+            return new H(LayoutInflater.from(ContentPCActivity.this).inflate(R.layout.item_accout, parent, false));
         }
 
         @Override
