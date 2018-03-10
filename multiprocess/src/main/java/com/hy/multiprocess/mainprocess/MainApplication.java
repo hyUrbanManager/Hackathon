@@ -2,6 +2,8 @@ package com.hy.multiprocess.mainprocess;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.content.ContentResolver;
+import android.net.Uri;
 
 import com.hy.androidlib.Logcat;
 import com.hy.androidlib.utils.FileUtil;
@@ -15,12 +17,16 @@ import java.lang.reflect.Field;
  */
 public class MainApplication extends Application {
 
-    public static final String TAG = "MainApplication";
+    public static final String TAG = "@MainApplication";
 
     @Override
     public void onCreate() {
         super.onCreate();
         Logcat.i(TAG, "onCreate");
+
+        ContentResolver resolver = getContentResolver();
+        String type = resolver.getType(Uri.parse("content://com.hy.provider.AccountProvider"));
+        Logcat.d(TAG, "type: " + type);
 
         try {
             Field field = this.getClass().getField("mLoadedApk");

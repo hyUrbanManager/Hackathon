@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.hy.database">
 
+    <!--声明权限-->
+    <permission
+        android:name="com.hy.GET_ACCOUNT"
+        android:label="account"
+        android:protectionLevel="normal"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,6 +22,20 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <!--提供账号查询-->
+        <provider
+            android:name=".AccountProvider"
+            android:authorities="com.hy.provider.AccountProvider"
+            android:exported="true"
+            android:permission="com.hy.GET_ACCOUNT"/>
+
+        <!--提供网页查询-->
+        <provider
+            android:name=".WebProvider"
+            android:authorities="com.hy.provider.WebProvider"
+            android:exported="true"
+            android:permission="com.hy.GET_WEB"/>
     </application>
 
 </manifest>

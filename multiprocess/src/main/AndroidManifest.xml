@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.hy.multiprocess">
 
+    <uses-permission android:name="com.hy.GET_ACCOUNT"/>
+
     <application
         android:name=".mainprocess.MainApplication"
         android:allowBackup="true"
