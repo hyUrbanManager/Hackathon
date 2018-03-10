@@ -4,6 +4,8 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +19,8 @@ import com.hy.client.bean.Account;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
 
     private ContentResolver resolver;
 
+    private ExecutorService pool = Executors.newFixedThreadPool(1);
+    private Handler mMainHandler = new Handler(Looper.getMainLooper());
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,14 +59,13 @@ public class MainActivity extends AppCompatActivity {
         String type = resolver.getType(URI_GET_ACCOUT);
         type = type == null ? "数据库app未启动" : type;
         text.setText(type);
-        updateData();
+        pool.submit(this::updateData);
     }
 
     private void updateData() {
-        list.clear();
-        adapter.notifyDataSetChanged();
         Cursor cursor = resolver.query(URI_GET_ACCOUT, null, null, null, null);
         Logcat.i(TAG, "cursor: " + cursor);
+        list.clear();
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 int id = cursor.getInt(cursor.getColumnIndex("id"));
@@ -71,11 +76,10 @@ public class MainActivity extends AppCompatActivity {
             }
             cursor.close();
         }
-        adapter.notifyDataSetChanged();
+        mMainHandler.postDelayed(() -> adapter.notifyDataSetChanged(), 500);
     }
 
     class Adp extends RecyclerView.Adapter<Adp.H> {
-
 
         @Override
         public H onCreateViewHolder(ViewGroup parent, int viewType) {
