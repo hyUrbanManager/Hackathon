@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     class Adp extends RecyclerView.Adapter<Adp.H> {
 
+
         @Override
         public H onCreateViewHolder(ViewGroup parent, int viewType) {
             return new H(LayoutInflater.from(MainActivity.this).inflate(R.layout.item_accout, parent, false));
@@ -84,8 +85,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(H holder, int position) {
             Account account = list.get(position);
-            holder.info.setText(String.format(Locale.CHINA, "%d %s %s",
-                    account.id, account.account, account.userName));
+            holder.text.setText(String.valueOf(account.id));
+            holder.text2.setText(account.account);
+            holder.text3.setText(account.userName);
         }
 
         @Override
@@ -95,8 +97,12 @@ public class MainActivity extends AppCompatActivity {
 
         class H extends RecyclerView.ViewHolder {
 
-            @BindView(R.id.info)
-            TextView info;
+            @BindView(R.id.text)
+            TextView text;
+            @BindView(R.id.text2)
+            TextView text2;
+            @BindView(R.id.text3)
+            TextView text3;
 
             public H(View itemView) {
                 super(itemView);
