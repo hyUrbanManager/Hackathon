@@ -2,9 +2,11 @@
 
 android工程如下：
 
++ 基础android库。
 + 多进程Android app。
 + 网络毒瘤，实现udp广播轰炸。
-+ 基础android库。
++ 提供ContentProvider的数据库app。
++ 访问ContentProvider的客户端app。
 
 基础android库：
 
