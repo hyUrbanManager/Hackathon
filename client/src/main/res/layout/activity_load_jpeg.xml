@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.hy.client.LoadJPEGActivity">
+
+    <TextView
+        android:id="@+id/fileInfo"
+        android:text="has not found jpg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/primary_text"
+        android:textSize="@dimen/material_button"/>
+
+    <TextView
+        android:id="@+id/decodeInfo"
+        android:layout_below="@+id/fileInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/primary_text"
+        android:textSize="@dimen/material_button"/>
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/line1"
+        android:layout_below="@+id/decodeInfo"
+        android:layout_margin="4dp"/>
+
+    <LinearLayout
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button1"
+            style="@style/click_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/button2"
+            style="@style/click_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/button3"
+            style="@style/click_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/button4"
+            style="@style/click_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+</RelativeLayout>
