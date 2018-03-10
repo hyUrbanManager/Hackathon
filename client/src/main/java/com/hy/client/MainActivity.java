@@ -50,7 +50,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        text.setText(resolver.getType(URI_GET_ACCOUT));
+        String type = resolver.getType(URI_GET_ACCOUT);
+        type = type == null ? "数据库app未启动" : type;
+        text.setText(type);
         updateData();
     }
 
