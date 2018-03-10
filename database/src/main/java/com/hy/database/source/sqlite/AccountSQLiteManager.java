@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.hy.androidlib.Logcat;
 
 /**
- * Created by Administrator on 2018/3/10.
+ * 数据库管理者。
  *
  * @author hy 2018/3/10
  */
@@ -24,7 +24,11 @@ public class AccountSQLiteManager extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         Logcat.i(TAG, "database version: " + db.getVersion());
-
+        db.execSQL("create table " + Account.TABLE_NAME + "(" +
+                "id integer primary key autoincrement," +
+                "account char(20) not null," +
+                "username char(20) not null" +
+                ");");
     }
 
     @Override
