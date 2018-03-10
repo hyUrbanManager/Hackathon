@@ -9,6 +9,8 @@ import android.widget.GridView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.hy.androidlib.utils.ToastUtil;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,8 +44,10 @@ public class WelcomeActivity extends AppCompatActivity {
         activities.add(ContentPCActivity.class);
         titles.add("ContentProvider读取数据库");
 
-        activities.add(ContentPCActivity.class);
-        titles.add("ContentProvider读取数据库");
+        activities.add(LoadJPEGActivity.class);
+        titles.add("相机大图片加载优化");
+
+        ToastUtil.init(getApplicationContext());
 
         // 初始化数据。
         for (int i = 0; i < titles.size(); i++) {
