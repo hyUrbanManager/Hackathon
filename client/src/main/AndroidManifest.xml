@@ -3,7 +3,6 @@
           package="com.hy.client">
 
     <uses-permission android:name="com.hy.GET_ACCOUNT"/>
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
@@ -24,6 +23,8 @@
         <activity android:name=".ContentPCActivity">
         </activity>
         <activity android:name=".LoadJPEGActivity">
+        </activity>
+        <activity android:name=".ViewStubActivity">
         </activity>
     </application>
 

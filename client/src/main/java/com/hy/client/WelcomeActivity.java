@@ -47,6 +47,9 @@ public class WelcomeActivity extends AppCompatActivity {
         activities.add(LoadJPEGActivity.class);
         titles.add("相机大图片加载优化");
 
+        activities.add(ViewStubActivity.class);
+        titles.add("viewStub优化布局");
+
         ToastUtil.init(getApplicationContext());
 
         // 初始化数据。
