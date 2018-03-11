@@ -3,6 +3,8 @@ package com.hy.client;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapRegionDecoder;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import com.hy.androidlib.utils.ToastUtil;
 
 import java.io.File;
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,10 +58,10 @@ public class LoadJPEGActivity extends AppCompatActivity {
         button1.setOnClickListener(v -> decodeJpg1());
         button2.setText("缩小加载");
         button2.setOnClickListener(v -> decodeJpg2());
-        button3.setText("原始加载");
-        button3.setOnClickListener(v -> decodeJpg1());
-        button4.setText("原始加载");
-        button4.setOnClickListener(v -> decodeJpg1());
+        button3.setText("降低色彩");
+        button3.setOnClickListener(v -> decodeJpg3());
+        button4.setText("部分加载");
+        button4.setOnClickListener(v -> decodeJpg4());
     }
 
     public File getCameraFile() {
@@ -93,20 +96,83 @@ public class LoadJPEGActivity extends AppCompatActivity {
         }
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        options.inPreferredConfig = Bitmap.Config.RGB_565;
-        Bitmap b = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+        BitmapFactory.decodeFile(file.getAbsolutePath(), options);
 
         int imgW = options.outWidth;
         int imgH = options.outHeight;
         int scale = Math.max(imgH / image.getHeight(), imgW / image.getWidth());
-        scale *= 4;
 
         options.inJustDecodeBounds = false;
         options.inSampleSize = scale;
         Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+        Bitmap.Config config = bitmap.getConfig();
 
         image.setImageBitmap(bitmap);
-        decodeInfo.setText("bytes: " + bitmap.getByteCount() + " size: " + bitmap.getByteCount() / 1024 + " K");
+        decodeInfo.setText("bytes: " + bitmap.getByteCount() + " size: " + bitmap.getByteCount() / 1024 + " K " +
+                "config: " + config.name());
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void decodeJpg3() {
+        File file = getCameraFile();
+        if (file == null) {
+            return;
+        }
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+
+        int imgW = options.outWidth;
+        int imgH = options.outHeight;
+        int scale = Math.max(imgH / image.getHeight(), imgW / image.getWidth());
+
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = scale;
+        Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+        Bitmap.Config config = bitmap.getConfig();
+
+        image.setImageBitmap(bitmap);
+        decodeInfo.setText("bytes: " + bitmap.getByteCount() + " size: " + bitmap.getByteCount() / 1024 + " K " +
+                "config: " + config.name());
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void decodeJpg4() {
+        File file = getCameraFile();
+        if (file == null) {
+            return;
+        }
+
+        BitmapRegionDecoder decoder;
+        try {
+            decoder = BitmapRegionDecoder.newInstance(file.getPath(), false);
+        } catch (IOException e) {
+            ToastUtil.showToastLong("该图片不支持部分加载");
+            return;
+        }
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+
+        int imgW = options.outWidth;
+        int imgH = options.outHeight;
+        int w = imgW / 4;
+        int h = imgH / 4;
+
+        Rect rect = new Rect(w, h, w * 3, h * 3);
+
+        int scale = Math.max(rect.width() / image.getHeight(), rect.height() / image.getWidth());
+
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = scale;
+
+        Bitmap bitmap = decoder.decodeRegion(rect, options);
+        image.setImageBitmap(bitmap);
+        decodeInfo.setText("bytes: " + bitmap.getByteCount() + " size: " + bitmap.getByteCount() / 1024 + " K " +
+                "config: " + bitmap.getConfig().name());
     }
 }
 
