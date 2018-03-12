@@ -8,6 +8,13 @@ android工程如下：
 + 提供ContentProvider的数据库app。
 + 访问ContentProvider的客户端app。
 
+客户端app:
+
++ 读取ContentProvider数据。
++ 加载显示图片不同的方式。
++ ViewStub优化布局。
++ applink打开app。
+
 基础android库：
 
 + 系统快速检测工具(网络，前后台，权限申请器等)。
