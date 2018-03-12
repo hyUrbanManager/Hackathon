@@ -14,6 +14,7 @@ android工程如下：
 + 加载显示图片不同的方式。
 + ViewStub优化布局。
 + applink打开app。
++ 生成二维码。
 
 基础android库：
 
