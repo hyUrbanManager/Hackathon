@@ -27,7 +27,7 @@
         <activity android:name=".ViewStubActivity">
         </activity>
 
-        <!--使用url外部链接打开的Activity-->
+        <!-- 使用url外部链接打开的Activity -->
         <activity android:name=".AppLinkActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -35,9 +35,13 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
 
-                <data
-                    android:scheme="hyclient"/>
+                <data android:scheme="hyclient"/>
             </intent-filter>
+        </activity>
+
+        <!--生成二维码-->
+        <activity android:name=".QRCodeActivity"
+            android:label="二维码">
         </activity>
     </application>
 

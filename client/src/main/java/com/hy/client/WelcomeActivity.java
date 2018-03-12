@@ -50,6 +50,9 @@ public class WelcomeActivity extends AppCompatActivity {
         activities.add(ViewStubActivity.class);
         titles.add("viewStub优化布局");
 
+        activities.add(QRCodeActivity.class);
+        titles.add("网址生成二维码");
+
         ToastUtil.init(getApplicationContext());
 
         // 初始化数据。
