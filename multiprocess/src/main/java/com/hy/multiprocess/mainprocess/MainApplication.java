@@ -7,6 +7,7 @@ import android.net.Uri;
 
 import com.hy.androidlib.Logcat;
 import com.hy.androidlib.utils.FileUtil;
+import com.hy.androidlib.utils.ToastUtil;
 
 import java.lang.reflect.Field;
 
@@ -23,6 +24,7 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Logcat.i(TAG, "onCreate");
+        ToastUtil.init(getApplicationContext());
 
         ContentResolver resolver = getContentResolver();
         String type = resolver.getType(Uri.parse("content://com.hy.provider.AccountProvider"));

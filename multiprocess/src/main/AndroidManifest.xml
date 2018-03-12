@@ -12,7 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".mainprocess.MPActivity"
             android:launchMode="singleTask">
@@ -24,12 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity
             android:name=".backgroundprocess1.BP1Activity"
             android:launchMode="singleTask"
-            android:targetActivity=".backgroundprocess1.BP1Activity"
-            android:process=":bp1">
+            android:process=":bp1"
+            android:targetActivity=".backgroundprocess1.BP1Activity">
             <intent-filter>
                 <action android:name="com.hy.Bp1"/>
                 <action android:name="android.intent.action.MAIN"/>
@@ -37,24 +35,33 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-
         <activity
             android:name=".backgroundprocess2.BP2Activity"
             android:launchMode="singleTask"
             android:process=":bp2">
             <intent-filter>
                 <action android:name="com.hy.Bp2"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
-        <!--静态注册时，每次接收到广播会创建一个新的实例。-->
+        <!-- 静态注册时，每次接收到广播会创建一个新的实例。 -->
         <receiver android:name=".MyBroadCastReceiver">
             <intent-filter>
                 <action android:name="hy.startCount"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </receiver>
 
+        <!--后台进程Service提供Token-->
+        <service
+            android:name=".backgroundprocess1.TokenService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":bp1">
+        </service>
     </application>
+
 </manifest>
