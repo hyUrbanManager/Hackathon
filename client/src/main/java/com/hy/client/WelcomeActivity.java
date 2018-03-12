@@ -37,6 +37,8 @@ public class WelcomeActivity extends AppCompatActivity {
     private ArrayList<HashMap<String, Object>> data = new ArrayList<>();
 
     public void onCreate(Bundle savedInstanceState) {
+        // 切换回原始theme。
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         ButterKnife.bind(this);
