@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".WelcomeActivity"
+        <activity
+            android:name=".WelcomeActivity"
             android:theme="@style/backgroundTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -40,10 +41,34 @@
             </intent-filter>
         </activity>
 
-        <!--生成二维码-->
-        <activity android:name=".QRCodeActivity"
+        <!-- 生成二维码 -->
+        <activity
+            android:name=".QRCodeActivity"
             android:label="二维码">
         </activity>
+
+        <!--qq分享-->
+        <activity android:name=".QQShareActivity">
+        </activity>
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <!--测试appid-->
+                <data android:scheme="tencent222222"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            />
     </application>
 
 </manifest>
