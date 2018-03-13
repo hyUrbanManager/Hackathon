@@ -96,7 +96,7 @@ public class SortUtils {
      * <p>
      * 1-&gt;2,3 = 0-&gt;1,2
      * 2-&gt;4,5 = 1-&gt;3,4
-     * 3-&gt;6,7 = 2-%gt;5,6
+     * 3-&gt;6,7 = 2-&gt;5,6
      *
      * @param arr
      */
