@@ -1,1 +1,1 @@
-include ':kotlin', ':hackathon1', ':hackathon2', ':security', ':security', ':niukewang', ':parser', ':multiprocess', ':androidlib', ':networkcancer', ':database', ':client'
+include ':kotlin', ':hackathon1', ':hackathon2', ':security', ':security', ':niukewang', ':parser', ':multiprocess', ':androidlib', ':networkcancer', ':database', ':client', ':media'
