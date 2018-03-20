@@ -11,16 +11,21 @@ public class FFPlayer {
 
     // 加载ffmpeg动态库，jni库。
     static {
-        System.loadLibrary("avcodec");
-        System.loadLibrary("avdevice");
-        System.loadLibrary("avfilter");
+//        System.loadLibrary("avcodec");
+//        System.loadLibrary("avdevice");
+//        System.loadLibrary("avfilter");
         System.loadLibrary("avformat");
-        System.loadLibrary("avutil");
-        System.loadLibrary("swresample");
-        System.loadLibrary("swscale");
+//        System.loadLibrary("avutil");
+//        System.loadLibrary("swresample");
+//        System.loadLibrary("swscale");
 
         System.loadLibrary("video");
+
+        // 初始化。
+        init();
     }
+
+    private static native int init();
 
     public static native void play(String path, SurfaceView surfaceView);
 
