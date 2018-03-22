@@ -16,7 +16,7 @@ android {
 
         externalNativeBuild {
             cmake {
-                cppFlags '-frtti -fexceptions'
+                cppFlags '-frtti -fexceptions -std=gnu++11'
             }
         }
         ndk {
@@ -24,10 +24,10 @@ android {
         }
     }
 
-    sourceSets.main {
-        jniLibs.srcDirs = ['libs']
-        jni.srcDirs = []
-    }
+//    sourceSets.main {
+//        jniLibs.srcDirs = ['libs']
+//        jni.srcDirs = []
+//    }
 
     buildTypes {
         release {
