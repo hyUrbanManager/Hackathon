@@ -25,7 +25,7 @@ Java_com_hy_media_NativeDrawActivity_native_1draw1(JNIEnv* env, jobject instance
     ANativeWindow_Buffer buffer;
 
     // 设置rgb 565
-    int set_ret = ANativeWindow_setBuffersGeometry(window, width, height, format);
+    int set_ret = ANativeWindow_setBuffersGeometry(window, width, height, WINDOW_FORMAT_RGB_565);
     int lock_ret = ANativeWindow_lock(window, &buffer, NULL);
 
     memset(buffer.bits, 0x55, (size_t) (buffer.stride * height * 2));
@@ -47,10 +47,10 @@ Java_com_hy_media_NativeDrawActivity_native_1draw2(JNIEnv* env, jobject instance
     ANativeWindow_Buffer buffer;
 
     // 设置rgb 565
-    int set_ret = ANativeWindow_setBuffersGeometry(window, width, height, format);
+    int set_ret = ANativeWindow_setBuffersGeometry(window, width, height, WINDOW_FORMAT_RGBA_8888);
     int lock_ret = ANativeWindow_lock(window, &buffer, NULL);
 
-    memset(buffer.bits, 0x22, (size_t) (width * height * 2));
+    memset(buffer.bits, 0x55, (size_t) (width * height * 2));
 
     int unlock_ret = ANativeWindow_unlockAndPost(window);
     log("set ret: %d, lock ret: %d, unlock_ret: %d", set_ret, lock_ret, unlock_ret);
