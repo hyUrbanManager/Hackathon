@@ -1,11 +1,8 @@
 package com.hy.media.player;
 
 import android.annotation.SuppressLint;
-import android.app.Application;
 import android.content.res.AssetManager;
-import android.os.Environment;
-import android.util.Log;
-import android.view.SurfaceView;
+import android.view.Surface;
 
 import com.hy.media.FileUtil;
 import com.hy.media.MediaApplication;
@@ -62,7 +59,7 @@ public class FFPlayer {
 
     private static native int init();
 
-    public static native void play(String path, SurfaceView surfaceView);
+    public static native void play(String path, Surface surface);
 
     public static native void pause();
 }

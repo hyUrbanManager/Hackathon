@@ -4,6 +4,7 @@ import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Surface;
 import android.view.SurfaceView;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -43,7 +44,8 @@ public class PlayVideoActivity extends AppCompatActivity {
         videoPath = new File(Environment.getExternalStorageDirectory(), "130.mp4").getAbsolutePath();
 
         button1.setOnClickListener(v -> {
-            FFPlayer.play(videoPath, surfaceView);
+            Surface surface = surfaceView.getHolder().getSurface();
+            FFPlayer.play(videoPath, surface);
         });
         button2.setOnClickListener(v -> {
             FFPlayer.pause();
