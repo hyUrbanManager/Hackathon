@@ -30,6 +30,7 @@ android工程如下：
 多媒体app：
 
 + 使用ffmpeg播放。
++ native层写画布。
 
 数据结构包括如下：
 
