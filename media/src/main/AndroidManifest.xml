@@ -22,6 +22,8 @@
         </activity>
         <activity android:name=".PlayVideoActivity">
         </activity>
+        <activity android:name=".NativeDrawActivity">
+        </activity>
     </application>
 
 </manifest>
