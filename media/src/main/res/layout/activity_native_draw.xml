@@ -14,10 +14,10 @@
 
     <LinearLayout
         android:id="@+id/line1"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/button1"
@@ -32,5 +32,19 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="绘制2"/>
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="绘制3"/>
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="绘制4"/>
     </LinearLayout>
 </RelativeLayout>
