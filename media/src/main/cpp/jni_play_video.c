@@ -14,7 +14,7 @@
 #define log(...) \
         __android_log_print(ANDROID_LOG_INFO, "@jni", __VA_ARGS__)
 
-void fill_color(ANativeWindow_Buffer* window_buffer);
+int isPlay = 0;
 
 JNIEXPORT jint JNICALL
 Java_com_hy_media_player_FFPlayer_init(JNIEnv* env, jclass type) {
@@ -45,6 +45,17 @@ Java_com_hy_media_player_FFPlayer_play(
     // 获取视频流解码器解码。
     AVCodecContext* codec_ctx = av_fmt_ctx->streams[video_stream_idx]->codec;
     AVCodec* codec = avcodec_find_decoder(codec_ctx->codec_id);
+
+    // 设定区域。
+    int width = codec_ctx->width;
+    int height = codec_ctx->height;
+    ARect rect;
+    rect.left = 0;
+    rect.top = 0;
+    rect.right = width;
+    rect.bottom = height;
+    log("video width: %d, video height: %d", width, height);
+
     AVFrame* yuv_frame = av_frame_alloc();
     AVFrame* rgb_frame = av_frame_alloc();
 
@@ -55,48 +66,52 @@ Java_com_hy_media_player_FFPlayer_play(
     ANativeWindow* window = ANativeWindow_fromSurface(env, surface);
     ANativeWindow_Buffer window_buffer;
 
+    // 初始化转换器。
     struct SwsContext* sws_ctx = sws_getContext(
-            codec_ctx->width, codec_ctx->height, codec_ctx->pix_fmt,
-            codec_ctx->width, codec_ctx->height, AV_PIX_FMT_RGBA,
+            width, height, codec_ctx->pix_fmt,
+            width, height, AV_PIX_FMT_RGBA,
             SWS_BILINEAR, NULL, NULL, NULL);
 
     // 读取。
     int hasDecodeAFrame;
+    isPlay = 1;
     AVPacket* packet = (AVPacket*) av_malloc(sizeof(AVPacket));
-    while (av_read_frame(av_fmt_ctx, packet) >= 0) {
+    while (isPlay > 0 && av_read_frame(av_fmt_ctx, packet) >= 0) {
         // 解码。
         if (packet->stream_index == video_stream_idx) {
             avcodec_decode_video2(codec_ctx, yuv_frame, &hasDecodeAFrame, packet);
             if (hasDecodeAFrame) {
-                log("success frame: %x, width: %d, height: %d",
-                    *yuv_frame->data[0], codec_ctx->width, codec_ctx->height);
-                int width = codec_ctx->width;
-                int height = codec_ctx->height;
-
                 // 设置缓冲区。
                 ANativeWindow_setBuffersGeometry(window, width, height, WINDOW_FORMAT_RGBA_8888);
-                ANativeWindow_lock(window, &window_buffer, NULL);
+                ANativeWindow_lock(window, &window_buffer, &rect);
                 avpicture_fill(rgb_frame, window_buffer.bits, AV_PIX_FMT_RGBA, width, height);
 
                 // 格式转换
-                sws_scale(sws_ctx, (uint8_t const* const*) yuv_frame->data,
+                sws_scale(sws_ctx, (const uint8_t* const*) yuv_frame->data,
                           yuv_frame->linesize, 0, codec_ctx->height,
                           rgb_frame->data, rgb_frame->linesize);
 
                 ANativeWindow_unlockAndPost(window);
+
+                log("success frame: %x, window width: %d, window height: %d,  stride: %d",
+                    *yuv_frame->data[0], window_buffer.width, window_buffer.height,
+                    window_buffer.stride);
             }
-            usleep(1000 * 16);
+            usleep(16666);
         }
     }
+
+    // 释放资源。
+    isPlay = 0;
+    avformat_free_context(av_fmt_ctx);
+    log("release.");
 
     (*env)->ReleaseStringUTFChars(env, path_, path);
 }
 
 JNIEXPORT void JNICALL
 Java_com_hy_media_player_FFPlayer_pause(JNIEnv* env, jclass type) {
-
-    // TODO
-
+    isPlay = 0;
 }
 
 

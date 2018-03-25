@@ -31,6 +31,7 @@ public class PlayVideoActivity extends AppCompatActivity {
     private String videoPath;
 
     private FFPlayer ffPlayer;
+    private boolean hasStart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +45,24 @@ public class PlayVideoActivity extends AppCompatActivity {
         videoPath = new File(Environment.getExternalStorageDirectory(), "130.mp4").getAbsolutePath();
 
         button1.setOnClickListener(v -> {
-            Surface surface = surfaceView.getHolder().getSurface();
-            FFPlayer.play(videoPath, surface);
+            if (hasStart) {
+                return;
+            }
+            hasStart = true;
+            new Thread(() -> {
+                Surface surface = surfaceView.getHolder().getSurface();
+                FFPlayer.play(videoPath, surface);
+            }).start();
         });
         button2.setOnClickListener(v -> {
             FFPlayer.pause();
+            hasStart = false;
         });
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        FFPlayer.pause();
+    }
 }
