@@ -53,6 +53,9 @@ public class WelcomeActivity extends AppCompatActivity {
         activities.add(NativeDrawActivity.class);
         titles.add("native层绘画");
 
+        activities.add(FFMpegInfoActivity.class);
+        titles.add("ffmpeg获取视频的信息");
+
         ToastUtil.init(getApplicationContext());
 
         // 初始化数据。
