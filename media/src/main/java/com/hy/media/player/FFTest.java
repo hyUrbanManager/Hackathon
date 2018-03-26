@@ -6,4 +6,7 @@ package com.hy.media.player;
  * @author hy 2018/3/26
  */
 public class FFTest {
+
+    public static native String getInfo(String path);
+
 }
