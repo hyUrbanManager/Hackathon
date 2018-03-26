@@ -103,6 +103,8 @@ Java_com_hy_media_player_FFPlayer_play(
 
     // 释放资源。
     isPlay = 0;
+    avcodec_close(codec_ctx);
+    avformat_close_input(&av_fmt_ctx);
     avformat_free_context(av_fmt_ctx);
     log("release.");
 
