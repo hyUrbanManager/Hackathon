@@ -42,7 +42,8 @@ public class PlayVideoActivity extends AppCompatActivity {
         // 设置像素格式。
         surfaceView.getHolder().setFormat(PixelFormat.RGBA_8888);
 
-        videoPath = new File(Environment.getExternalStorageDirectory(), "130.mp4").getAbsolutePath();
+        videoPath = new File(Environment.getExternalStorageDirectory(),
+                "future h264 aac.mkv").getAbsolutePath();
 
         button1.setOnClickListener(v -> {
             if (hasStart) {
@@ -64,5 +65,6 @@ public class PlayVideoActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         FFPlayer.pause();
+        hasStart = false;
     }
 }
