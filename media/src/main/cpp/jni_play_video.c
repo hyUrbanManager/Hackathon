@@ -6,7 +6,6 @@
 #include <unistd.h>
 #include <android/native_window.h>
 #include <android/native_window_jni.h>
-#include <android/window.h>
 #include "libavformat/avformat.h"
 #include "libavcodec/avcodec.h"
 #include "libswscale/swscale.h"
@@ -15,12 +14,6 @@
         __android_log_print(ANDROID_LOG_INFO, "@jni", __VA_ARGS__)
 
 int isPlay = 0;
-
-JNIEXPORT jint JNICALL
-Java_com_hy_media_player_FFPlayer_init(JNIEnv* env, jclass type) {
-    av_register_all();
-    return 0;
-}
 
 JNIEXPORT void JNICALL
 Java_com_hy_media_player_FFPlayer_play(

@@ -63,6 +63,8 @@ add_library( # Sets the name of the library.
              # video
              src/main/cpp/jni_play_video.c
              src/main/cpp/native_draw.cpp
+             src/main/cpp/ffmpeg_test.cpp
+             src/main/cpp/jni_loader.cpp
              )
 
 

@@ -18,14 +18,6 @@ import butterknife.ButterKnife;
 
 public class NativeDrawActivity extends AppCompatActivity {
 
-    static {
-        try {
-            Class.forName("com.hy.media.player.FFPlayer");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
     @BindView(R.id.surfaceView)
     SurfaceView surfaceView;
     @BindView(R.id.button1)

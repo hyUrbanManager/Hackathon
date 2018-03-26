@@ -10,6 +10,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.hy.androidlib.utils.ToastUtil;
+import com.hy.media.player.FFLoader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +43,9 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         ButterKnife.bind(this);
+
+        // 加载类库。
+        FFLoader.load();
 
         activities.add(PlayVideoActivity.class);
         titles.add("ffmpeg播放视频");
