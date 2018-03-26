@@ -31,6 +31,7 @@ android工程如下：
 
 + 使用ffmpeg播放。
 + native层写画布。
++ 使用ffmpeg获取视频信息。
 
 数据结构包括如下：
 
