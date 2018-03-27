@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.4.1)
 # 头文件文件夹
 include_directories(
              src/main/cpp/ffmpeg/include
+             src/main/cpp/
 )
 
 # build文件夹一直回退到最顶层文件夹
@@ -65,6 +66,7 @@ add_library( # Sets the name of the library.
              src/main/cpp/native_draw.cpp
              src/main/cpp/ffmpeg_test.cpp
              src/main/cpp/jni_loader.cpp
+             src/main/cpp/hy_lib.cpp
              )
 
 
