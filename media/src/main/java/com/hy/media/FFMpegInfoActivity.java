@@ -3,8 +3,10 @@ package com.hy.media;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.hy.media.player.FFTest;
@@ -30,6 +32,8 @@ public class FFMpegInfoActivity extends AppCompatActivity {
     LinearLayout line1;
     @BindView(R.id.text)
     TextView text;
+    @BindView(R.id.scrollView)
+    ScrollView scrollView;
 
     public String[] paths = {
             "future h264 aac.mkv",
@@ -57,5 +61,6 @@ public class FFMpegInfoActivity extends AppCompatActivity {
                 paths[index]).getAbsolutePath();
         String info = FFTest.getInfo(path);
         text.setText(info);
+        scrollView.fullScroll(View.FOCUS_UP);
     }
 }
