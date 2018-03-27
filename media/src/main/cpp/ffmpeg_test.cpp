@@ -31,7 +31,7 @@ Java_com_hy_media_player_FFTest_getInfo(JNIEnv* env, jclass type, jstring path_)
         strcat(info, "name: ");
         strcat(info, av_input_fmt->name);
         strcat(info, " ");
-        strcat(info, "long name: ");
+        strcat(info, "long_name: ");
         strcat(info, av_input_fmt->long_name);
         strcat(info, "\n");
         av_input_fmt = av_input_fmt->next;
@@ -41,10 +41,18 @@ Java_com_hy_media_player_FFTest_getInfo(JNIEnv* env, jclass type, jstring path_)
     AVStream* av_stream;
     for (int i = 0; i < av_fmt_ctx->nb_streams; i++) {
         av_stream = av_fmt_ctx->streams[i];
-        strcat(info, "long name: ");
-//        strcat(info, itos(av_stream->duration));
+//        strcat(info, "codec_type: ");
+//        strcat(info, itos(av_stream->codec->codec_type));
+//        strcat(info, " ");
+        strcat(info, "durantion: ");
+        strcat(info, lltos(av_stream->duration));
         strcat(info, " ");
-
+//        strcat(info, "nb_frame: ");
+//        strcat(info, lltos(av_stream->nb_frames));
+//        strcat(info, " ");
+//        strcat(info, "nb_decoded_frame: ");
+//        strcat(info, itos(av_stream->nb_decoded_frames));
+        strcat(info, "\n");
     }
 
     env->ReleaseStringUTFChars(path_, path);
