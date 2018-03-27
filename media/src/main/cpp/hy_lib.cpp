@@ -5,7 +5,21 @@
 #include "hy_lib.h"
 #include <unistd.h>
 
-static const char* internal_ntos(long l);
+static const char* internal_ntos(long long l);
+
+/*
+ * 数字转字符串。
+ */
+const char* lltos(long long l) {
+    return internal_ntos(l);
+}
+
+/*
+ * 数字转字符串。
+ */
+const char* ltos(long l) {
+    return internal_ntos(l);
+}
 
 /*
  * 数字转字符串。
@@ -17,7 +31,7 @@ const char* itos(int i) {
 /*
  * 内部转换数字。
  */
-static const char* internal_ntos(long l) {
+static const char* internal_ntos(long long l) {
     char* str = (char*) calloc(1, 15);
     int di = 0;
     if (l < 0) {
