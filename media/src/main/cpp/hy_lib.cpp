@@ -37,11 +37,12 @@ static const char* internal_ntos(long long l) {
     if (l < 0) {
         str[0] = '-';
         di = 1;
+        l = -l;
     }
 
     char tcs[15] = {0};
     int si = 0;
-    long t = l;
+    long long t = l;
     while (t > 0) {
         tcs[si++] = (char) (t % 10 + '0');
         t /= 10;
