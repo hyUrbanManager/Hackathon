@@ -10,3 +10,32 @@ targetCompatibility = "1.8"
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
+
+def desSdkDir = 'jspider/build/sdk/'
+
+def jarInclude = new File('jspider/libs').list()
+
+task cleanJar(type: Delete) {
+    delete desSdkDir + 'jar'
+}
+
+// 生成Jar包。
+task makeJar(dependsOn: [cleanJar], type: Jar) {
+    doFirst {
+        println 'start makeJar.'
+    }
+
+    def src = []
+    def file = new File('jspider/build/classes/java/main')
+    src.add(file)
+
+    for (int i = 0; i < jarInclude.size(); i++) {
+        from project.zipTree('libs/' + jarInclude[i])
+    }
+
+    // set.
+    archiveName = 'spider.jar'
+    from src
+    destinationDir = new File(desSdkDir, 'jar')
+    setVersion version
+}
