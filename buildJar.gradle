@@ -1,4 +1,6 @@
-// 执行方式 gradlew.bat -q -b build.gradle makeJar
+// 执行方式 gradlew.bat -q -b buildJar.gradle makeJar
+// 执行方式 gradlew.bat -q -b buildJar.gradle execJar
+// java -jar jspider/build/sdk/jar/spider.jar
 
 def desSdkDir = 'jspider/build/sdk/'
 
@@ -27,4 +29,17 @@ task makeJar(dependsOn: [cleanJar], type: Jar) {
     from src
     destinationDir = new File(desSdkDir, 'jar')
     setVersion version
+
+    manifest {
+        attributes 'Main-class': 'com.hy.jspider.Main'
+    }
+}
+
+task execJar(type: Exec) {
+    commandLine 'cmd', '/c',
+            'java', '-jar',
+            desSdkDir + 'jar/spider.jar'
+
+    // file.else console.
+//    standardOutput = new FileOutputStream(new File(projectDir, "jspider/build/exec.txt"))
 }
