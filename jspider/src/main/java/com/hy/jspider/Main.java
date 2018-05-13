@@ -3,13 +3,18 @@ package com.hy.jspider;
 import com.hy.jspider.myweb.DatabasePipeline;
 import com.hy.jspider.myweb.MyWebProcessor;
 
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Properties;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
@@ -18,34 +23,80 @@ import us.codecraft.webmagic.processor.PageProcessor;
 
 /**
  * 爬虫起始。
+ * 开始爬虫，和控制系统定时。
  */
 public class Main {
 
+    /**
+     * Android studio 测试。
+     */
+    @Test
+    public void run() {
+//        System.setProperty("javax.net.debug", "all");
+        if (false) {
+            runSpider();
+        } else {
+            main(null);
+            try {
+                Thread.sleep(3600 * 1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // version.
     public static final String version = "0.1";
 
+    // spider.
     public static PageProcessor pageProcessor = new MyWebProcessor();
     public static Pipeline pipeline = new DatabasePipeline();
     public static String startUrl = "http://139.199.170.98";
 
-    @Test
-    public void run() {
-//        System.setProperty("javax.net.debug", "all");
-        main(new String[]{"123"});
+    // exec.
+//    public static final
+    public static final int execPeriodMills = 24 * 3600 * 1000;
+
+    /**
+     * main.
+     */
+    public static void main(String[] args) {
+        // init log4j.
+        initLog4j();
+
+        // 定时任务，每天晚上3点开始执行。
+        Timer timer = new Timer();
+        Date now = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 3);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        Date scheduleDate = calendar.getTime();
+        if (scheduleDate.after(now)) {
+            // do nothing.exec now.
+        }
+
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Logger.getLogger(Main.class).info("start spider task.");
+                runSpider();
+            }
+        }, scheduleDate, execPeriodMills);
+
+        // 增加退出钩子。
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            timer.cancel();
+            String exitTime = new Date().toString() + " exit jvm.";
+            Logger.getLogger(Main.class).info(exitTime);
+        }));
+
     }
 
-    public static void main(String[] args) {
+    public static void runSpider() {
         System.out.println("version: " + version);
 
         pwd();
-
-        String os = System.getProperty("os.name").toLowerCase();
-        System.out.println("operating system: " + os);
-
-        if (os.contains("windows")) {
-            initLog4jConfig(true);
-        } else {
-            initLog4jConfig(false);
-        }
 
         Spider.create(pageProcessor)
                 .addUrl(startUrl)
@@ -55,6 +106,22 @@ public class Main {
                 .run();
     }
 
+    public static void initLog4j() {
+        String os = System.getProperty("os.name").toLowerCase();
+        System.out.println("operating system: " + os);
+
+        if (os.contains("windows")) {
+            initLog4jConfig(true);
+        } else {
+            initLog4jConfig(false);
+        }
+    }
+
+    /**
+     * 初始化日志参数，分为windows端日志和linux端日志。
+     *
+     * @param isWindows
+     */
     private static void initLog4jConfig(boolean isWindows) {
         Properties props;
         FileInputStream fis = null;
@@ -81,6 +148,9 @@ public class Main {
         }
     }
 
+    /**
+     * 输出当前路径。
+     */
     private static void pwd() {
         File directory = new File("");//参数为空
         String courseFile = null;
