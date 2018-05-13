@@ -1,4 +1,4 @@
-package com.hy.jspider;
+package com.hy.jspider.myweb;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;

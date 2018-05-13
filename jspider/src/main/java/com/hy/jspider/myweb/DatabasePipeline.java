@@ -1,4 +1,4 @@
-package com.hy.jspider;
+package com.hy.jspider.myweb;
 
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;

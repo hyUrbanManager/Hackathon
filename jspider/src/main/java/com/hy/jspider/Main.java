@@ -1,5 +1,8 @@
 package com.hy.jspider;
 
+import com.hy.jspider.myweb.DatabasePipeline;
+import com.hy.jspider.myweb.MyWebProcessor;
+
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.Test;
 
@@ -10,10 +13,19 @@ import java.util.Properties;
 
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
+import us.codecraft.webmagic.pipeline.Pipeline;
+import us.codecraft.webmagic.processor.PageProcessor;
 
+/**
+ * 爬虫起始。
+ */
 public class Main {
 
     public static final String version = "0.1";
+
+    public static PageProcessor pageProcessor = new MyWebProcessor();
+    public static Pipeline pipeline = new DatabasePipeline();
+    public static String startUrl = "http://139.199.170.98";
 
     @Test
     public void run() {
@@ -35,11 +47,11 @@ public class Main {
             initLog4jConfig(false);
         }
 
-        Spider.create(new MyWebProcessor())
-                .addUrl("http://139.199.170.98")
+        Spider.create(pageProcessor)
+                .addUrl(startUrl)
                 .thread(4)
-                .addPipeline(new DatabasePipeline())
                 .addPipeline(new ConsolePipeline())
+                .addPipeline(pipeline)
                 .run();
     }
 
