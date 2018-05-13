@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.pipeline.JsonFilePipeline;
+import us.codecraft.webmagic.pipeline.ConsolePipeline;
 
 public class Main {
 
@@ -38,7 +38,8 @@ public class Main {
         Spider.create(new MyWebProcessor())
                 .addUrl("http://139.199.170.98")
                 .thread(4)
-                .addPipeline(new JsonFilePipeline("G:\\webmagic\\myweb"))
+                .addPipeline(new DatabasePipeline())
+                .addPipeline(new ConsolePipeline())
                 .run();
     }
 

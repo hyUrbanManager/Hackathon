@@ -15,8 +15,7 @@ public class MyWebProcessor implements PageProcessor{
 
     @Override
     public void process(Page page) {
-        page.putField("h1", page.getHtml().xpath("//h1[href]").toString());
-        page.putField("links", page.getHtml().links());
+        page.putField("h1", page.getHtml().xpath("//h1/a/@href").get());
     }
 
     @Override
