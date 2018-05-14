@@ -17,12 +17,19 @@ public abstract class Downloader {
      * url list下载。
      *
      * @param urlList
+     * @param fileNames
      */
-    public void download(List<String> urlList) {
-        int num = 0;
-        for (String url : urlList) {
-            String[] ss = url.split("/");
-            String fileName = ss[ss.length - 1];
+    public void download(List<String> urlList, List<String> fileNames) {
+        if (fileNames.size() != urlList.size()) {
+            Logger.getLogger(Downloader.class).info("param erro. size is: " + urlList.size() +
+                    ", " + fileNames.size());
+            return;
+        }
+        Logger.getLogger(Downloader.class).info("download size: " + urlList.size());
+        int num = 1;
+        for (int i = 0; i < urlList.size(); i++) {
+            String url = urlList.get(i);
+            String fileName = fileNames.get(i);
             String command = "curl -o " + getDownLoadDir() + "/" + fileName + " " + url;
             try {
                 Process process = Runtime.getRuntime().exec(command);

@@ -40,16 +40,21 @@ public class XemhDownloader extends Downloader {
 
     @Override
     public void startDownload() {
-        List<String> list = new ArrayList<>();
+        List<String> urls = new ArrayList<>();
+        List<String> names = new ArrayList<>();
         try {
             connection = DriverManager.getConnection(mySqlServerUrl,
                     user, password);
             statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("select url from ess_xemh");
+            ResultSet rs = statement.executeQuery("select title, url from ess_xemh");
             while (rs.next()) {
-                list.add(rs.getString("url"));
+                String title = rs.getString("title").replace("邪恶漫画全集", "");
+                if (title.length() != 0) {
+                    urls.add(rs.getString("url"));
+                    names.add(title);
+                }
             }
-            download(list);
+            download(urls, names);
             statement.close();
             connection.close();
         } catch (SQLException e) {
