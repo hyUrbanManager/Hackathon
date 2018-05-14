@@ -1,5 +1,7 @@
 package com.hy.jspider.myweb;
 
+import com.hy.jspider.DbPipeline;
+
 import org.junit.Test;
 
 import java.sql.Connection;
@@ -11,14 +13,13 @@ import java.util.List;
 
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.pipeline.Pipeline;
 
 /**
  * 保存进数据库。
  *
  * @author hy 2018/5/13
  */
-public class DatabasePipeline implements Pipeline {
+public class MyPipeline implements DbPipeline {
 
     @Test
     public void testSql() {
@@ -80,7 +81,7 @@ public class DatabasePipeline implements Pipeline {
     /**
      * 连接打开数据库。
      */
-    public void connect() {
+    public void startDb() {
         try {
             connection = DriverManager.getConnection(mySqlServerUrl,
                     user, password);
@@ -94,7 +95,7 @@ public class DatabasePipeline implements Pipeline {
     /**
      * 关闭数据库。
      */
-    public void disconnect() {
+    public void endDb() {
         if (connection != null) {
             try {
                 connection.close();

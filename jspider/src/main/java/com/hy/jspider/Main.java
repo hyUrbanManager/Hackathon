@@ -1,6 +1,6 @@
 package com.hy.jspider;
 
-import com.hy.jspider.myweb.DatabasePipeline;
+import com.hy.jspider.myweb.MyPipeline;
 import com.hy.jspider.myweb.MyWebProcessor;
 
 import org.apache.log4j.Logger;
@@ -18,7 +18,6 @@ import java.util.TimerTask;
 
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
-import us.codecraft.webmagic.pipeline.Pipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 
 /**
@@ -50,7 +49,7 @@ public class Main {
 
     // spider.
     public static PageProcessor pageProcessor = new MyWebProcessor();
-    public static Pipeline pipeline = new DatabasePipeline();
+    public static DbPipeline pipeline = new MyPipeline();
     public static String startUrl = "http://139.199.170.98";
 
     // exec.
@@ -76,6 +75,9 @@ public class Main {
             // do nothing.exec now.
         }
 
+        // start db.
+        pipeline.startDb();
+
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -87,6 +89,7 @@ public class Main {
         // 增加退出钩子。
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             timer.cancel();
+            pipeline.endDb();
             String exitTime = new Date().toString() + " exit jvm.";
             Logger.getLogger(Main.class).info(exitTime);
         }));
