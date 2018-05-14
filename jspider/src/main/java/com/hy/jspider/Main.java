@@ -1,5 +1,6 @@
 package com.hy.jspider;
 
+import com.hy.jspider.ess.XemhDownloader;
 import com.hy.jspider.ess.XemhPipeline;
 import com.hy.jspider.ess.XemhProcessor;
 import com.hy.jspider.myweb.MyPipeline;
@@ -25,6 +26,7 @@ import us.codecraft.webmagic.processor.PageProcessor;
 /**
  * 爬虫起始。
  * 开始爬虫，和控制系统定时。
+ * 具有下载器功能。
  */
 public class Main {
 
@@ -37,7 +39,7 @@ public class Main {
         if (false) {
             runSpider();
         } else {
-            main(null);
+            main(new String[]{});
             try {
                 Thread.sleep(3600 * 1000);
             } catch (InterruptedException e) {
@@ -64,6 +66,13 @@ public class Main {
     public static void main(String[] args) {
         // init log4j.
         initLog4j();
+
+        if (args != null && args.length > 0 && args[0].equals("-d")) {
+            Logger.getLogger(Main.class).info("start download task.");
+            Downloader downloader = new XemhDownloader();
+            downloader.startDownload();
+            return;
+        }
 
         // 定时任务，每天晚上3点开始执行。
         Timer timer = new Timer();
