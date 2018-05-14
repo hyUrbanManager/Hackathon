@@ -1,5 +1,7 @@
 package com.hy.jspider;
 
+import com.hy.jspider.ess.XemhPipeline;
+import com.hy.jspider.ess.XemhProcessor;
 import com.hy.jspider.myweb.MyPipeline;
 import com.hy.jspider.myweb.MyWebProcessor;
 
@@ -48,9 +50,9 @@ public class Main {
     public static final String version = "0.1";
 
     // spider.
-    public static PageProcessor pageProcessor = new MyWebProcessor();
-    public static DbPipeline pipeline = new MyPipeline();
-    public static String startUrl = "http://139.199.170.98";
+    public static PageProcessor pageProcessor = new XemhProcessor();
+    public static DbPipeline pipeline = new XemhPipeline();
+    public static String startUrl = "http://www.ess32.com/xiee/9282.html";
 
     // exec.
 //    public static final
