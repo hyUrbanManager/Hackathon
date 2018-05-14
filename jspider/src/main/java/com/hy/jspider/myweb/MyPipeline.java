@@ -21,6 +21,95 @@ import us.codecraft.webmagic.Task;
  */
 public class MyPipeline implements DbPipeline {
 
+    // load Driver.
+    static {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // url.
+    public static final String mySqlServerUrl =
+            "jdbc:mysql://localhost:3306/myweb" +
+                    "?useSSL=false" +
+                    "&serverTimezone=CST" +
+                    "&useUnicode=true&characterEncoding=utf8";
+    public static final String user = "hy";
+    public static final String password = "12345678";
+
+    private Connection connection;
+    private Statement statement;
+
+    /**
+     * 连接打开数据库。
+     */
+    public void startDb() {
+        try {
+            connection = DriverManager.getConnection(mySqlServerUrl,
+                    user, password);
+            statement = connection.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        createTable();
+    }
+
+    /**
+     * 创建表。
+     */
+    private void createTable() {
+        try {
+            statement.execute("create table if not exists " +
+                    "links(id int not null primary key auto_increment, " +
+                    "url varchar(512)" +
+                    ")");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 关闭数据库。
+     */
+    public void endDb() {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        if (statement != null) {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void process(ResultItems resultItems, Task task) {
+        List<String> list = resultItems.get("links");
+        try {
+            ResultSet rs = statement.executeQuery("select url from links");
+            while (rs.next()) {
+                String url = rs.getString("url");
+                list.remove(url);
+            }
+            for (String url : list) {
+                statement.execute("insert into links(url) values ('" +
+                        url +
+                        "')");
+                System.out.println("add");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Test
     public void testSql() {
         try {
@@ -55,68 +144,6 @@ public class MyPipeline implements DbPipeline {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    // load Driver.
-    static {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // url.
-    public static final String mySqlServerUrl =
-            "jdbc:mysql://localhost:3306/sqlinjection" +
-                    "?useSSL=false" +
-                    "&serverTimezone=CST" +
-                    "&useUnicode=true&characterEncoding=utf8";
-    public static final String user = "hy";
-    public static final String password = "12345678";
-
-    private Connection connection;
-    private Statement statement;
-
-    /**
-     * 连接打开数据库。
-     */
-    public void startDb() {
-        try {
-            connection = DriverManager.getConnection(mySqlServerUrl,
-                    user, password);
-            statement = connection.createStatement();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    /**
-     * 关闭数据库。
-     */
-    public void endDb() {
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        if (statement != null) {
-            try {
-                statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public void process(ResultItems resultItems, Task task) {
-        List<String> list = resultItems.get("links");
-
-
     }
 
 }
