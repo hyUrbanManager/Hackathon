@@ -67,11 +67,15 @@ public class Main {
         // init log4j.
         initLog4j();
 
-        if (args != null && args.length > 0 && args[0].equals("-d")) {
-            Logger.getLogger(Main.class).info("start download task.");
-            Downloader downloader = new XemhDownloader();
-            downloader.startDownload();
-            return;
+        if (args != null && args.length > 0) {
+            if (args[0].equals("-d")) {
+                Logger.getLogger(Main.class).info("start download task.");
+                Downloader downloader = new XemhDownloader();
+                downloader.startDownload();
+                return;
+            } else if (args.length >= 2 && args[0].equals("-s")) {
+                startUrl = args[1];
+            }
         }
 
         // 定时任务，每天晚上3点开始执行。
