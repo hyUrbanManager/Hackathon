@@ -10,10 +10,9 @@ task cleanJar(type: Delete) {
     delete desSdkDir + 'jar'
 }
 
-// 生成Jar包。
-task makeJar(dependsOn: [cleanJar], type: Jar) {
+task makeJarAll(type: Jar) {
     doFirst {
-        println 'start makeJar.'
+        println 'start makeJarAll.'
     }
 
     def src = []
@@ -25,7 +24,7 @@ task makeJar(dependsOn: [cleanJar], type: Jar) {
     }
 
     // set.
-    archiveName = 'spider.jar'
+    archiveName = 'spiderAll.jar'
     from src
     destinationDir = new File(desSdkDir, 'jar')
     setVersion version
@@ -35,11 +34,45 @@ task makeJar(dependsOn: [cleanJar], type: Jar) {
     }
 }
 
-task execJar(type: Exec) {
-    commandLine 'cmd', '/c',
-            'java', '-jar',
-            desSdkDir + 'jar/spider.jar'
+// only run on linux.
+task makeJarSimple(type: Jar) {
+    doFirst {
+        println 'start makeJarSimple.'
+    }
 
-    // file.else console.
-//    standardOutput = new FileOutputStream(new File(projectDir, "jspider/build/exec.txt"))
+    def src = []
+    def file = new File('jspider/build/classes/java/main')
+    src.add(file)
+
+    // set.
+    archiveName = 'spiderSimple.jar'
+    from src
+    destinationDir = new File(desSdkDir, 'jar')
+    setVersion version
+
+    manifest {
+        attributes 'Main-class': 'com.hy.jspider.Main'
+        attributes 'Class-Path': '/home/hy/Downloads/lib/spiderlibrary.jar'
+    }
 }
+
+// 生成Jar包。
+task makeJar(dependsOn: [cleanJar, makeJarSimple, makeJarAll], type: Jar) {
+}
+
+// 多个依赖打成一个Jar包。
+task makeJarDependency(type: Jar) {
+    doFirst {
+        println 'start makeJarDependency.'
+    }
+
+    for (int i = 0; i < jarInclude.size(); i++) {
+        from project.zipTree('jspider/libs/' + jarInclude[i])
+    }
+
+    // set.
+    archiveName = 'spiderlibrary.jar'
+    destinationDir = new File(desSdkDir, 'lib')
+    setVersion version
+}
+
