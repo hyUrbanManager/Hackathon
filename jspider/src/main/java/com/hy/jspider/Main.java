@@ -30,24 +30,6 @@ import us.codecraft.webmagic.processor.PageProcessor;
  */
 public class Main {
 
-    /**
-     * Android studio 测试。
-     */
-    @Test
-    public void run() {
-//        System.setProperty("javax.net.debug", "all");
-        if (false) {
-            runSpider();
-        } else {
-            main(new String[]{});
-            try {
-                Thread.sleep(3600 * 1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     // version.
     public static final String version = "0.1";
 
@@ -57,13 +39,14 @@ public class Main {
     public static String startUrl = "http://www.ess32.com/xiee/9282.html";
 
     // exec.
-//    public static final
     public static final int execPeriodMills = 24 * 3600 * 1000;
 
     /**
      * main.
      */
     public static void main(String[] args) {
+        System.out.println(System.getProperty("CLASSPATH"));
+
         // init log4j.
         initLog4j();
 
@@ -76,6 +59,7 @@ public class Main {
             } else if (args.length >= 2 && args[0].equals("-s")) {
                 startUrl = args[1];
             }
+            return;
         }
 
         // 定时任务，每天晚上3点开始执行。
@@ -180,4 +164,14 @@ public class Main {
         System.out.println(courseFile);
     }
 
+    /**
+     * 输出帮助。
+     */
+    public void printHelp() {
+        String help = "" +
+                "use: option [args]\n" +
+                "-s\n" +
+                "-d\n";
+        System.out.println(help);
+    }
 }
