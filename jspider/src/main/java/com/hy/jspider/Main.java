@@ -25,6 +25,12 @@ public class Main {
      * main.
      */
     public static void main(String[] args) {
+        try {
+            Runtime.getRuntime().exec("bash /home/hy/light.sh 5");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         if (!hasBeenInit) {
             // init log4j.
             initLog4jConfig();
@@ -34,28 +40,34 @@ public class Main {
 
         if (args == null || args.length == 0) {
             printHelp();
-            return;
+        } else {
+            printInfo();
+            switch (args[0]) {
+                case "-d":
+                    MainDownload.main(args);
+                    break;
+                case "-s":
+                    MainScrape.main(args);
+                    break;
+                default:
+                    printHelp();
+            }
         }
 
-        printInfo();
-
-        switch (args[0]) {
-            case "-d":
-                MainDownload.main(args);
-                break;
-            case "-s":
-                MainScrape.main(args);
-                break;
-            default:
-                printHelp();
+        // 不一定会执行到。
+        try {
+            Runtime.getRuntime().exec("bash /home/hy/light.sh");
+            System.out.println("main close light.");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        while (doNextArgs != null) {
-            String[] tmpArgs = new String[doNextArgs.length];
-            System.arraycopy(doNextArgs, 0, tmpArgs, 0, doNextArgs.length);
-            doNextArgs = null;
-            main(tmpArgs);
-        }
+//        while (doNextArgs != null) {
+//            String[] tmpArgs = new String[doNextArgs.length];
+//            System.arraycopy(doNextArgs, 0, tmpArgs, 0, doNextArgs.length);
+//            doNextArgs = null;
+//            main(tmpArgs);
+//        }
     }
 
     /**

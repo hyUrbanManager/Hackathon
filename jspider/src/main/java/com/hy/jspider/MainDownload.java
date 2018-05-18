@@ -4,6 +4,7 @@ import com.hy.jspider.ess.XemhDownloader;
 
 import org.apache.log4j.Logger;
 
+import java.io.IOException;
 import java.util.Date;
 
 /**
@@ -20,6 +21,11 @@ public class MainDownload {
 
         // 增加退出钩子。
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                Runtime.getRuntime().exec("bash /home/hy/light.sh");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             String exitTime = new Date().toString() + " exit jvm.";
             Logger.getLogger(Main.class).info(exitTime);
         }));
