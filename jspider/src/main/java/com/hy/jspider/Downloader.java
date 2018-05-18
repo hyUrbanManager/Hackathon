@@ -31,6 +31,7 @@ public abstract class Downloader {
             String url = urlList.get(i);
             String fileName = fileNames.get(i);
             String command = "curl -o " + getDownLoadDir() + "/" + fileName + " " + url;
+            System.out.println("command: " + command);
             try {
                 Process process = Runtime.getRuntime().exec(command);
                 int r = process.waitFor();

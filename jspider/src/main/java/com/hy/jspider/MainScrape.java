@@ -1,5 +1,6 @@
 package com.hy.jspider;
 
+import com.hy.jspider.ess.XemhConfig;
 import com.hy.jspider.ess.XemhPipeline;
 import com.hy.jspider.ess.XemhProcessor;
 
@@ -22,15 +23,16 @@ import us.codecraft.webmagic.processor.PageProcessor;
 public class MainScrape {
 
     // spider.
-    public static PageProcessor pageProcessor = new XemhProcessor();
-    public static DbPipeline pipeline = new XemhPipeline();
-    public static String startUrl = "http://www.ess32.com/xiee/9282.html";
+    public static PageProcessor pageProcessor = XemhConfig.processor;
+    public static DbPipeline pipeline = XemhConfig.pipeline;
+    public static String startUrl = XemhConfig.startUrl;
 
     // exec.
     public static final int execPeriodMills = 24 * 3600 * 1000;
 
     /**
      * Scrape，从jvm Main传来的参数。
+     *
      * @param args
      */
     public static void main(String[] args) {
