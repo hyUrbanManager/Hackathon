@@ -14,16 +14,11 @@ public class TestTest {
      */
     @Test
     public void run() {
-//        System.setProperty("javax.net.debug", "all");
-        if (false) {
-            Main.runSpider();
-        } else {
-            Main.main(new String[]{});
-            try {
-                Thread.sleep(3600 * 1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        Main.main(new String[]{"-s"});
+        try {
+            Thread.sleep(3600 * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

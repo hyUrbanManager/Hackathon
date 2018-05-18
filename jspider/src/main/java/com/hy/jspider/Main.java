@@ -1,27 +1,11 @@
 package com.hy.jspider;
 
-import com.hy.jspider.ess.XemhDownloader;
-import com.hy.jspider.ess.XemhPipeline;
-import com.hy.jspider.ess.XemhProcessor;
-import com.hy.jspider.myweb.MyPipeline;
-import com.hy.jspider.myweb.MyWebProcessor;
-
-import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.junit.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Properties;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.pipeline.ConsolePipeline;
-import us.codecraft.webmagic.processor.PageProcessor;
 
 /**
  * 爬虫起始。
@@ -33,104 +17,70 @@ public class Main {
     // version.
     public static final String version = "0.1";
 
-    // spider.
-    public static PageProcessor pageProcessor = new XemhProcessor();
-    public static DbPipeline pipeline = new XemhPipeline();
-    public static String startUrl = "http://www.ess32.com/xiee/9282.html";
-
-    // exec.
-    public static final int execPeriodMills = 24 * 3600 * 1000;
-
     /**
      * main.
      */
     public static void main(String[] args) {
-        System.out.println(System.getProperty("CLASSPATH"));
-
         // init log4j.
-        initLog4j();
+        initLog4jConfig();
 
-        if (args != null && args.length > 0) {
-            if (args[0].equals("-d")) {
-                Logger.getLogger(Main.class).info("start download task.");
-                Downloader downloader = new XemhDownloader();
-                downloader.startDownload();
-                return;
-            } else if (args.length >= 2 && args[0].equals("-s")) {
-                startUrl = args[1];
-            }
+        if (args == null || args.length == 0) {
+            printHelp();
             return;
         }
 
-        // 定时任务，每天晚上3点开始执行。
-        Timer timer = new Timer();
-        Date now = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 3);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        Date scheduleDate = calendar.getTime();
-        if (scheduleDate.after(now)) {
-            // do nothing.exec now.
-        }
+        printInfo();
 
-        // start db.
-        pipeline.startDb();
-
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                Logger.getLogger(Main.class).info("start spider task.");
-                runSpider();
-            }
-        }, scheduleDate, execPeriodMills);
-
-        // 增加退出钩子。
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            timer.cancel();
-            pipeline.endDb();
-            String exitTime = new Date().toString() + " exit jvm.";
-            Logger.getLogger(Main.class).info(exitTime);
-        }));
-
-    }
-
-    public static void runSpider() {
-        System.out.println("version: " + version);
-
-        pwd();
-
-        Spider.create(pageProcessor)
-                .addUrl(startUrl)
-                .thread(4)
-                .addPipeline(new ConsolePipeline())
-                .addPipeline(pipeline)
-                .run();
-    }
-
-    public static void initLog4j() {
-        String os = System.getProperty("os.name").toLowerCase();
-        System.out.println("operating system: " + os);
-
-        if (os.contains("windows")) {
-            initLog4jConfig(true);
-        } else {
-            initLog4jConfig(false);
+        switch (args[0]) {
+            case "-d":
+                MainDownload.main(args);
+                break;
+            case "-s":
+                MainScrape.main(args);
+                break;
+            default:
+                printHelp();
         }
     }
 
     /**
-     * 初始化日志参数，分为windows端日志和linux端日志。
-     *
-     * @param isWindows
+     * 输出帮助。
      */
-    private static void initLog4jConfig(boolean isWindows) {
+    public static void printHelp() {
+        String help = "" +
+                "use: option [args]\n" +
+                "-s [startUrl]\n" +
+                "-d \n";
+        System.out.println(help);
+    }
+
+    /**
+     * 输出程序重要信息。
+     */
+    public static void printInfo() {
+        System.out.println("version: " + version);
+        pwd();
+        System.out.println(System.getProperty("os.name"));
+        long totalMem = Runtime.getRuntime().totalMemory();
+        long maxMem = Runtime.getRuntime().maxMemory();
+        long freeMem = Runtime.getRuntime().freeMemory();
+        System.out.println("totalMem: " + totalMem / 1024 / 1024 + " M.");
+        System.out.println("maxMem: " + maxMem / 1024 / 1024 + " M.");
+        System.out.println("freeMem: " + freeMem / 1024 / 1024 + " M.");
+    }
+
+
+    /**
+     * 初始化日志参数，分为windows端日志和linux端日志。
+     */
+    private static void initLog4jConfig() {
+        String os = System.getProperty("os.name").toLowerCase();
         Properties props;
         FileInputStream fis = null;
         try {
             // 从配置文件dbinfo.properties中读取配置信息
             props = new Properties();
-            if (isWindows) {
+            if (os.contains("windows")) {
                 fis = new FileInputStream("jspider/log4jw.properties");
             } else {
                 fis = new FileInputStream("/home/hy/Public/log4jl.properties");
@@ -164,14 +114,4 @@ public class Main {
         System.out.println(courseFile);
     }
 
-    /**
-     * 输出帮助。
-     */
-    public void printHelp() {
-        String help = "" +
-                "use: option [args]\n" +
-                "-s\n" +
-                "-d\n";
-        System.out.println(help);
-    }
 }
