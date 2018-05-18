@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * 邪恶漫画图片下载。
+ * 不支持中文文件名。
  *
  * @author hy 2018/5/14
  */
@@ -47,11 +48,21 @@ public class XemhDownloader extends Downloader {
                     user, password);
             statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("select title, url from ess_xemh");
+            int num = 0;
             while (rs.next()) {
                 String title = rs.getString("title").replace("邪恶漫画全集", "");
                 if (title.length() != 0) {
-                    urls.add(rs.getString("url"));
-                    names.add(title);
+                    String url = rs.getString("url");
+                    urls.add(url);
+                    String[] urlSplit = url.split("/");
+                    String fn;
+                    try {
+                        fn = urlSplit[urlSplit.length - 2] + "_" + num++ + ".jpg";
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        fn = num++ + ".jpg";
+                    }
+                    names.add(fn);
                 }
             }
             download(urls, names);
