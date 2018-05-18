@@ -17,12 +17,20 @@ public class Main {
     // version.
     public static final String version = "0.1";
 
+    public static String[] doNextArgs = null;
+
+    private static boolean hasBeenInit = false;
+
     /**
      * main.
      */
     public static void main(String[] args) {
-        // init log4j.
-        initLog4jConfig();
+        if (!hasBeenInit) {
+            // init log4j.
+            initLog4jConfig();
+
+            hasBeenInit = true;
+        }
 
         if (args == null || args.length == 0) {
             printHelp();
@@ -40,6 +48,13 @@ public class Main {
                 break;
             default:
                 printHelp();
+        }
+
+        while (doNextArgs != null) {
+            String[] tmpArgs = new String[doNextArgs.length];
+            System.arraycopy(doNextArgs, 0, tmpArgs, 0, doNextArgs.length);
+            doNextArgs = null;
+            main(tmpArgs);
         }
     }
 

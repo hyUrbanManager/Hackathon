@@ -61,8 +61,8 @@ public class MainScrape {
                         .addUrl(startUrl)
                         .thread(Runtime.getRuntime().availableProcessors())
                         .addPipeline(new ConsolePipeline())
-                        .addPipeline(pipeline);
-//                        .run();
+                        .addPipeline(pipeline)
+                        .run();
             }
         }, scheduleDate, execPeriodMills);
 

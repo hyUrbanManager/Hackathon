@@ -119,7 +119,7 @@ public class XemhPipeline implements DbPipeline {
         String title = resultItems.get("title");
         String url = resultItems.get("url");
         if (savedUrls.contains(url)) {
-            System.out.println("has saved.");
+            System.out.println("mysql has been saved this url result.");
             return;
         }
         try {

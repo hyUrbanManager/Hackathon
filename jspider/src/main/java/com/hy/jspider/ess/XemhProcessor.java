@@ -1,5 +1,9 @@
 package com.hy.jspider.ess;
 
+import com.hy.jspider.Main;
+
+import org.apache.log4j.Logger;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
@@ -22,15 +26,6 @@ public class XemhProcessor implements PageProcessor {
     @Override
     public void process(Page page) {
         Selectable comicNode = page.getHtml().xpath("//li[@id='imgshow']/img");
-        Selectable nextNode = page.getHtml().xpath("//a[@id='pre2']");
-
-//        String s = page.getHtml().xpath("//[@class='tagc2]/text()").get();
-//        String s = page.getHtml().xpath("//li[@id='imgshow']/img/@href").get();
-//        String s = page.getHtml().css("").get();
-//        System.out.println(s);
-//        String n = comicNode.xpath("@alt").get();
-//        page.putField("name", comicNode.xpath("@alt").get());
-//        page.putField("url", comicNode.xpath("@src").get());
 
         page.putField("title", comicNode.regex("alt=\"(.*?)\"", 1).get());
         page.putField("url", comicNode.regex("src=\"(.*?)\"", 1).get());
@@ -40,7 +35,12 @@ public class XemhProcessor implements PageProcessor {
         // 统计。
         page.putField("num", num++);
 
-        page.addTargetRequest("http://www.ess32.com" + next);
+        if (next != null) {
+            page.addTargetRequest("http://www.ess32.com" + next);
+        } else {
+            Logger.getLogger(XemhProcessor.class).info("xemh spider will end, reason: no next page.");
+            Main.doNextArgs = new String[]{"-d"};
+        }
     }
 
     @Override
@@ -48,3 +48,11 @@ public class XemhProcessor implements PageProcessor {
         return site;
     }
 }
+
+//        String s = page.getHtml().xpath("//[@class='tagc2]/text()").get();
+//        String s = page.getHtml().xpath("//li[@id='imgshow']/img/@href").get();
+//        String s = page.getHtml().css("").get();
+//        System.out.println(s);
+//        String n = comicNode.xpath("@alt").get();
+//        page.putField("name", comicNode.xpath("@alt").get());
+//        page.putField("url", comicNode.xpath("@src").get());
