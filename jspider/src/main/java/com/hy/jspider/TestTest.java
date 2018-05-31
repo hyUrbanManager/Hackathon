@@ -14,7 +14,7 @@ public class TestTest {
      */
     @Test
     public void run() {
-        Main.main(new String[]{"-s"});
+        Main.main(new String[]{"-s", "-t"});
         try {
             Thread.sleep(3600 * 1000);
         } catch (InterruptedException e) {

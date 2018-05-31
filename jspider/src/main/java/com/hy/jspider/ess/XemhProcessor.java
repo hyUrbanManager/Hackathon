@@ -39,7 +39,6 @@ public class XemhProcessor implements PageProcessor {
             page.addTargetRequest("http://www.ess32.com" + next);
         } else {
             Logger.getLogger(XemhProcessor.class).info("xemh spider will end, reason: no next page.");
-            Main.doNextArgs = new String[]{"-d"};
         }
     }
 

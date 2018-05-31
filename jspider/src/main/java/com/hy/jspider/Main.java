@@ -17,26 +17,29 @@ public class Main {
     // version.
     public static final String version = "0.1";
 
-    public static String[] doNextArgs = null;
-
-    private static boolean hasBeenInit = false;
+    // is linux system.
+    public static boolean isLinux = true;
 
     /**
      * main.
      */
     public static void main(String[] args) {
-        try {
-            Runtime.getRuntime().exec("bash /home/hy/light.sh 5");
-        } catch (IOException e) {
-            e.printStackTrace();
+        // 判断系统。
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.contains("windows")) {
+            isLinux = false;
         }
 
-        if (!hasBeenInit) {
-            // init log4j.
-            initLog4jConfig();
-
-            hasBeenInit = true;
+        if (isLinux) {
+            try {
+                Runtime.getRuntime().exec("bash /home/hy/light.sh 5");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
+        // init log4j.
+        initLog4jConfig();
 
         if (args == null || args.length == 0) {
             printHelp();
@@ -55,19 +58,14 @@ public class Main {
         }
 
         // 不一定会执行到。
-        try {
-            Runtime.getRuntime().exec("bash /home/hy/light.sh");
-            System.out.println("main close light.");
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (isLinux) {
+            try {
+                Runtime.getRuntime().exec("bash /home/hy/light.sh");
+                System.out.println("main close light.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-
-//        while (doNextArgs != null) {
-//            String[] tmpArgs = new String[doNextArgs.length];
-//            System.arraycopy(doNextArgs, 0, tmpArgs, 0, doNextArgs.length);
-//            doNextArgs = null;
-//            main(tmpArgs);
-//        }
     }
 
     /**
@@ -76,7 +74,7 @@ public class Main {
     public static void printHelp() {
         String help = "" +
                 "use: option [args]\n" +
-                "-s [startUrl]\n" +
+                "-s [startUrl] [-t](if test scrape) \n" +
                 "-d \n";
         System.out.println(help);
     }
@@ -101,16 +99,15 @@ public class Main {
      * 初始化日志参数，分为windows端日志和linux端日志。
      */
     private static void initLog4jConfig() {
-        String os = System.getProperty("os.name").toLowerCase();
         Properties props;
         FileInputStream fis = null;
         try {
             // 从配置文件dbinfo.properties中读取配置信息
             props = new Properties();
-            if (os.contains("windows")) {
-                fis = new FileInputStream("jspider/log4jw.properties");
-            } else {
+            if (isLinux) {
                 fis = new FileInputStream("/home/hy/Public/log4jl.properties");
+            } else {
+                fis = new FileInputStream("jspider/log4jw.properties");
             }
             props.load(fis);
             PropertyConfigurator.configure(props);//装入log4j配置信息

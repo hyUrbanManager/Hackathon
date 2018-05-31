@@ -1,11 +1,11 @@
 package com.hy.jspider;
 
+import com.hy.jspider.baidu.BaiduConfig;
 import com.hy.jspider.ess.XemhConfig;
-import com.hy.jspider.ess.XemhPipeline;
-import com.hy.jspider.ess.XemhProcessor;
 
 import org.apache.log4j.Logger;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
@@ -23,12 +23,14 @@ import us.codecraft.webmagic.processor.PageProcessor;
 public class MainScrape {
 
     // spider.
-    public static PageProcessor pageProcessor = XemhConfig.processor;
-    public static DbPipeline pipeline = XemhConfig.pipeline;
-    public static String startUrl = XemhConfig.startUrl;
+    public static PageProcessor pageProcessor = BaiduConfig.processor;
+    public static DbPipeline pipeline = BaiduConfig.pipeline;
+    public static String startUrl = BaiduConfig.startUrl;
 
     // exec.
     public static final int execPeriodMills = 24 * 3600 * 1000;
+
+    private static boolean isTestScrape = false;
 
     /**
      * Scrape，从jvm Main传来的参数。
@@ -36,8 +38,27 @@ public class MainScrape {
      * @param args
      */
     public static void main(String[] args) {
-        if (args.length >= 2) {
-            startUrl = args[1];
+        try {
+            int index = 0;
+            String s;
+            String ss;
+            while (index < args.length && (s = args[index++]).startsWith("-")) {
+                switch (s) {
+                    case "-s":
+                        if ((ss = args[index++]).startsWith("-")) {
+                            index--;
+                        } else {
+                            startUrl = ss;
+                        }
+                        break;
+                    case "-t":
+                        isTestScrape = true;
+                        break;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("*** " + Arrays.toString(args) + " args is error. ***");
+            return;
         }
 
         // 定时任务，每天晚上3点开始执行。
@@ -48,8 +69,10 @@ public class MainScrape {
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         Date scheduleDate = calendar.getTime();
-        if (scheduleDate.after(now)) {
+        if (!isTestScrape && scheduleDate.before(now)) {
             // do nothing.exec now.
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            scheduleDate = calendar.getTime();
         }
 
         // start db.
