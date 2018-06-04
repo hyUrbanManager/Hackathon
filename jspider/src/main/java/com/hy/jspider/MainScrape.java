@@ -2,6 +2,7 @@ package com.hy.jspider;
 
 import com.hy.jspider.baidu.BaiduConfig;
 import com.hy.jspider.ess.XemhConfig;
+import com.hy.jspider.github.GithubConfig;
 
 import org.apache.log4j.Logger;
 
@@ -23,9 +24,9 @@ import us.codecraft.webmagic.processor.PageProcessor;
 public class MainScrape {
 
     // spider.
-    public static PageProcessor pageProcessor = BaiduConfig.processor;
-    public static DbPipeline pipeline = BaiduConfig.pipeline;
-    public static String startUrl = BaiduConfig.startUrl;
+    public static PageProcessor pageProcessor = GithubConfig.processor;
+    public static DbPipeline pipeline = GithubConfig.pipeline;
+    public static String startUrl = GithubConfig.startUrl;
 
     // exec.
     public static final int execPeriodMills = 24 * 3600 * 1000;
