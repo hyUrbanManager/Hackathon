@@ -12,7 +12,12 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.downloader.*;
+import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 
@@ -84,6 +89,7 @@ public class MainScrape {
             public void run() {
                 Logger.getLogger(Main.class).info("start spider task.");
                 Spider.create(pageProcessor)
+                        .setDownloader(new OkHttpDownloader())
                         .addUrl(startUrl)
                         .thread(Runtime.getRuntime().availableProcessors())
                         .addPipeline(new ConsolePipeline())
@@ -100,4 +106,5 @@ public class MainScrape {
             Logger.getLogger(Main.class).info(exitTime);
         }));
     }
+
 }
