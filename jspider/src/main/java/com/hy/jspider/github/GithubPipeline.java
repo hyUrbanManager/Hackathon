@@ -31,7 +31,7 @@ public class GithubPipeline implements DbPipeline {
 
     // url.
     public static final String mySqlServerUrl =
-            "jdbc:mysql://localhost:3306/ess" +
+            "jdbc:mysql://localhost:3306/github" +
                     "?useSSL=false" +
                     "&serverTimezone=CST" +
                     "&useUnicode=true&characterEncoding=utf8";
@@ -40,8 +40,6 @@ public class GithubPipeline implements DbPipeline {
 
     private Connection connection;
     private Statement statement;
-
-    private List<String> savedUrls;
 
     /**
      * 连接打开数据库。
@@ -55,7 +53,6 @@ public class GithubPipeline implements DbPipeline {
             e.printStackTrace();
         }
         createTable();
-        savedUrls = readUrlList();
     }
 
     /**
@@ -64,32 +61,17 @@ public class GithubPipeline implements DbPipeline {
     private void createTable() {
         try {
             statement.execute("create table if not exists " +
-                    "ess_xemh(id int not null primary key auto_increment, " +
-                    "title varchar(50), " +
-                    "url varchar(512)" +
+                    "github_search(id int not null primary key auto_increment, " +
+                    "keyword varchar(32), " +
+                    "title varchar(100), " +
+                    "language varchar(32), " +
+                    "stars varchar(16), " +
+                    "description varchar(512)" +
                     ") " +
                     "charset utf8 collate utf8_general_ci");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * 读取数据库已储存的url。
-     *
-     * @return
-     */
-    private List<String> readUrlList() {
-        List<String> list = new ArrayList<>();
-        try {
-            ResultSet rs = statement.executeQuery("select url from ess_xemh");
-            while (rs.next()) {
-                list.add(rs.getString("url"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
     }
 
     /**
@@ -114,19 +96,40 @@ public class GithubPipeline implements DbPipeline {
 
     @Override
     public void process(ResultItems resultItems, Task task) {
-//        String title = resultItems.get("title");
-//        String url = resultItems.get("url");
-//        if (savedUrls.contains(url)) {
-//            System.out.println("mysql has been saved this url result.");
-//            return;
-//        }
-//        try {
-//            statement.execute("insert into ess_xemh(title, url) values ('" +
-//                    title + "','" +
-//                    url +
-//                    "')");
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        String keyword = resultItems.get("keyword");
+        String title = resultItems.get("title");
+        String language = resultItems.get("language");
+        String stars = resultItems.get("stars");
+        String description = resultItems.get("description");
+
+        try {
+            ResultSet set = statement.executeQuery("select title from github_search " +
+                    "where title='" + title + "'");
+            if (set.next()) {
+                statement.execute("update github_search set " +
+                        "keyword='" +
+                        keyword + "'," +
+                        "title='" +
+                        title + "'," +
+                        "language='" +
+                        language + "'," +
+                        "stars='" +
+                        stars + "'," +
+                        "description='" +
+                        description + "' where title='" + title +
+                        "'");
+            } else {
+                statement.execute("insert into github_search(keyword,title,language,stars,description) values ('" +
+                        keyword + "','" +
+                        title + "','" +
+                        language + "','" +
+                        stars + "','" +
+                        description +
+                        "')");
+            }
+            set.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

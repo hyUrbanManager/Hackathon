@@ -13,11 +13,17 @@ import us.codecraft.webmagic.processor.PageProcessor;
  */
 public class GithubConfig {
 
+    public static String[] keywords = {
+            "Android",
+    };
+
+    public static int keywordIndex = 0;
+
     public static PageProcessor processor = new GithubProcessor();
 
     public static DbPipeline pipeline = new GithubPipeline();
 
-    // e绅士首页最后一章地址。
-    public static String startUrl = "https://github.com/search?q=Android";
+    // 第一个搜索地址。
+    public static String startUrl = "https://github.com/search?q=" + keywords[keywordIndex];
 
 }
