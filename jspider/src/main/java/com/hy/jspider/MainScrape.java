@@ -12,17 +12,13 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.downloader.*;
-import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 
 /**
  * 爬虫运行。
+ * github爬虫，5天运行一次。
  *
  * @author hy 2018/5/17
  */
@@ -33,8 +29,10 @@ public class MainScrape {
     public static DbPipeline pipeline = GithubConfig.pipeline;
     public static String startUrl = GithubConfig.startUrl;
 
-    // exec.
+    // exec.1天间隔定时，5倍软件定时。
     public static final int execPeriodMills = 24 * 3600 * 1000;
+    public static final int execPeriodDay = 5;
+    public static int dayCnt = 0;
 
     private static boolean isTestScrape = false;
 
@@ -87,14 +85,17 @@ public class MainScrape {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                Logger.getLogger(Main.class).info("start spider task.");
-                Spider.create(pageProcessor)
-                        .setDownloader(new OkHttpDownloader())
-                        .addUrl(startUrl)
-                        .thread(Runtime.getRuntime().availableProcessors())
-                        .addPipeline(new ConsolePipeline())
-                        .addPipeline(pipeline)
-                        .run();
+                if (++dayCnt >= execPeriodDay) {
+                    dayCnt = 0;
+                    Logger.getLogger(Main.class).info("start spider task.");
+                    Spider.create(pageProcessor)
+                            .setDownloader(new OkHttpDownloader())
+                            .addUrl(startUrl)
+                            .thread(Runtime.getRuntime().availableProcessors())
+                            .addPipeline(new ConsolePipeline())
+                            .addPipeline(pipeline)
+                            .run();
+                }
             }
         }, scheduleDate, execPeriodMills);
 
