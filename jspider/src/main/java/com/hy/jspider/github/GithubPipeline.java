@@ -96,40 +96,49 @@ public class GithubPipeline implements DbPipeline {
 
     @Override
     public void process(ResultItems resultItems, Task task) {
-        String keyword = resultItems.get("keyword");
-        String title = resultItems.get("title");
-        String language = resultItems.get("language");
-        String stars = resultItems.get("stars");
-        String description = resultItems.get("description");
 
-        try {
-            ResultSet set = statement.executeQuery("select title from github_search " +
-                    "where title='" + title + "'");
-            if (set.next()) {
-                statement.execute("update github_search set " +
-                        "keyword='" +
-                        keyword + "'," +
-                        "title='" +
-                        title + "'," +
-                        "language='" +
-                        language + "'," +
-                        "stars='" +
-                        stars + "'," +
-                        "description='" +
-                        description + "' where title='" + title +
-                        "'");
-            } else {
-                statement.execute("insert into github_search(keyword,title,language,stars,description) values ('" +
-                        keyword + "','" +
-                        title + "','" +
-                        language + "','" +
-                        stars + "','" +
-                        description +
-                        "')");
+        String keyword = resultItems.get("keyword");
+        List<String> titles = resultItems.get("titles");
+        List<String> languages = resultItems.get("languages");
+        List<String> starses = resultItems.get("starses");
+        List<String> descriptions = resultItems.get("descriptions");
+
+        int index = -1;
+        while (++index < titles.size()) {
+            String title = titles.get(index).replaceAll("'","\\\\'");
+            String language = languages.get(index).replaceAll("'","\\\\'");
+            String stars = starses.get(index).replaceAll("'","\\\\'");
+            String description = descriptions.get(index).replaceAll("'","\\\\'");
+
+            try {
+                ResultSet set = statement.executeQuery("select title from github_search " +
+                        "where title='" + title + "'");
+                if (set.next()) {
+                    statement.execute("update github_search set " +
+                            "keyword='" +
+                            keyword + "'," +
+                            "title='" +
+                            title + "'," +
+                            "language='" +
+                            language + "'," +
+                            "stars='" +
+                            stars + "'," +
+                            "description='" +
+                            description + "' where title='" + title +
+                            "'");
+                } else {
+                    statement.execute("insert into github_search(keyword,title,language,stars,description) values ('" +
+                            keyword + "','" +
+                            title + "','" +
+                            language + "','" +
+                            stars + "','" +
+                            description +
+                            "')");
+                }
+                set.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-            set.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 }

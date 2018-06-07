@@ -13,17 +13,19 @@ import us.codecraft.webmagic.processor.PageProcessor;
  */
 public class GithubConfig {
 
-    public static String[] keywords = {
+    public static final String baseUrl = "https://www.github.com";
+
+    public static final String[] keywords = {
             "Android",
     };
 
     public static int keywordIndex = 0;
 
-    public static PageProcessor processor = new GithubProcessor();
+    public static final PageProcessor processor = new GithubProcessor();
 
-    public static DbPipeline pipeline = new GithubPipeline();
+    public static final DbPipeline pipeline = new GithubPipeline();
 
     // 第一个搜索地址。
-    public static String startUrl = "https://github.com/search?q=" + keywords[keywordIndex];
+    public static final String startUrl = "https://www.github.com/search?q=" + keywords[keywordIndex];
 
 }

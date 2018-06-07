@@ -21,4 +21,11 @@ public class TestTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void test() {
+        String s = "21312'rwe";
+        String a = s.replaceAll("'", "\\\\'");
+        System.out.println(a);
+    }
 }
