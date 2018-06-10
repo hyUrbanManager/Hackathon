@@ -52,7 +52,7 @@ task makeJarSimple(type: Jar) {
 
     manifest {
         attributes 'Main-class': 'com.hy.jspider.Main'
-        attributes 'Class-Path': '/home/hy/Downloads/lib/spiderlibrary.jar'
+        attributes 'Class-Path': '/home/hy/Program/libs/spiderlibrary.jar'
     }
 }
 

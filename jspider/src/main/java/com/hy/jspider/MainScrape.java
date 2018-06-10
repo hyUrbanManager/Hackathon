@@ -18,7 +18,7 @@ import us.codecraft.webmagic.processor.PageProcessor;
 
 /**
  * 爬虫运行。
- * github爬虫，5天运行一次。
+ * github爬虫，15天运行一次。
  *
  * @author hy 2018/5/17
  */
@@ -31,8 +31,8 @@ public class MainScrape {
 
     // exec.1天间隔定时，5倍软件定时。
     public static final int execPeriodMills = 24 * 3600 * 1000;
-    public static final int execPeriodDay = 5;
-    public static int dayCnt = 0;
+    public static final int execPeriodDay = 15;
+    public static int dayCnt = execPeriodDay - 1;
 
     private static boolean isTestScrape = false;
 
@@ -87,6 +87,9 @@ public class MainScrape {
             public void run() {
                 if (++dayCnt >= execPeriodDay) {
                     dayCnt = 0;
+
+                    Main.light(5);
+
                     Logger.getLogger(Main.class).info("start spider task.");
                     Spider.create(pageProcessor)
                             .setDownloader(new OkHttpDownloader())
@@ -101,6 +104,8 @@ public class MainScrape {
 
         // 增加退出钩子。
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            Main.light(9);
+
             timer.cancel();
             pipeline.endDb();
             String exitTime = new Date().toString() + " exit jvm.";

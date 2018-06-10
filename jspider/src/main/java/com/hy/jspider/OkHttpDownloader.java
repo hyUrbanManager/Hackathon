@@ -16,7 +16,6 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.selector.PlainText;
-import us.codecraft.webmagic.utils.HttpClientUtils;
 
 /**
  * 使用Okhttp。
@@ -44,6 +43,9 @@ public class OkHttpDownloader implements us.codecraft.webmagic.downloader.Downlo
         if (task == null || task.getSite() == null) {
             throw new NullPointerException("task or site can not be null");
         }
+
+        Main.light(4);
+
         Page page = Page.fail();
 
         try {
@@ -59,6 +61,9 @@ public class OkHttpDownloader implements us.codecraft.webmagic.downloader.Downlo
         } catch (IOException e) {
             logger.warning("download page {} error" + request.getUrl() + " " + e.getMessage());
         }
+
+        Main.light(5);
+
         return page;
     }
 

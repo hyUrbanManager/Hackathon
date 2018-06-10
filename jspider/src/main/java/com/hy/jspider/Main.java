@@ -31,11 +31,7 @@ public class Main {
         }
 
         if (isLinux) {
-            try {
-                Runtime.getRuntime().exec("bash /home/hy/light.sh 5");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            light(5);
         }
 
         // init log4j.
@@ -45,26 +41,13 @@ public class Main {
             printHelp();
         } else {
             printInfo();
-            switch (args[0]) {
-                case "-d":
-                    MainDownload.main(args);
-                    break;
-                case "-s":
-                    MainScrape.main(args);
-                    break;
-                default:
-                    printHelp();
-            }
+            MainScrape.main(args);
         }
 
         // 不一定会执行到。
         if (isLinux) {
-            try {
-                Runtime.getRuntime().exec("bash /home/hy/light.sh");
-                System.out.println("main close light.");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            light(9);
+            System.out.println("main close light.");
         }
     }
 
@@ -136,6 +119,21 @@ public class Main {
             e.printStackTrace();
         }
         System.out.println(courseFile);
+    }
+
+    /**
+     * 亮几号灯。
+     * 1~5为亮1到5号灯。
+     * 其他数字则为熄灭。
+     *
+     * @param num
+     */
+    public static void light(int num) {
+        try {
+            Runtime.getRuntime().exec("bash /home/hy/light.sh " + num);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

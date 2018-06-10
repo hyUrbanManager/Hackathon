@@ -21,11 +21,7 @@ public class MainDownload {
 
         // 增加退出钩子。
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try {
-                Runtime.getRuntime().exec("bash /home/hy/light.sh");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Main.light(9);
             String exitTime = new Date().toString() + " exit jvm.";
             Logger.getLogger(Main.class).info(exitTime);
         }));
