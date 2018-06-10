@@ -1,6 +1,8 @@
 package com.hy.jspider.github;
 
-import java.util.ArrayList;
+import com.hy.jspider.Main;
+import com.hy.jspider.OkHttpDownloader;
+
 import java.util.List;
 
 import us.codecraft.webmagic.Page;
@@ -66,9 +68,15 @@ public class GithubProcessor implements PageProcessor {
         }
 
         if (isHaveNextUrl) {
-            List<String> list = new ArrayList<>();
-            list.add(GithubConfig.baseUrl + nextUrl);
-            page.addTargetRequests(list);
+            page.addTargetRequest(GithubConfig.baseUrl + nextUrl);
+        } else {
+            // 把失败的页面加入队列。
+            if (OkHttpDownloader.isFail) {
+                page.addTargetRequest(OkHttpDownloader.failUrl);
+            } else {
+                // sleep.
+                Main.light(2);
+            }
         }
     }
 

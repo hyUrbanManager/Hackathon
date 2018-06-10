@@ -1,8 +1,5 @@
 package com.hy.jspider;
 
-import org.apache.http.Header;
-import org.apache.http.util.EntityUtils;
-
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
@@ -24,8 +21,6 @@ import us.codecraft.webmagic.selector.PlainText;
  */
 public class OkHttpDownloader implements us.codecraft.webmagic.downloader.Downloader {
 
-    private Logger logger;
-
     private static OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)
@@ -34,9 +29,8 @@ public class OkHttpDownloader implements us.codecraft.webmagic.downloader.Downlo
 
     private Call nowCall;
 
-    public OkHttpDownloader() {
-        logger = Logger.getLogger("OkHttpDownloader");
-    }
+    public static boolean isFail = false;
+    public static String failUrl;
 
     @Override
     public Page download(Request request, Task task) {
@@ -47,6 +41,8 @@ public class OkHttpDownloader implements us.codecraft.webmagic.downloader.Downlo
         Main.light(4);
 
         Page page = Page.fail();
+        boolean isSuccess = false;
+        isFail = false;
 
         try {
             okhttp3.Request r = new okhttp3.Request.Builder()
@@ -57,12 +53,27 @@ public class OkHttpDownloader implements us.codecraft.webmagic.downloader.Downlo
             Response response = nowCall.execute();
             page = handleResponse(request, request.getUrl(), response);
 
-            logger.info("downloading page success {}" + request.getUrl());
+            if (response.code() != 200) {
+                // red light.
+                Main.light(1);
+                isFail = true;
+                failUrl = request.getUrl();
+            }
+
+            isSuccess = true;
+            Logger.getLogger("OkHttpDownloader").info("downloading page success {}" + request.getUrl());
         } catch (IOException e) {
-            logger.warning("download page {} error" + request.getUrl() + " " + e.getMessage());
+            Logger.getLogger("OkHttpDownloader").warning("download page {} error" + request.getUrl() + " " + e.getMessage());
+
+            // red light.
+            Main.light(1);
+            isFail = true;
+            failUrl = request.getUrl();
         }
 
-        Main.light(5);
+        if (isSuccess) {
+            Main.light(5);
+        }
 
         return page;
     }
@@ -72,6 +83,14 @@ public class OkHttpDownloader implements us.codecraft.webmagic.downloader.Downlo
 
     }
 
+    /**
+     * 装填请求。
+     *
+     * @param request
+     * @param url
+     * @param response
+     * @return
+     */
     private Page handleResponse(Request request, String url, Response response) {
         Page page = new Page();
 

@@ -30,9 +30,7 @@ public class Main {
             isLinux = false;
         }
 
-        if (isLinux) {
-            light(5);
-        }
+        light(5);
 
         // init log4j.
         initLog4jConfig();
@@ -42,12 +40,6 @@ public class Main {
         } else {
             printInfo();
             MainScrape.main(args);
-        }
-
-        // 不一定会执行到。
-        if (isLinux) {
-            light(9);
-            System.out.println("main close light.");
         }
     }
 
@@ -129,10 +121,12 @@ public class Main {
      * @param num
      */
     public static void light(int num) {
-        try {
-            Runtime.getRuntime().exec("bash /home/hy/light.sh " + num);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (isLinux) {
+            try {
+                Runtime.getRuntime().exec("bash /home/hy/light.sh " + num);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
