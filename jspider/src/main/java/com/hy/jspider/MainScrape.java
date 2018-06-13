@@ -6,14 +6,19 @@ import com.hy.jspider.github.GithubConfig;
 
 import org.apache.log4j.Logger;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
+import us.codecraft.webmagic.pipeline.Pipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 
 /**
@@ -24,6 +29,8 @@ import us.codecraft.webmagic.processor.PageProcessor;
  */
 public class MainScrape {
 
+    private static Logger logger = Logger.getLogger(MainScrape.class);
+
     public static Spider spider;
 
     // spider.
@@ -31,12 +38,16 @@ public class MainScrape {
     public static DbPipeline pipeline = GithubConfig.pipeline;
     public static String startUrl = GithubConfig.startUrl;
 
-    // exec.1天间隔定时，5倍软件定时。
+    // exec.1天间隔定时，3倍软件定时。如果上次的没爬完，则等待下一个3天。
     public static final int execPeriodMills = 24 * 3600 * 1000;
-    public static final int execPeriodDay = 15;
+    public static final int execPeriodDay = 3;
     public static int dayCnt = execPeriodDay - 1;
 
+    // 是否测试环境，立即运行。
     private static boolean isTestScrape = false;
+
+    // 爬虫是否正在运行。
+    private static boolean isSpiderRunning = false;
 
     /**
      * Scrape，从jvm Main传来的参数。
@@ -90,16 +101,23 @@ public class MainScrape {
                 if (++dayCnt >= execPeriodDay) {
                     dayCnt = 0;
 
-                    Light.programRunning();
+                    if (!isSpiderRunning) {
+                        Light.programRunning();
+                        logger.info("Three day, it is time to start spider task.");
+                        isSpiderRunning = true;
 
-                    Logger.getLogger(Main.class).info("start spider task.");
-                    spider = Spider.create(pageProcessor);
-                    spider.setDownloader(new OkHttpDownloader())
-                            .addUrl(startUrl)
-                            .thread(Runtime.getRuntime().availableProcessors())
-                            .addPipeline(new ConsolePipeline())
-                            .addPipeline(pipeline)
-                            .run();
+                        spider = Spider.create(pageProcessor);
+                        spider.setDownloader(new OkHttpDownloader())
+                                .addUrl(startUrl)
+                                // 单线程。
+//                            .thread(Runtime.getRuntime().availableProcessors())
+                                .addPipeline(new ConsolePipeline())
+                                .addPipeline(pipeline)
+                                .addPipeline(new SpiderEndListener())
+                                .run();
+                    } else {
+                        logger.info("spider is still running, wait for next three day.");
+                    }
                 }
             }
         }, scheduleDate, execPeriodMills);
@@ -113,6 +131,17 @@ public class MainScrape {
             String exitTime = new Date().toString() + " exit jvm.";
             Logger.getLogger(Main.class).info(exitTime);
         }));
+    }
+
+    static class SpiderEndListener implements Pipeline, Closeable {
+        @Override
+        public void process(ResultItems resultItems, Task task) {
+        }
+
+        @Override
+        public void close() throws IOException {
+            isSpiderRunning = false;
+        }
     }
 
 }
