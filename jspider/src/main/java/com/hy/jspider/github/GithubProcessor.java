@@ -82,7 +82,7 @@ public class GithubProcessor implements PageProcessor {
                 page.putField("nextUrl", nextUrl);
                 page.addTargetRequest(GithubConfig.baseUrl + nextUrl);
             } else if (++GithubConfig.keywordIndex < GithubConfig.keywords.length) {
-                nextUrl = "search?q=" + GithubConfig.keywords[GithubConfig.keywordIndex];
+                nextUrl = "/search?q=" + GithubConfig.keywords[GithubConfig.keywordIndex];
                 page.addTargetRequest(GithubConfig.baseUrl + nextUrl);
             } else {
                 // sleep.
