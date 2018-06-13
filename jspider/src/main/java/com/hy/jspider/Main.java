@@ -30,7 +30,7 @@ public class Main {
             isLinux = false;
         }
 
-        light(5);
+        Light.programRunning();
 
         // init log4j.
         initLog4jConfig();
@@ -82,7 +82,7 @@ public class Main {
             if (isLinux) {
                 fis = new FileInputStream("/home/hy/Public/log4jl.properties");
             } else {
-                fis = new FileInputStream("jspider/log4jw.properties");
+                fis = new FileInputStream("G:\\AndroidStudioProject2\\JSpider\\jspider\\log4jw.properties");
             }
             props.load(fis);
             PropertyConfigurator.configure(props);//装入log4j配置信息
@@ -111,23 +111,6 @@ public class Main {
             e.printStackTrace();
         }
         System.out.println(courseFile);
-    }
-
-    /**
-     * 亮几号灯。
-     * 1~5为亮1到5号灯。
-     * 其他数字则为熄灭。
-     *
-     * @param num
-     */
-    public static void light(int num) {
-        if (isLinux) {
-            try {
-                Runtime.getRuntime().exec("bash /home/hy/light.sh " + num);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
 }

@@ -103,6 +103,10 @@ public class GithubPipeline implements DbPipeline {
         List<String> starses = resultItems.get("starses");
         List<String> descriptions = resultItems.get("descriptions");
 
+        if (titles == null) {
+            return;
+        }
+
         int index = -1;
         while (++index < titles.size()) {
             String title = titles.get(index).replaceAll("'","\\\\'");

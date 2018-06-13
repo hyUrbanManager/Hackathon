@@ -1,8 +1,9 @@
 package com.hy.jspider;
 
+import org.apache.log4j.Logger;
+
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 import okhttp3.Call;
 import okhttp3.Headers;
@@ -16,6 +17,7 @@ import us.codecraft.webmagic.selector.PlainText;
 
 /**
  * 使用Okhttp。
+ * 运行过程中是单例，但是为了外部获取方便，使用静态方法。
  *
  * @author hy 2018/6/4
  */
@@ -29,8 +31,23 @@ public class OkHttpDownloader implements us.codecraft.webmagic.downloader.Downlo
 
     private Call nowCall;
 
-    public static boolean isFail = false;
-    public static String failUrl;
+    private static int code;
+
+    public static int getHttpCode() {
+        return code;
+    }
+
+    private static String failUrl;
+
+    public static String getFailUrl() {
+        return failUrl;
+    }
+
+    private static Headers headers;
+
+    public static Headers getHeaders() {
+        return headers;
+    }
 
     @Override
     public Page download(Request request, Task task) {
@@ -38,41 +55,45 @@ public class OkHttpDownloader implements us.codecraft.webmagic.downloader.Downlo
             throw new NullPointerException("task or site can not be null");
         }
 
-        Main.light(4);
+        Light.programAcquiringHttp();
 
         Page page = Page.fail();
-        boolean isSuccess = false;
-        isFail = false;
 
         try {
             okhttp3.Request r = new okhttp3.Request.Builder()
                     .url(request.getUrl())
-//                    .headers(new Headers()request.getHeaders())
                     .build();
             nowCall = client.newCall(r);
             Response response = nowCall.execute();
             page = handleResponse(request, request.getUrl(), response);
 
-            if (response.code() != 200) {
-                // red light.
-                Main.light(1);
-                isFail = true;
-                failUrl = request.getUrl();
-            }
+            code = response.code();
 
-            isSuccess = true;
-            Logger.getLogger("OkHttpDownloader").info("downloading page success {}" + request.getUrl());
+            if (code >= 300) {
+                Logger.getLogger("OkHttpDownloader").info("downloading page fail: " +
+                        response.code() + ", headers: \n" + response.headers().toString()
+                        + "\nurl: " + request.getUrl());
+                headers = response.headers().newBuilder().build();
+
+                if (code == 429) {
+                    Light.programRunning();
+                } else {
+                    // red light.
+                    Light.programHttpError();
+                }
+                failUrl = request.getUrl();
+            } else {
+                Logger.getLogger("OkHttpDownloader").info("downloading page success {" + request.getUrl() + "}");
+                Light.programRunning();
+            }
         } catch (IOException e) {
-            Logger.getLogger("OkHttpDownloader").warning("download page {} error" + request.getUrl() + " " + e.getMessage());
+            Logger.getLogger("OkHttpDownloader").error("download page error {" +
+                    request.getUrl() + "}\n" + e.getMessage());
+            page.setDownloadSuccess(false);
 
             // red light.
-            Main.light(1);
-            isFail = true;
+            Light.programHttpError();
             failUrl = request.getUrl();
-        }
-
-        if (isSuccess) {
-            Main.light(5);
         }
 
         return page;

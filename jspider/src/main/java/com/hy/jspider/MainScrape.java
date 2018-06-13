@@ -24,6 +24,8 @@ import us.codecraft.webmagic.processor.PageProcessor;
  */
 public class MainScrape {
 
+    public static Spider spider;
+
     // spider.
     public static PageProcessor pageProcessor = GithubConfig.processor;
     public static DbPipeline pipeline = GithubConfig.pipeline;
@@ -88,11 +90,11 @@ public class MainScrape {
                 if (++dayCnt >= execPeriodDay) {
                     dayCnt = 0;
 
-                    Main.light(5);
+                    Light.programRunning();
 
                     Logger.getLogger(Main.class).info("start spider task.");
-                    Spider.create(pageProcessor)
-                            .setDownloader(new OkHttpDownloader())
+                    spider = Spider.create(pageProcessor);
+                    spider.setDownloader(new OkHttpDownloader())
                             .addUrl(startUrl)
                             .thread(Runtime.getRuntime().availableProcessors())
                             .addPipeline(new ConsolePipeline())
@@ -104,7 +106,7 @@ public class MainScrape {
 
         // 增加退出钩子。
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            Main.light(9);
+            Light.programExit();
 
             timer.cancel();
             pipeline.endDb();

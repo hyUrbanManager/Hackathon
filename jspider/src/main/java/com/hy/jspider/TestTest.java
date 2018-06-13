@@ -16,7 +16,7 @@ public class TestTest {
     public void run() {
         Main.main(new String[]{"-s", "-t"});
         try {
-            Thread.sleep(3600 * 1000);
+            Thread.sleep(4 * 3600 * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -21,7 +21,7 @@ public class MainDownload {
 
         // 增加退出钩子。
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            Main.light(9);
+            Light.programExit();
             String exitTime = new Date().toString() + " exit jvm.";
             Logger.getLogger(Main.class).info(exitTime);
         }));
