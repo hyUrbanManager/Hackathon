@@ -58,6 +58,9 @@ public class WelcomeActivity extends AppCompatActivity {
         activities.add(QQShareActivity.class);
         titles.add("qq分享");
 
+        activities.add(ViewActivity.class);
+        titles.add("测试View布局滑动");
+
         ToastUtil.init(getApplicationContext());
 
         // 初始化数据。
