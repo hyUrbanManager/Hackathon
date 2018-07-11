@@ -106,6 +106,9 @@ public class MainScrape {
                         logger.info("Three day, it is time to start spider task.");
                         isSpiderRunning = true;
 
+                        // index = 0;
+                        GithubConfig.keywordIndex = 0;
+
                         spider = Spider.create(pageProcessor);
                         spider.setDownloader(new OkHttpDownloader())
                                 .addUrl(startUrl)

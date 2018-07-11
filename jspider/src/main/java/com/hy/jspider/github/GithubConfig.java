@@ -17,6 +17,25 @@ public class GithubConfig {
 
     public static final String[] keywords = {
             "Android",
+            "java",
+            "android c++",
+            "flutter",
+            "react native",
+            "rx",
+            "kotlin",
+            "gradle",
+            "okhttp",
+            "glide",
+            "raspberry",
+            "spring",
+            "google",
+            "facebook",
+            "microSoft",
+            "tencent",
+            "alibaba",
+            "baidu",
+            "iflytek",
+            "cvte",
     };
 
     public static int keywordIndex = 0;
