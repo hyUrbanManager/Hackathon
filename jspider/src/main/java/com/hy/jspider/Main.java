@@ -35,12 +35,12 @@ public class Main {
         // init log4j.
         initLog4jConfig();
 
-        if (args == null || args.length == 0) {
+//        if (args == null || args.length == 0) {
             printHelp();
-        } else {
+//        } else {
             printInfo();
             MainScrape.main(args);
-        }
+//        }
     }
 
     /**
@@ -48,9 +48,8 @@ public class Main {
      */
     public static void printHelp() {
         String help = "" +
-                "use: option [args]\n" +
-                "-s [startUrl] [-t](if test scrape) \n" +
-                "-d \n";
+                "use: option.\n" +
+                "-t(if run spider right now).\n";
         System.out.println(help);
     }
 
