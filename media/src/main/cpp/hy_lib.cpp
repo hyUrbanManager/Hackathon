@@ -4,6 +4,7 @@
 
 #include "hy_lib.h"
 #include <unistd.h>
+#include <stdlib.h>
 
 static const char* internal_ntos(long long l);
 

@@ -4,6 +4,7 @@
  */
 #include "memleak.h"
 #include <string.h>
+#include <stdlib.h>
 
 #define log(...)  LOGD("memleak", __VA_ARGS__)
 #define logi(...) LOGI("memleak", __VA_ARGS__)
