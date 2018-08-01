@@ -21,4 +21,9 @@
         android:inflatedId="@+id/line1"
         android:layout="@layout/layout_colorful_block"/>
 
+    <com.hy.client.widget.VerticalTSeekBar
+        android:id="@+id/seek"
+        android:layout_width="100dp"
+        android:layout_height="500dp"/>
+
 </RelativeLayout>

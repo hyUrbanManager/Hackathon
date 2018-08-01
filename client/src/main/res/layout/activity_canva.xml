@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CanvasActivity">
+
+    <com.hy.client.widget.MyView
+        android:id="@+id/my_view"
+        android:layout_margin="100dp"
+        android:layout_width="80dp"
+        android:layout_height="150dp"/>
+
+</FrameLayout>
