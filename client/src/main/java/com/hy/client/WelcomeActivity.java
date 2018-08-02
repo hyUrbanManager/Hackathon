@@ -61,6 +61,9 @@ public class WelcomeActivity extends AppCompatActivity {
         activities.add(CanvasActivity.class);
         titles.add("测试画布");
 
+        activities.add(TouchEventActivity.class);
+        titles.add("测试点击事件分发");
+
         ToastUtil.init(getApplicationContext());
 
         // 初始化数据。
