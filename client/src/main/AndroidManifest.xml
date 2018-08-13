@@ -72,6 +72,8 @@
         </activity>
         <activity android:name=".TouchEventActivity">
         </activity>
+        <activity android:name=".LottieActivity">
+        </activity>
     </application>
 
 </manifest>
