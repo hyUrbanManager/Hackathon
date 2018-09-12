@@ -1,0 +1,43 @@
+09-10 14:24:48.698 D/ModeActivity ModeActivity@25325308: onCreate
+    onStart
+    onResume
+09-10 14:24:49.238 D/MainActivity MainActivity@20b187c1: onStop
+09-10 14:24:49.347 D/ModeActivity ModeActivity@25325308: onPause
+09-10 14:24:49.354 D/RunningActivity RunningActivity@38abfc6f: onCreate
+09-10 14:24:49.356 D/RunningActivity RunningActivity@38abfc6f: onStart
+    onResume
+09-10 14:24:50.267 D/ModeActivity ModeActivity@25325308: onStop
+09-10 14:24:50.462 D/RunningActivity RunningActivity@38abfc6f: onPause
+09-10 14:24:50.466 D/ShareActivity ShareActivity@262515e: onCreate
+09-10 14:24:50.467 D/ShareActivity ShareActivity@262515e: onStart
+    onResume
+09-10 14:24:50.477 D/ModeActivity ModeActivity@25325308: onDestroy
+09-10 14:24:51.308 D/RunningActivity RunningActivity@38abfc6f: onStop
+    onDestroy
+09-10 14:24:54.004 D/ShareActivity ShareActivity@262515e: onPause
+09-10 14:24:54.008 D/ShareActivity ShareActivity@262515e: onStop
+09-10 14:24:54.173 D/ShareActivity ShareActivity@262515e: onDestroy
+09-10 14:24:57.185 D/MainActivity MainActivity@20b187c1: onStart
+    onResume
+09-10 14:24:58.608 D/MainActivity MainActivity@20b187c1: onPause
+09-10 14:24:58.625 D/ModeActivity ModeActivity@e96cdc3: onCreate
+    onStart
+    onResume
+09-10 14:24:59.134 D/MainActivity MainActivity@20b187c1: onStop
+09-10 14:24:59.313 D/ModeActivity ModeActivity@e96cdc3: onPause
+09-10 14:24:59.318 D/RunningActivity RunningActivity@2d792621: onCreate
+09-10 14:24:59.321 D/RunningActivity RunningActivity@2d792621: onStart
+    onResume
+09-10 14:25:00.219 D/ModeActivity ModeActivity@e96cdc3: onStop
+09-10 14:25:00.426 D/RunningActivity RunningActivity@2d792621: onPause
+09-10 14:25:00.431 D/ShareActivity ShareActivity@2bf211fb: onCreate
+    onStart
+    onResume
+09-10 14:25:00.435 D/ModeActivity ModeActivity@e96cdc3: onDestroy
+09-10 14:25:00.720 D/RunningActivity RunningActivity@2d792621: onStop
+    onDestroy
+09-10 14:25:03.728 D/ShareActivity ShareActivity@2bf211fb: onPause
+09-10 14:25:03.732 D/ShareActivity ShareActivity@2bf211fb: onStop
+09-10 14:25:03.846 D/ShareActivity ShareActivity@2bf211fb: onDestroy
+09-10 14:25:09.362 D/RunningActivity RunningActivity@38abfc6f: 20s runnable has been run.
+09-10 14:25:19.330 D/RunningActivity RunningActivity@2d792621: 20s runnable has been run.

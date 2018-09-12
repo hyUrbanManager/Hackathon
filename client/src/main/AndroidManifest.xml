@@ -72,7 +72,8 @@
         </activity>
         <activity android:name=".TouchEventActivity">
         </activity>
-        <activity android:name=".LottieActivity">
+        <activity android:name=".LottieActivity"
+            android:resizeableActivity="true">
         </activity>
     </application>
 

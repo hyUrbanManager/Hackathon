@@ -1,0 +1,41 @@
+09-10 10:03:26.578 D/MainActivity MainActivity@20b187c1: onCreate
+    onStart
+    onResume
+09-10 10:03:32.083 D/MainActivity MainActivity@20b187c1: onPause
+09-10 10:03:32.092 D/ModeActivity ModeActivity@25325308: onCreate
+09-10 10:03:32.093 D/ModeActivity ModeActivity@25325308: onStart
+09-10 10:03:32.094 D/ModeActivity ModeActivity@25325308: onResume
+09-10 10:03:32.603 D/MainActivity MainActivity@20b187c1: onStop
+09-10 10:03:32.772 D/ModeActivity ModeActivity@25325308: onPause
+09-10 10:03:32.779 D/RunningActivity RunningActivity@38abfc6f: onCreate
+    onStart
+    onResume
+09-10 10:03:33.651 D/ModeActivity ModeActivity@25325308: onStop
+09-10 10:03:34.194 D/RunningActivity RunningActivity@38abfc6f: onPause
+09-10 10:03:34.199 D/ShareActivity ShareActivity@5daa062: onCreate
+    onStart
+    onResume
+09-10 10:03:34.201 D/ModeActivity ModeActivity@25325308: onDestroy
+09-10 10:03:35.023 D/RunningActivity RunningActivity@38abfc6f: onStop
+09-10 10:03:35.894 D/ShareActivity ShareActivity@5daa062: onPause
+09-10 10:03:35.896 D/ShareActivity ShareActivity@5daa062: onStop
+09-10 10:03:35.994 D/ShareActivity ShareActivity@5daa062: onDestroy
+09-10 10:03:39.478 D/MainActivity MainActivity@20b187c1: onStart
+    onResume
+09-10 10:03:40.426 D/MainActivity MainActivity@20b187c1: onPause
+09-10 10:03:40.448 D/ModeActivity ModeActivity@d12e36: onCreate
+09-10 10:03:40.449 D/ModeActivity ModeActivity@d12e36: onStart
+    onResume
+09-10 10:03:40.887 D/MainActivity MainActivity@20b187c1: onStop
+09-10 10:03:41.060 D/ModeActivity ModeActivity@d12e36: onPause
+09-10 10:03:41.063 D/RunningActivity RunningActivity@38abfc6f: onStart
+    onResume
+09-10 10:03:41.869 D/ModeActivity ModeActivity@d12e36: onStop
+09-10 10:03:43.065 D/RunningActivity RunningActivity@38abfc6f: onPause
+09-10 10:03:43.072 D/ShareActivity ShareActivity@1a1b766c: onCreate
+    onStart
+09-10 10:03:43.073 D/ShareActivity ShareActivity@1a1b766c: onResume
+09-10 10:03:43.103 D/ModeActivity ModeActivity@d12e36: onDestroy
+09-10 10:03:43.886 D/RunningActivity RunningActivity@38abfc6f: onStop
+
+无finish，无引用。
