@@ -15,6 +15,7 @@ android工程如下：
 + ViewStub优化布局。
 + applink打开app。
 + 生成二维码。
++ 深入探索View绘画滑动机制。
 
 基础android库：
 

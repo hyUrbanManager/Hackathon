@@ -67,6 +67,9 @@ public class WelcomeActivity extends AppCompatActivity {
         activities.add(LottieActivity.class);
         titles.add("测试lottie动画");
 
+        activities.add(ViewActivity.class);
+        titles.add("测试View布局滑动");
+
         ToastUtil.init(getApplicationContext());
 
         // 初始化数据。
