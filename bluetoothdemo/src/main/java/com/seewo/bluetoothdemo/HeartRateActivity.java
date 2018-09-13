@@ -7,7 +7,6 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
-import android.bluetooth.BluetoothGattServer;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
@@ -22,8 +21,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,28 +32,41 @@ import butterknife.OnClick;
 public class HeartRateActivity extends AppCompatActivity {
 
     private static final String HR_ADDRESS = "F2:B5:01:6D:90:56";
+    private static final UUID HR_SERVICE_UUID = UUID.fromString("0000180f-0000-1000-8000-00805f9b34fb");// 0 1 d f a
 
     @BindView(R.id.button1)
     Button mButton1;
     @BindView(R.id.button2)
     Button mButton2;
     @BindView(R.id.button3)
-    Button button3;
+    Button mButton3;
+    @BindView(R.id.button4)
+    Button mButton4;
     @BindView(R.id.text)
     TextView mMessage;
     @BindView(R.id.info)
     TextView mInfo;
     @BindView(R.id.scrollView)
     ScrollView mScrollView;
+    @BindView(R.id.button5)
+    Button mButton5;
+    @BindView(R.id.button6)
+    Button mButton6;
 
     private String mMyName;
     private String mMyAddress;
     private boolean mIsSupportBLE;
     private boolean mIsFoundHR;
 
+    private int mBpm;
+
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeScanner mBluetoothLeScanner;
     private BluetoothDevice mHRDevice;
+    private BluetoothGatt mBluetoothGatt;
+    private BluetoothGattService mBluetoothGattService;
+    private BluetoothGattCharacteristic mBluetoothGattCharacteristic;
+    private BluetoothGattDescriptor mBluetoothGattDescriptor;
 
     private ScanCallback mSCallback = new SC();
     private BluetoothGattCallback mBGCallback = new BGC();
@@ -65,11 +78,16 @@ public class HeartRateActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         mIsSupportBLE = getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE);
+        if (!mIsSupportBLE) {
+            mButton1.setClickable(false);
+            mButton2.setClickable(false);
+            mButton3.setClickable(false);
+            mButton4.setClickable(false);
+        }
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
         mBluetoothAdapter.enable();
-
 
         mInfo.setText(generateInfo());
     }
@@ -92,6 +110,13 @@ public class HeartRateActivity extends AppCompatActivity {
         if (mIsFoundHR) {
             sb.append("\n").append("找到心率设备 ")
                     .append(mHRDevice.getName()).append(" : ").append(HR_ADDRESS);
+            if (mBluetoothGattCharacteristic != null) {
+                sb.append("  心率: ").append(mBpm).append(" bpm");
+            }
+            if (mBluetoothGattDescriptor != null) {
+                byte[] bs = mBluetoothGattDescriptor.getValue();
+                sb.append("  描述: ").append(Arrays.toString(bs));
+            }
         } else {
             sb.append("\n").append("未找到心率设备");
         }
@@ -108,7 +133,6 @@ public class HeartRateActivity extends AppCompatActivity {
     @OnClick(R.id.button2)
     public void click2(View v) {
         mBluetoothLeScanner.stopScan(mSCallback);
-
     }
 
     @OnClick(R.id.button3)
@@ -122,51 +146,93 @@ public class HeartRateActivity extends AppCompatActivity {
 
     @OnClick(R.id.button4)
     public void click4(View v) {
-        if (mHRDevice == null) {
-            toast("还未找到设备");
+        if (mHRDevice == null || mBluetoothGatt == null) {
+            toast("还未找到设备或未连接上");
+            return;
+        }
+        mBluetoothGatt.disconnect();
+    }
+
+    @OnClick(R.id.button5)
+    public void click5(View v) {
+        if (mHRDevice == null || mBluetoothGatt == null) {
+            toast("还未找到设备或未连接上");
+            return;
+        }
+        mBluetoothGatt.discoverServices();
+    }
+
+    @OnClick(R.id.button6)
+    public void click6(View v) {
+        if (mBluetoothGattService == null) {
+            toast("还未找到设备Service");
             return;
         }
 
+        List<BluetoothGattCharacteristic> characteristics = mBluetoothGattService.getCharacteristics();
+        mMessage.append("getCharacteristics:\n");
+        for (BluetoothGattCharacteristic characteristic : characteristics) {
+            mMessage.append("value: " + Arrays.toString(characteristic.getValue()) +
+                    ", uuid: " + characteristic.getUuid());
+            mMessage.append("\n");
+        }
+        mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+
+        mBluetoothGattCharacteristic = mBluetoothGattService.getCharacteristic(Constant.HEART_RATE_MEASUREMENT);
+        if (mBluetoothGattCharacteristic != null) {
+            boolean isSuccess = mBluetoothGatt.setCharacteristicNotification(mBluetoothGattCharacteristic, true);
+            toast("设置Characteristic监听 " + (isSuccess ? "成功" : "失败"));
+
+            mBluetoothGattDescriptor = mBluetoothGattCharacteristic.getDescriptor(Constant.CHAR_CLIENT_CONFIG);
+            mBluetoothGattDescriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+            mBluetoothGatt.writeDescriptor(mBluetoothGattDescriptor);
+        }
     }
 
     private class SC extends ScanCallback {
 
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
-            mMessage.append("onScanResult: ");
-            BluetoothDevice bd = result.getDevice();
-            if (bd != null) {
-                mMessage.append(bd.getName() == null ? "null" : bd.getName());
-                mMessage.append(" : ");
-                mMessage.append(bd.getAddress() == null ? "null" : bd.getAddress());
-                mMessage.append("\n");
-            } else {
-                mMessage.append("no device.\n");
-            }
-            mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
-            BluetoothDevice device = result.getDevice();
-            if (HR_ADDRESS.equals(device.getAddress())) {
-                mHRDevice = device;
-                mIsFoundHR = true;
-                mInfo.setText(generateInfo());
-            }
+            runOnUiThread(() -> {
+                mMessage.append("onScanResult: ");
+                BluetoothDevice bd = result.getDevice();
+                if (bd != null) {
+                    mMessage.append(bd.getName() == null ? "null" : bd.getName());
+                    mMessage.append(" : ");
+                    mMessage.append(bd.getAddress() == null ? "null" : bd.getAddress());
+                    mMessage.append("\n");
+                } else {
+                    mMessage.append("no device.\n");
+                }
+                mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                BluetoothDevice device = result.getDevice();
+                if (HR_ADDRESS.equals(device.getAddress())) {
+                    mHRDevice = device;
+                    mIsFoundHR = true;
+                    mInfo.setText(generateInfo());
+                }
+            });
         }
 
         @Override
         public void onBatchScanResults(List<ScanResult> results) {
-            mMessage.append("onBatchScanResults:\n");
-            for (ScanResult result : results) {
-                mMessage.append(result.toString());
-                mMessage.append("\n");
-            }
-            mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+            runOnUiThread(() -> {
+                mMessage.append("onBatchScanResults:\n");
+                for (ScanResult result : results) {
+                    mMessage.append(result.toString());
+                    mMessage.append("\n");
+                }
+                mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+            });
         }
 
         @Override
         public void onScanFailed(int errorCode) {
-            mMessage.append("scanFailed: " + errorCode);
-            mMessage.append("\n");
-            mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+            runOnUiThread(() -> {
+                mMessage.append("scanFailed: " + errorCode);
+                mMessage.append("\n");
+                mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+            });
         }
     }
 
@@ -181,62 +247,98 @@ public class HeartRateActivity extends AppCompatActivity {
 
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-            if (newState == BluetoothProfile.STATE_CONNECTED) {
-                gatt.discoverServices();
-            }
-            toast("连接状态：" + newState);
+            runOnUiThread(() -> {
+                if (newState == BluetoothProfile.STATE_CONNECTED) {
+                    mBluetoothGatt = gatt;
+                    gatt.discoverServices();
+                    mMessage.append("设备成功连接\n");
+                } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                    mMessage.append("设备断开连接\n");
+                    // clear.
+                    mBluetoothGatt = null;
+                    mBluetoothGattService = null;
+                    mBluetoothGattCharacteristic = null;
+                }
+                mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                toast("连接状态：" + newState);
+            });
         }
 
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-            if (status == BluetoothGatt.GATT_SUCCESS) {
-                List<BluetoothGattService> services = gatt.getServices();
-                for (BluetoothGattService service : services) {
-                    mMessage.append("type: " + service.getType() + ", uuid: " + service.getUuid());
-                    mMessage.append("\n");
+            runOnUiThread(() -> {
+                if (status == BluetoothGatt.GATT_SUCCESS) {
+                    mMessage.append("onServicesDiscovered:\n");
+                    List<BluetoothGattService> services = gatt.getServices();
+                    for (BluetoothGattService service : services) {
+                        mMessage.append("type: " + service.getType() + ", uuid: " + service.getUuid());
+                        mMessage.append("\n");
+                    }
+
+                    mBluetoothGattService = gatt.getService(Constant.HEART_RATE);
                 }
-            }
-            toast("设备发现状态: " + status);
+                mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                toast("设备服务发现状态: " + status);
+            });
         }
 
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-            super.onCharacteristicRead(gatt, characteristic, status);
         }
 
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-            super.onCharacteristicWrite(gatt, characteristic, status);
         }
 
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
-            super.onCharacteristicChanged(gatt, characteristic);
+            runOnUiThread(() -> {
+                try {
+                    if (Constant.HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
+                        int flag = characteristic.getProperties();
+                        int format;
+                        if ((flag & 0x01) != 0) {
+                            format = BluetoothGattCharacteristic.FORMAT_UINT16;
+                        } else {
+                            format = BluetoothGattCharacteristic.FORMAT_UINT8;
+                        }
+                        mBpm = characteristic.getIntValue(format, 1);
+                        mInfo.setText(generateInfo());
+                    } else {
+                        // For all other profiles, writes the data formatted in HEX.
+                        final byte[] data = characteristic.getValue();
+                        if (data != null && data.length > 0) {
+                            final StringBuilder sb = new StringBuilder(data.length);
+                            for (byte byteChar : data) {
+                                sb.append(String.format("%02X ", byteChar));
+                            }
+                            mMessage.append("unknown onCharacteristicChanged: " + sb.toString());
+                        }
+                    }
+                } catch (Exception e) {
+                    toast("读取失败。" + e.getCause().toString());
+                }
+            });
         }
 
         @Override
         public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
-            super.onDescriptorRead(gatt, descriptor, status);
         }
 
         @Override
         public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
-            super.onDescriptorWrite(gatt, descriptor, status);
         }
 
         @Override
         public void onReliableWriteCompleted(BluetoothGatt gatt, int status) {
-            super.onReliableWriteCompleted(gatt, status);
         }
 
         @Override
         public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
-            super.onReadRemoteRssi(gatt, rssi, status);
         }
 
         @Override
         public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
-            super.onMtuChanged(gatt, mtu, status);
         }
     }
 
