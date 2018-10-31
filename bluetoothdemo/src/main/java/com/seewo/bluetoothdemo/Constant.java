@@ -10,6 +10,7 @@ import java.util.UUID;
 public class Constant {
 
     public static final UUID HEART_RATE = UUID.fromString("0000180d-0000-1000-8000-00805f9b34fb");
+    public static final UUID BATTERY_SERVICE = UUID.fromString("0000180f-0000-1000-8000-00805f9b34fb");
 
     public static final UUID HEART_RATE_MEASUREMENT = UUID.fromString("00002a37-0000-1000-8000-00805f9b34fb");
     public static final UUID MANUFACTURER_STRING = UUID.fromString("00002a29-0000-1000-8000-00805f9b34fb");

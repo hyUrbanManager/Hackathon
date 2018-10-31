@@ -2,6 +2,7 @@ package com.seewo.bluetoothdemo;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
@@ -12,9 +13,14 @@ import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ScrollView;
@@ -31,7 +37,13 @@ import butterknife.OnClick;
 
 public class HeartRateActivity extends AppCompatActivity {
 
-    private static final String HR_ADDRESS = "F2:B5:01:6D:90:56";
+    private static final String TAG = "@HR";
+
+    // 心率带。
+//    private static final String HR_ADDRESS = "F2:B5:01:6D:90:56";
+    // 咕咚心率耳机。
+//    private static final String HR_ADDRESS = "0C:73:EB:38:94:4B"; // CODOON Quiet
+    private static final String HR_ADDRESS = "0C:73:EB:39:B8:0F"; // COD_HP18Q01
     private static final UUID HR_SERVICE_UUID = UUID.fromString("0000180f-0000-1000-8000-00805f9b34fb");// 0 1 d f a
 
     @BindView(R.id.button1)
@@ -59,13 +71,16 @@ public class HeartRateActivity extends AppCompatActivity {
     private boolean mIsFoundHR;
 
     private int mBpm;
+    private int mBatteryLevel;
 
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeScanner mBluetoothLeScanner;
     private BluetoothDevice mHRDevice;
     private BluetoothGatt mBluetoothGatt;
     private BluetoothGattService mBluetoothGattService;
+    private BluetoothGattService mBluetoothBatteryGattService;
     private BluetoothGattCharacteristic mBluetoothGattCharacteristic;
+    private BluetoothGattCharacteristic mBluetoothBatteryGattCharacteristic;
     private BluetoothGattDescriptor mBluetoothGattDescriptor;
 
     private ScanCallback mSCallback = new SC();
@@ -117,6 +132,9 @@ public class HeartRateActivity extends AppCompatActivity {
                 byte[] bs = mBluetoothGattDescriptor.getValue();
                 sb.append("  描述: ").append(Arrays.toString(bs));
             }
+            if (mBluetoothBatteryGattService != null) {
+                sb.append("  电量: ").append(mBatteryLevel);
+            }
         } else {
             sb.append("\n").append("未找到心率设备");
         }
@@ -128,11 +146,15 @@ public class HeartRateActivity extends AppCompatActivity {
     public void click1(View v) {
         mBluetoothLeScanner.startScan(mSCallback);
 
+//        mBluetoothAdapter.startDiscovery();
+
     }
 
     @OnClick(R.id.button2)
     public void click2(View v) {
         mBluetoothLeScanner.stopScan(mSCallback);
+
+//        mBluetoothAdapter.cancelDiscovery();
     }
 
     @OnClick(R.id.button3)
@@ -172,6 +194,15 @@ public class HeartRateActivity extends AppCompatActivity {
         List<BluetoothGattCharacteristic> characteristics = mBluetoothGattService.getCharacteristics();
         mMessage.append("getCharacteristics:\n");
         for (BluetoothGattCharacteristic characteristic : characteristics) {
+            mBluetoothGatt.readCharacteristic(characteristic);
+            mMessage.append("value: " + Arrays.toString(characteristic.getValue()) +
+                    ", uuid: " + characteristic.getUuid());
+            mMessage.append("\n");
+        }
+        characteristics = mBluetoothBatteryGattService.getCharacteristics();
+        mMessage.append("battery getCharacteristics:\n");
+        for (BluetoothGattCharacteristic characteristic : characteristics) {
+            mBluetoothGatt.readCharacteristic(characteristic);
             mMessage.append("value: " + Arrays.toString(characteristic.getValue()) +
                     ", uuid: " + characteristic.getUuid());
             mMessage.append("\n");
@@ -186,6 +217,26 @@ public class HeartRateActivity extends AppCompatActivity {
             mBluetoothGattDescriptor = mBluetoothGattCharacteristic.getDescriptor(Constant.CHAR_CLIENT_CONFIG);
             mBluetoothGattDescriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
             mBluetoothGatt.writeDescriptor(mBluetoothGattDescriptor);
+        }
+
+        mBluetoothBatteryGattCharacteristic = mBluetoothBatteryGattService.getCharacteristic(Constant.BATTERY_LEVEL);
+        if (mBluetoothBatteryGattCharacteristic != null) {
+            boolean isSuccess = mBluetoothGatt.setCharacteristicNotification(mBluetoothBatteryGattCharacteristic, true);
+            toast("设置Characteristic监听 " + (isSuccess ? "成功" : "失败"));
+
+            mBluetoothGattDescriptor = mBluetoothBatteryGattCharacteristic.getDescriptor(Constant.CHAR_CLIENT_CONFIG);
+            mBluetoothGattDescriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+            mBluetoothGatt.writeDescriptor(mBluetoothGattDescriptor);
+
+            mBluetoothGatt.readCharacteristic(mBluetoothBatteryGattCharacteristic);
+            try {
+                mBatteryLevel = mBluetoothBatteryGattCharacteristic.getIntValue(
+                        BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+                Log.d(TAG, "click6: " + mBatteryLevel);
+                mInfo.setText(generateInfo());
+            } catch (Exception e) {
+                Log.e(TAG, "click6: ", e);
+            }
         }
     }
 
@@ -210,6 +261,9 @@ public class HeartRateActivity extends AppCompatActivity {
                     mHRDevice = device;
                     mIsFoundHR = true;
                     mInfo.setText(generateInfo());
+
+                    BluetoothClass bluetoothClass = device.getBluetoothClass();
+                    Log.d(TAG, "onScanResult: class: " + bluetoothClass.toString());
                 }
             });
         }
@@ -258,6 +312,7 @@ public class HeartRateActivity extends AppCompatActivity {
                     mBluetoothGatt = null;
                     mBluetoothGattService = null;
                     mBluetoothGattCharacteristic = null;
+                    mBluetoothBatteryGattService = null;
                 }
                 mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
                 toast("连接状态：" + newState);
@@ -276,6 +331,7 @@ public class HeartRateActivity extends AppCompatActivity {
                     }
 
                     mBluetoothGattService = gatt.getService(Constant.HEART_RATE);
+                    mBluetoothBatteryGattService = gatt.getService(Constant.BATTERY_SERVICE);
                 }
                 mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
                 toast("设备服务发现状态: " + status);
@@ -303,6 +359,11 @@ public class HeartRateActivity extends AppCompatActivity {
                             format = BluetoothGattCharacteristic.FORMAT_UINT8;
                         }
                         mBpm = characteristic.getIntValue(format, 1);
+                        mInfo.setText(generateInfo());
+                    } else if (Constant.BATTERY_LEVEL.equals(characteristic.getUuid())) {
+                        mBatteryLevel = characteristic.getIntValue(
+                                BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+                        Log.d(TAG, "onCharacteristicChanged: " + mBatteryLevel);
                         mInfo.setText(generateInfo());
                     } else {
                         // For all other profiles, writes the data formatted in HEX.
