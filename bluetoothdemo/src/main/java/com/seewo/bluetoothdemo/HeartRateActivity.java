@@ -28,7 +28,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -85,6 +87,8 @@ public class HeartRateActivity extends AppCompatActivity {
 
     private ScanCallback mSCallback = new SC();
     private BluetoothGattCallback mBGCallback = new BGC();
+
+    private Set<BluetoothDevice> mTotalDevice = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +159,9 @@ public class HeartRateActivity extends AppCompatActivity {
         mBluetoothLeScanner.stopScan(mSCallback);
 
 //        mBluetoothAdapter.cancelDiscovery();
+
+        Log.d(TAG, "click2: " + Arrays.toString(mTotalDevice.toArray()));
+        mTotalDevice.clear();
     }
 
     @OnClick(R.id.button3)
@@ -252,6 +259,8 @@ public class HeartRateActivity extends AppCompatActivity {
                     mMessage.append(" : ");
                     mMessage.append(bd.getAddress() == null ? "null" : bd.getAddress());
                     mMessage.append("\n");
+
+                    mTotalDevice.add(bd);
                 } else {
                     mMessage.append("no device.\n");
                 }
