@@ -32,7 +32,7 @@ def configList = [
         ['sdkversion': 26, 'buildToolsVersion': '27.0.3', 'supportVersion': '26.0.2'],
         ['sdkversion': 27, 'buildToolsVersion': '', 'supportVersion': ''],
 ]
-def index = 0
+def index = 1
 
 // 设置external额外属性。
 ext {

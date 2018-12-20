@@ -7,6 +7,7 @@ android工程如下：
 + 网络毒瘤，实现udp广播轰炸。
 + 提供ContentProvider的数据库app。
 + 访问ContentProvider的客户端app。
++ 蓝牙工程demo测试。
 
 客户端app:
 

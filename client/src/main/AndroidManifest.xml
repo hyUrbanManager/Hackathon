@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.hy.client">
+    package="com.hy.client">
 
-    <uses-permission android:name="com.hy.GET_ACCOUNT"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="com.hy.GET_ACCOUNT" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -17,64 +17,57 @@
             android:name=".WelcomeActivity"
             android:theme="@style/backgroundTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ContentPCActivity">
-        </activity>
-        <activity android:name=".LoadJPEGActivity">
-        </activity>
-        <activity android:name=".ViewStubActivity">
-        </activity>
+        <activity android:name=".ContentPCActivity"></activity>
+        <activity android:name=".LoadJPEGActivity"></activity>
+        <activity android:name=".ViewStubActivity"></activity>
 
         <!-- 使用url外部链接打开的Activity -->
         <activity android:name=".AppLinkActivity">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="hyclient"/>
+                <data android:scheme="hyclient" />
             </intent-filter>
         </activity>
 
         <!-- 生成二维码 -->
         <activity
             android:name=".QRCodeActivity"
-            android:label="二维码">
-        </activity>
+            android:label="二维码"></activity>
 
         <!-- qq分享 -->
-        <activity android:name=".QQShareActivity">
-        </activity>
+        <activity android:name=".QQShareActivity"></activity>
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
             android:noHistory="true">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
                 <!-- 测试appid -->
-                <data android:scheme="tencent222222"/>
+                <data android:scheme="tencent222222" />
             </intent-filter>
         </activity>
         <activity
             android:name="com.tencent.connect.common.AssistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-        <activity android:name=".CanvasActivity">
-        </activity>
-        <activity android:name=".TouchEventActivity">
-        </activity>
-        <activity android:name=".LottieActivity"/>
-        <activity android:name=".ViewActivity">
-        </activity>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".CanvasActivity"></activity>
+        <activity android:name=".TouchEventActivity"></activity>
+        <activity android:name=".LottieActivity" />
+        <activity android:name=".ViewActivity"></activity>
+        <activity android:name=".NfcActivity"></activity>
     </application>
 
 </manifest>

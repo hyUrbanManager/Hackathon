@@ -1,4 +1,4 @@
-package com.seewo.bluetoothdemo;
+package com.hy.bluetoothdemo;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

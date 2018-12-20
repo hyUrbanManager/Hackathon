@@ -1,4 +1,4 @@
-package com.seewo.bluetoothdemo;
+package com.hy.bluetoothdemo;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAssignedNumbers;
