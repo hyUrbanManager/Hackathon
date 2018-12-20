@@ -6,7 +6,7 @@ android {
 
 
     defaultConfig {
-        applicationId "com.seewo.bluetoothdemo"
+        applicationId "com.hy.bluetoothdemo"
         minSdkVersion 22
         targetSdkVersion 22
         versionCode 1
