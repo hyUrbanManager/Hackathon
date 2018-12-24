@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.SimpleAdapter;
@@ -70,6 +72,12 @@ public class WelcomeActivity extends AppCompatActivity {
         activities.add(ViewActivity.class);
         titles.add("测试View布局滑动");
 
+        activities.add(WebActivity.class);
+        titles.add("原生webView内核");
+
+        activities.add(WebActivity.class);
+        titles.add("腾讯x5 webView内核");
+
         ToastUtil.init(getApplicationContext());
 
         // 初始化数据。
@@ -100,6 +108,15 @@ public class WelcomeActivity extends AppCompatActivity {
         mGridView.setOnItemClickListener((parent, view, position, id) -> {
             startActivity(new Intent(WelcomeActivity.this, activities.get(position)));
         });
+        // 根据屏幕宽高来决定每行多少个。
+        WindowManager manager = this.getWindowManager();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        manager.getDefaultDisplay().getMetrics(outMetrics);
+        int width = outMetrics.widthPixels;
+        int height = outMetrics.heightPixels;
+        if (width > height) {
+            mGridView.setNumColumns(6);
+        }
     }
 
     private Random random = new Random();
