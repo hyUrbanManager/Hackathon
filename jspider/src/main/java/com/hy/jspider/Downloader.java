@@ -2,6 +2,7 @@ package com.hy.jspider;
 
 import org.apache.log4j.Logger;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -12,6 +13,34 @@ import java.util.List;
 public abstract class Downloader {
 
     public abstract void startDownload();
+
+    /**
+     * url list下载。
+     *
+     * @param urlList
+     */
+    public void download(List<String> urlList, String downloadPath) {
+        Logger.getLogger(Downloader.class).info("download size: " + urlList.size());
+        int num = 1;
+        for (int i = 0; i < urlList.size(); i++) {
+            String url = urlList.get(i);
+            String command = "curl -O " + url;
+            System.out.println("command: " + command);
+            try {
+                Process process = Runtime.getRuntime().exec(command, null, new File(downloadPath));
+                int r = process.waitFor();
+                if (r != 0) {
+                    Logger.getLogger(Downloader.class).info("download " + url +
+                            " fail, reason is " + r + ".");
+                } else {
+                    Logger.getLogger(Downloader.class).info("download " + url +
+                            " success. has done: " + num++);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * url list下载。

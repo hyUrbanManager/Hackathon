@@ -3,7 +3,6 @@ package com.hy.jspider;
 import com.hy.jspider.animalworld.AnimalPipeline;
 import com.hy.jspider.animalworld.AnimalProcessor;
 
-import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import java.io.FileInputStream;
@@ -19,7 +18,7 @@ import us.codecraft.webmagic.Spider;
  */
 public class DisposableScrape {
 
-    public static final String START_URL = "http://www.baidu.com";
+    public static final String START_URL = AnimalProcessor.START_URL;
 
     public static void main(String[] args) {
         initLog4jConfig();
