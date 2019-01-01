@@ -1,5 +1,7 @@
 package com.hy.jspider;
 
+import com.hy.jspider.animalworld.AnimalNewsPipeline;
+import com.hy.jspider.animalworld.AnimalNewsProcessor;
 import com.hy.jspider.animalworld.AnimalPipeline;
 import com.hy.jspider.animalworld.AnimalProcessor;
 
@@ -18,16 +20,16 @@ import us.codecraft.webmagic.Spider;
  */
 public class DisposableScrape {
 
-    public static final String START_URL = AnimalProcessor.START_URL;
+    public static final String START_URL = AnimalNewsProcessor.START_URL;
 
     public static void main(String[] args) {
         initLog4jConfig();
 
-        Spider.create(new AnimalProcessor())
+        Spider.create(new AnimalNewsProcessor())
                 .setDownloader(new OkHttpDownloader())
                 .addUrl(START_URL)
                 .thread(Runtime.getRuntime().availableProcessors())
-                .addPipeline(new AnimalPipeline())
+                .addPipeline(new AnimalNewsPipeline())
                 .run();
     }
 
