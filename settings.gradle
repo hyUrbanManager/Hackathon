@@ -1,2 +1,2 @@
-include ':kotlin', ':hackathon1', ':hackathon2', ':security', ':security', ':niukewang', ':parser', ':multiprocess', ':androidlib', ':networkcancer', ':database', ':client', ':media', ':activities', ':bluetoothdemo'
+include ':kotlin', ':hackathon1', ':hackathon2', ':security', ':security', ':niukewang', ':parser', ':multiprocess', ':androidlib', ':networkcancer', ':database', ':client', ':media', ':activities', ':bluetoothdemo', ':map'
 include ':jspider'
