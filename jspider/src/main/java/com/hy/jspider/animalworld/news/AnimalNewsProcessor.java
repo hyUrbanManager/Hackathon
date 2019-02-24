@@ -1,4 +1,4 @@
-package com.hy.jspider.animalworld;
+package com.hy.jspider.animalworld.news;
 
 import org.apache.log4j.Logger;
 

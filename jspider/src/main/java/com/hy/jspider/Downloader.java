@@ -10,9 +10,10 @@ import java.util.List;
  *
  * @author hy 2018/5/14
  */
-public abstract class Downloader {
+public class Downloader {
 
-    public abstract void startDownload();
+    public void startDownload() {
+    }
 
     /**
      * url list下载。

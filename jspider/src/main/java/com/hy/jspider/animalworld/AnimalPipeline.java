@@ -1,6 +1,7 @@
 package com.hy.jspider.animalworld;
 
 import com.google.gson.Gson;
+import com.hy.jspider.animalworld.news.Animal;
 
 import org.apache.log4j.Logger;
 

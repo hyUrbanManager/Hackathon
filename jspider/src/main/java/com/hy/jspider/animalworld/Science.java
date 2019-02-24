@@ -1,6 +1,7 @@
 package com.hy.jspider.animalworld;
 
 import com.google.gson.annotations.SerializedName;
+import com.hy.jspider.animalworld.news.Animal;
 
 import java.util.List;
 

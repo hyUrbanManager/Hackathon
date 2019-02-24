@@ -1,4 +1,4 @@
-package com.hy.jspider.animalworld;
+package com.hy.jspider.animalworld.news;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Animal {
 
-    Animal(int id, String imgUrl, String name, String enName, String desc) {
+    public Animal(int id, String imgUrl, String name, String enName, String desc) {
         this.id = id;
         this.imgUrl = imgUrl;
         this.name = name;
