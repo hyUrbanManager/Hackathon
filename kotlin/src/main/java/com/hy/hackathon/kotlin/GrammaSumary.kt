@@ -7,6 +7,7 @@ fun main(args: Array<String>) {
     describeNullRangeParam(arg1 = 1)
     describeNullRangeParam(0)
     describeLambda()
+    describeIterator()
 }
 
 fun describeNullRangeParam(arg1: Int, arg2: Int? = null, arg3: Any? = ""): Float? {
@@ -14,10 +15,10 @@ fun describeNullRangeParam(arg1: Int, arg2: Int? = null, arg3: Any? = ""): Float
     val range = 10
     for (item in items) {
         if (item.length in 2..range) {
-            println(item.length)
+            print(item.length)
         }
         if (item.length !in 0..5) {
-            println(item.length)
+            print(item.length)
         }
     }
     for (i in 0..10 step 2) {
@@ -26,6 +27,10 @@ fun describeNullRangeParam(arg1: Int, arg2: Int? = null, arg3: Any? = ""): Float
     for (i in 10 downTo 2) {
         print(i)
     }
+    for (i in 0 until 10) {
+        print(i)
+    }
+    println()
     return null
 }
 
@@ -47,5 +52,14 @@ fun describeLambda() {
             .sortedBy { it.length }
             .map { it.toUpperCase() }
             .forEach { print(it) }
+}
+
+fun describeIterator() {
+    val map = mapOf(Pair("k", "v"), Pair("k2", "v2"), Pair("k3", "v3"))
+    println("map key is k, value: ${map["k"]}")
+    for ((k, v) in map) {
+        print("key: $k, value: $v")
+    }
+    val cnt = map.count { entry -> entry.key.length > 1 }
 }
 
