@@ -8,6 +8,7 @@ fun main(args: Array<String>) {
     describeNullRangeParam(0)
     describeLambda()
     describeIterator()
+    describeNull("a")
 }
 
 fun describeNullRangeParam(arg1: Int, arg2: Int? = null, arg3: Any? = ""): Float? {
@@ -61,5 +62,25 @@ fun describeIterator() {
         print("key: $k, value: $v")
     }
     val cnt = map.count { entry -> entry.key.length > 1 }
+}
+
+fun describeNull(name: String?) {
+    name?.let {
+        println(name)
+    }
+}
+
+fun getWidth() = 30
+
+fun describeArray() {
+    val array = intArrayOf(1, 2, 3)
+    val num = array[1]
+
+    val array2 = listOf("a", "b")
+    val c = array2[0]
+
+    val array3 = arrayListOf("a", "b")
+    val c2 = array3[0]
+
 }
 
