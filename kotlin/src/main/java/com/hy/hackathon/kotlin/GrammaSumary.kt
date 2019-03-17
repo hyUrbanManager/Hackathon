@@ -84,3 +84,18 @@ fun describeArray() {
 
 }
 
+fun describeContinue() {
+    loop@ for (i in 0..10) {
+        val num = i
+        for (j in i..10) {
+            if (j == 8) {
+                continue@loop
+            }
+            if (j == 6) {
+                break@loop
+            }
+        }
+    }
+
+}
+
