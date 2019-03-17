@@ -1,5 +1,7 @@
 package com.hy.hackathon.kotlin
 
+import kotlin.properties.Delegates
+
 data class Customer(val name: String, val age: Int)
 
 fun main() {
@@ -13,6 +15,12 @@ fun main() {
 
     val c = C("h")
     c.mLastName = ""
+
+    println(Outer().Inner().getOuterName())
+
+    val user = User()
+    user.name = "hy"
+    user.name = "xld"
 }
 
 // 加var、val声明有该成员，否则无，只是作为构造函数的传参。
@@ -83,5 +91,58 @@ class C constructor(mFirstName: String) {
 
 abstract class BaseAdp {
     open fun onBind() {
+    }
+}
+
+class Outer {
+    val name: String = "outer"
+
+    inner class Inner {
+
+        val name: String = "inner"
+
+        fun getOuterName() = this@Outer.name
+
+    }
+
+}
+
+interface OnClickListener {
+    fun onClick()
+}
+
+fun setOnClickListener(listener: OnClickListener, num: Int) {
+    listener.onClick()
+}
+
+fun doSetClick() {
+    setOnClickListener(object : OnClickListener {
+        override fun onClick() {
+        }
+    }, 1)
+    val result = object {
+        val code = 1
+        val msg = "no error."
+    }
+    println("r: ${result.code}, ${result.msg}")
+}
+
+object SingletonObject {
+
+    fun start() {
+
+    }
+}
+
+typealias SO = SingletonObject
+
+fun doGetSingleton() {
+    SingletonObject.start()
+    SO.start()
+}
+
+class User {
+    var name: String by Delegates.observable("init name") { property, oldValue, newValue ->
+        println("property: $property, old: $oldValue, new: $newValue")
     }
 }

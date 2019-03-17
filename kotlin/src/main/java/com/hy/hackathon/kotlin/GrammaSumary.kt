@@ -106,3 +106,14 @@ fun describeDestructing() {
     println("code : $code, msg: $msg")
 }
 
+fun describeLambdaParam(onDone: (name: String, value: Int) -> Unit, onFinish: () -> Boolean) {
+
+}
+
+fun callDescribeLambdaParam() {
+    describeLambdaParam({ _, _ ->
+    }, {
+        true
+    })
+
+}
