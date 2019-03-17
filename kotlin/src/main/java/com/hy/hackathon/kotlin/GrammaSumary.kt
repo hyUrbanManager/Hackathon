@@ -9,6 +9,7 @@ fun main(args: Array<String>) {
     describeLambda()
     describeIterator()
     describeNull("a")
+    describeDestructing()
 }
 
 fun describeNullRangeParam(arg1: Int, arg2: Int? = null, arg3: Any? = ""): Float? {
@@ -96,6 +97,12 @@ fun describeContinue() {
             }
         }
     }
+}
 
+data class Result(val code: Int, val msg: String)
+
+fun describeDestructing() {
+    val (code, msg) = Result(10, "no error.")
+    println("code : $code, msg: $msg")
 }
 
