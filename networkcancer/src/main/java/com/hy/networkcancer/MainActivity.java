@@ -1,11 +1,14 @@
 package com.hy.networkcancer;
 
+import android.net.TrafficStats;
 import android.net.wifi.WifiInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.Formatter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -17,6 +20,8 @@ import com.hy.androidlib.network.WifiHelper;
 import com.hy.androidlib.utils.ToastUtil;
 import com.hy.androidlib.widget.ButtonsLayout;
 import com.hy.networkcancer.shooter.Shooter;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
     private WifiHelper wifiHelper;
     private WifiCallback wifiCallback = new WifiCallback();
 
+    private long mLastTxByte;
+    private long mLastRxByte;
+    private Runnable mCheckSpeedRunnable;
+
     private Shooter shooter;
     private Shooter.LogListener listener = (who, message) -> {
         mMainHandler.post(() -> mLog.append(who + ": " + message + '\n'));
@@ -46,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private SeekBar mSendSpeed;
     private AlertDialog sendOptionDialog;
     private EditText mEditSockets;
+    private TextView mSpeedTipView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +78,19 @@ public class MainActivity extends AppCompatActivity {
         wifiHelper = WifiHelper.getInstance();
         wifiHelper.registerBroadCastReceiver(getApplicationContext());
         wifiHelper.registerOnWifiCallback(wifiCallback);
+
+        // 初始化速度检测器。
+        mCheckSpeedRunnable = () -> {
+            long txByte = TrafficStats.getTotalTxBytes();
+            long rxByte = TrafficStats.getTotalRxBytes();
+            mSpeedTipView.setText(String.format(Locale.US, "上行: %s  下行: %s",
+                    Formatter.formatFileSize(this, txByte - mLastTxByte),
+                    Formatter.formatFileSize(this, rxByte - mLastRxByte)));
+            mLastTxByte = txByte;
+            mLastRxByte = rxByte;
+            mMainHandler.postDelayed(mCheckSpeedRunnable, 2000L);
+        };
+        mMainHandler.post(mCheckSpeedRunnable);
 
         // 初始化。
         dialogLayout = LayoutInflater.from(this).inflate(R.layout.layout_udp_option, null, false);
@@ -112,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
                 shooter.stopShoot();
             }
         });
+        mSpeedTipView = findViewById(R.id.speed_tip);
 
     }
 
@@ -120,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         wifiHelper.unregisterBroadcastReceiver(getApplicationContext());
         wifiHelper.registerOnWifiCallback(wifiCallback);
+        mMainHandler.removeCallbacksAndMessages(null);
     }
 
     public class WifiCallback implements WifiHelper.OnWifiCallBack {
