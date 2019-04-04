@@ -2,8 +2,10 @@ package com.hy.opengl.blurimage
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.opengl.GLES20
 import android.opengl.GLES30
 import android.opengl.GLSurfaceView
+import android.util.Log
 import java.io.*
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
@@ -13,6 +15,8 @@ class BlurImageViewRender(private val context: Context, private var bitmap: Bitm
     private var srcWidth: Int = 0
 
     private var srcHeight: Int = 0
+
+    private var mHasDraw = false
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
 
@@ -36,8 +40,9 @@ class BlurImageViewRender(private val context: Context, private var bitmap: Bitm
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
+        Log.d("blur", "onSurfaceChanged")
         prepare(width, height)
-        GLES30.glViewport(0, 0, width, height)
+        GLES20.glViewport(0, 0, width, height)
     }
 
     private fun prepare(width: Int, height: Int) {
@@ -52,11 +57,16 @@ class BlurImageViewRender(private val context: Context, private var bitmap: Bitm
 
     fun setImageBitmap(bitmap: Bitmap) {
         this.bitmap = bitmap
-        prepare(srcWidth, srcHeight)
+//        prepare(srcWidth, srcHeight)
+        mHasDraw = false
     }
 
     override fun onDrawFrame(gl: GL10?) {
-        draw()
+//        if (!mHasDraw) {
+            Log.d("@", "onDraw")
+            draw()
+            mHasDraw = true
+//        }
     }
 
     companion object {

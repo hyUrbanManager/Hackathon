@@ -11,7 +11,7 @@ class BlurImageView(context: Context, attributeSet: AttributeSet?) : GLSurfaceVi
     private var render: BlurImageViewRender
 
     init {
-        setEGLContextClientVersion(3)
+        setEGLContextClientVersion(2)
         render = BlurImageViewRender(context, null)
         setRenderer(render)
         renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY

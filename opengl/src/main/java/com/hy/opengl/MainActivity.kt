@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         mBitmap = BitmapFactory.decodeResource(resources, R.drawable.peppers)
+
         blur_image_view.setImageBitmap(mBitmap)
     }
 
