@@ -1,4 +1,4 @@
-package com.hy.opengl.blurimage
+package com.hy.opengl.blursimple
 
 import android.content.Context
 import android.graphics.Bitmap

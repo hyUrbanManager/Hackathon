@@ -151,7 +151,7 @@ static void bindVAO() {
 }
 
 JNIEXPORT void JNICALL
-Java_com_hy_opengl_blurimage_BlurImageViewRender_prepare(JNIEnv *env, jobject thiz,
+Java_com_hy_opengl_blursimple_BlurImageViewRender_prepare(JNIEnv *env, jobject thiz,
                                                               jstring vertex, jstring fragment,
                                                               jobject bitmap, jint srcWidth,
                                                               jint srcHeight) {
@@ -179,7 +179,7 @@ void setMatrix() {
 }
 
 JNIEXPORT void JNICALL
-Java_com_hy_opengl_blurimage_BlurImageViewRender_draw(JNIEnv *env, jobject thiz) {
+Java_com_hy_opengl_blursimple_BlurImageViewRender_draw(JNIEnv *env, jobject thiz) {
 
     int isVertical = 0;
     bool isFirst = true;

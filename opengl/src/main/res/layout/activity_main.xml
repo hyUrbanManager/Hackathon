@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.hy.opengl.blurimage.BlurImageView
+    <com.hy.opengl.blursimple.BlurImageView
         android:id="@+id/blur_image_view"
         android:layout_width="300dp"
         android:layout_height="300dp"

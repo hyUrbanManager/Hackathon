@@ -1,12 +1,13 @@
-package com.hy.opengl
+package com.hy.opengl.blursimple
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.hy.opengl.R
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class BlueSimpleMainActivity : AppCompatActivity() {
 
     lateinit var mBitmap: Bitmap
 

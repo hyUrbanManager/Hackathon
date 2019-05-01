@@ -1,9 +1,8 @@
-package com.hy.opengl.blurimage
+package com.hy.opengl.blursimple
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.opengl.GLES20
-import android.opengl.GLES30
 import android.opengl.GLSurfaceView
 import android.util.Log
 import java.io.*
@@ -49,8 +48,8 @@ class BlurImageViewRender(private val context: Context, private var bitmap: Bitm
         srcWidth = width
         srcHeight = height
         bitmap?.let {
-            val vertex = readSlgl("vertex.slgl")
-            val fragment = readSlgl("fragment.slgl")
+            val vertex = readSlgl("blur_simple/vertex.slgl")
+            val fragment = readSlgl("blur_simple/fragment.slgl")
             prepare(vertex, fragment, it, width, height)
         }
     }
@@ -71,7 +70,7 @@ class BlurImageViewRender(private val context: Context, private var bitmap: Bitm
 
     companion object {
         init {
-            System.loadLibrary("blurimageview")
+            System.loadLibrary("my-opengl")
         }
     }
 
