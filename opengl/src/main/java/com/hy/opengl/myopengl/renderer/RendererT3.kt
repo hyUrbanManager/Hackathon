@@ -13,36 +13,37 @@ import javax.microedition.khronos.opengles.GL10
 /**
  * @author huangye
  */
-class RendererT2 : GLSurfaceView.Renderer {
+class RendererT3 : GLSurfaceView.Renderer {
 
     companion object {
-        private const val TAG = "@OpenGl RendererT2"
+        private const val TAG = "@OpenGl RendererT3"
 
         private val POINTS = floatArrayOf(
-                // triangle1
-                -0.5F, -0.5F,
-                0.5F, -0.5F,
-                0.5F, 0.5F,
+                // triangle1, rgb
+                -0.5F, -0.5F, 1.0F, 0.0F, 0.0F,
+                0.5F, -0.5F, 0.0F, 1.0F, 0.0F,
+                0.5F, 0.5F, 0.0F, 0.0F, 1.0F,
                 // triangle2
-                -0.5F, -0.5F,
-                0.5F, 0.5F,
-                -0.5F, 0.5F,
+                -0.5F, -0.5F, 0.0F, 1.0F, 0.0F,
+                0.5F, 0.5F, 0.0F, 0.0F, 1.0F,
+                -0.5F, 0.5F, 1.0F, 0.0F, 0.0F,
                 // line
-                -0.5F, 0.0F,
-                0.5F, 0.0F
+                -0.5F, 0.0F, 1.0F, 0.0F, 0.0F,
+                0.5F, 0.0F, 0.0F, 0.0F, 1.0F
         )
     }
 
     private var my_Color = 0
+    private var my_Position = 0
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
-        val vertexCode = readGLSL("renderert2/vertex_shader.glsl")
+        val vertexCode = readGLSL("renderert3/vertex_shader.glsl")
         val vertexShader = glCreateShader(GL_VERTEX_SHADER)
         glShaderSource(vertexShader, vertexCode)
         glCompileShader(vertexShader)
         checkShaderCompile(vertexShader)
 
-        val fragmentCode = readGLSL("renderert2/fragment_shader.glsl")
+        val fragmentCode = readGLSL("renderert3/fragment_shader.glsl")
         val fragmentShader = glCreateShader(GL_FRAGMENT_SHADER)
         glShaderSource(fragmentShader, fragmentCode)
         glCompileShader(fragmentShader)
@@ -59,12 +60,13 @@ class RendererT2 : GLSurfaceView.Renderer {
 
         glUseProgram(program)
 
-        val my_Position = glGetAttribLocation(program, "my_Position")
-        val buffer = genFloatBuffer(POINTS)
-        glVertexAttribPointer(my_Position, 2, GL_FLOAT, false, 0, buffer)
-        glEnableVertexAttribArray(my_Position)
+        my_Position = glGetAttribLocation(program, "my_Position")
+        my_Color = glGetAttribLocation(program, "my_Color")
+        val pointBuffer = genFloatBuffer(POINTS)
+        glVertexAttribPointer(my_Position, 2, GL_FLOAT, false, 5 * 4, pointBuffer)
+        pointBuffer.position(2)
+        glVertexAttribPointer(my_Color, 3, GL_FLOAT, false, 5 * 4, pointBuffer)
 
-        my_Color = glGetUniformLocation(program, "my_Color")
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -75,13 +77,16 @@ class RendererT2 : GLSurfaceView.Renderer {
     override fun onDrawFrame(gl: GL10?) {
         glClear(GL_COLOR_BUFFER_BIT)
 
+        glEnableVertexAttribArray(my_Position)
+        glEnableVertexAttribArray(my_Color)
+
         // triangle
-        glUniform4f(my_Color, 0F, 0.5F, 0.5F, 1F)
         glDrawArrays(GL_TRIANGLES, 0, 6)
         // line
-        glUniform4f(my_Color, 1F, 0F, 0F, 1F)
         glDrawArrays(GL_LINES, 6, 2)
 
+        glDisableVertexAttribArray(my_Position)
+        glDisableVertexAttribArray(my_Color)
     }
 
     private fun checkShaderCompile(shader: Int) {

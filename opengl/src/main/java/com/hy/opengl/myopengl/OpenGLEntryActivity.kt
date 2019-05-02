@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.hy.opengl.R
-import com.hy.opengl.myopengl.renderer.RendererT2
+import com.hy.opengl.myopengl.renderer.*
 import kotlinx.android.synthetic.main.activity_opengl.*
 
 /**
@@ -39,7 +39,7 @@ class OpenGLEntryActivity : AppCompatActivity() {
         gl_surface_view.setEGLContextClientVersion(2)
 
         // renderer
-        gl_surface_view.setRenderer(RendererT2())
+        gl_surface_view.setRenderer(RendererT3())
 
     }
 
