@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_opengl.*
 class OpenGLEntryActivity : AppCompatActivity() {
 
     companion object {
-        private const val TAG = "@Opengl"
+        private const val TAG = "@OpenGl"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +39,7 @@ class OpenGLEntryActivity : AppCompatActivity() {
         gl_surface_view.setEGLContextClientVersion(2)
 
         // renderer
-        gl_surface_view.setRenderer(RendererT3())
+        gl_surface_view.setRenderer(RendererT4())
 
     }
 
