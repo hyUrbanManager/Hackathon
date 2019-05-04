@@ -6,6 +6,7 @@ import android.opengl.GLSurfaceView
 import android.opengl.GLUtils
 import android.util.Log
 import com.hy.opengl.*
+import java.util.*
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -72,7 +73,7 @@ class RendererT6 : GLSurfaceView.Renderer {
     private var u_HeightOffset = 0
     private var u_IsDrawOrigin = 0
 
-    private var mFrameBuffer = intArrayOf(0, 0)
+    private var mFrameBuffers = intArrayOf(0, 0, 0)
     private var mTextures = intArrayOf(0, 0, 0)
 
     private val mRect = Rect()
@@ -130,14 +131,15 @@ class RendererT6 : GLSurfaceView.Renderer {
         glGenerateMipmap(GL_TEXTURE_2D)
         glBindTexture(GL_TEXTURE_2D, 0)
 
-        // draw framebuffer 1, draw framebuffer 2
-        glGenFramebuffers(2, mFrameBuffer, 0)
-        glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffer[0])
+        // captrue framebuffer. draw framebuffer 1, draw framebuffer 2
+        glGenFramebuffers(3, mFrameBuffers, 0)
+
+        glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffers[1])
         glBindTexture(GL_TEXTURE_2D, mTextures[1])
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTextures[1], 0)
         glClear(GL_COLOR_BUFFER_BIT) // test
 
-        glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffer[1])
+        glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffers[2])
         glBindTexture(GL_TEXTURE_2D, mTextures[2])
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTextures[2], 0)
         glClear(GL_COLOR_BUFFER_BIT) // test
@@ -159,6 +161,8 @@ class RendererT6 : GLSurfaceView.Renderer {
         u_IsDrawOrigin = glGetUniformLocation(program, "u_IsDrawOrigin")
 
         glBindTexture(GL_TEXTURE_2D, 0)
+
+        Log.d(TAG, "textures: ${Arrays.toString(mTextures)}, framebuffers: ${Arrays.toString(mFrameBuffers)}")
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -177,7 +181,7 @@ class RendererT6 : GLSurfaceView.Renderer {
         glVertexAttribPointer(a_Position, 2, GL_FLOAT, false, 4 * 4, mPointBuffer)
         mPointBuffer.position(2)
         glVertexAttribPointer(a_TextureCoordinates, 2, GL_FLOAT, false, 4 * 4, mPointBuffer)
-        glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffer[0])
+        glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffers[1])
         glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_2D, mTextures[0])
         glUniform1i(u_TextureUnit, 0)
@@ -197,7 +201,7 @@ class RendererT6 : GLSurfaceView.Renderer {
         glVertexAttribPointer(a_Position, 2, GL_FLOAT, false, 4 * 4, mPointBuffer2)
         mPointBuffer2.position(2)
         glVertexAttribPointer(a_TextureCoordinates, 2, GL_FLOAT, false, 4 * 4, mPointBuffer2)
-        glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffer[1])
+        glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffers[2])
         glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_2D, mTextures[1])
         glUniform1i(u_TextureUnit, 0)
@@ -219,7 +223,7 @@ class RendererT6 : GLSurfaceView.Renderer {
         glVertexAttribPointer(a_TextureCoordinates, 2, GL_FLOAT, false, 4 * 4, mPointBuffer2)
         glBindFramebuffer(GL_FRAMEBUFFER, 0)
         glActiveTexture(GL_TEXTURE0)
-        glBindTexture(GL_TEXTURE_2D, mTextures[1])
+        glBindTexture(GL_TEXTURE_2D, mTextures[2])
         glUniform1i(u_TextureUnit, 0)
         glUniform1i(u_IsDrawOrigin, 1)
         glViewport(mRect.left, mRect.top, mRect.right, mRect.bottom)
