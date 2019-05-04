@@ -39,7 +39,7 @@ class OpenGLEntryActivity : AppCompatActivity() {
         gl_surface_view.setEGLContextClientVersion(2)
 
         // renderer
-        gl_surface_view.setRenderer(RendererT5())
+        gl_surface_view.setRenderer(RendererT6())
 
     }
 

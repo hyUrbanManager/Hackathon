@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -75,4 +76,14 @@ fun readBitmap(resourceID: Int): Bitmap {
     option.inScaled = false
     mBitmap = BitmapFactory.decodeResource(mContext!!.resources, resourceID, option)
     return mBitmap!!
+}
+
+fun readScaledBitmap(resourceID: Int): Bitmap {
+    val option = BitmapFactory.Options()
+    option.inScaled = false
+    mBitmap = BitmapFactory.decodeResource(mContext!!.resources, resourceID, option)
+
+    val matrix = Matrix()
+    matrix.setScale(0.2F, 0.2F)
+    return Bitmap.createBitmap(mBitmap!!, 0, 0, mBitmap!!.width, mBitmap!!.height, matrix, false)
 }

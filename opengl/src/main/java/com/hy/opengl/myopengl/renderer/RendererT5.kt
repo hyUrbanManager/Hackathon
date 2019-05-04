@@ -15,7 +15,7 @@ import javax.microedition.khronos.opengles.GL10
 class RendererT5 : GLSurfaceView.Renderer {
 
     companion object {
-        private const val TAG = "@OpenGl RendererT3"
+        private const val TAG = "@OpenGl RendererT5"
 
         // OpenGL、Android y坐标相反，使用y坐标为相反值。
         private val POINTS = floatArrayOf(
