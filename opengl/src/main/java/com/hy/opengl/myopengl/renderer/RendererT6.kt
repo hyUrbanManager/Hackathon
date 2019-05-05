@@ -48,20 +48,10 @@ class RendererT6 : GLSurfaceView.Renderer {
                 -1.0F, -1.0F, 0.0F, 0.0F,
                 1.0F, -1.0F, 1.0F, 0.0F,
                 1.0F, 1.0F, 1.0F, 1.0F,
-                // triangle1, st.
-//                -1.0F, -1.0F, -1.0F, -1.0F,
-//                1.0F, -1.0F, 1.0F, -1.0F,
-//                1.0F, 1.0F, 1.0F, 1.0F,
                 // triangle2
                 -1.0F, -1.0F, 0.0F, 0.0F,
-//                1.0F, 1.0F, 2.0F, 2.0F,
-//                -1.0F, 1.0F, 0.0F, 2.0F
                 1.0F, 1.0F, 0.5F, 0.5F,
                 -1.0F, 1.0F, 0.0F, 0.5F
-                // triangle2
-//                -1.0F, -1.0F, -1.0F, -1.0F,
-//                1.0F, 1.0F, 1.0F, 1.0F,
-//                -1.0F, 1.0F, 1.0F, 1.0F
         )
     }
 
@@ -73,6 +63,7 @@ class RendererT6 : GLSurfaceView.Renderer {
     private var u_HeightOffset = 0
     private var u_IsDrawOrigin = 0
 
+    private var mArrayBuffers = intArrayOf(0, 0, 0)
     private var mFrameBuffers = intArrayOf(0, 0, 0)
     private var mTextures = intArrayOf(0, 0, 0)
 
@@ -105,6 +96,15 @@ class RendererT6 : GLSurfaceView.Renderer {
             checkProgramValidate(program)
         }
         glUseProgram(program)
+
+        // array buffer.
+        glGenBuffers(3, mArrayBuffers, 0)
+        glBindBuffer(GL_ARRAY_BUFFER, mArrayBuffers[0])
+        glBufferData(GL_ARRAY_BUFFER, 24 * 4, mPointBuffer, GL_STATIC_DRAW)
+        glBindBuffer(GL_ARRAY_BUFFER, mArrayBuffers[1])
+        glBufferData(GL_ARRAY_BUFFER, 24 * 4, mPointBuffer2, GL_STATIC_DRAW)
+        glBindBuffer(GL_ARRAY_BUFFER, mArrayBuffers[2])
+        glBufferData(GL_ARRAY_BUFFER, 24 * 4, mPointBuffer3, GL_STATIC_DRAW)
 
         // picture texture, draw texture 1, draw texture 2.
         glGenTextures(3, mTextures, 0)
@@ -175,12 +175,11 @@ class RendererT6 : GLSurfaceView.Renderer {
         glClear(GL_COLOR_BUFFER_BIT)
 
         // 横向模糊，画到fb1
+        glBindBuffer(GL_ARRAY_BUFFER, mArrayBuffers[0])
         glEnableVertexAttribArray(a_Position)
+        glVertexAttribPointer(a_Position, 2, GL_FLOAT, false, 4 * 4, 0)
         glEnableVertexAttribArray(a_TextureCoordinates)
-        mPointBuffer.position(0)
-        glVertexAttribPointer(a_Position, 2, GL_FLOAT, false, 4 * 4, mPointBuffer)
-        mPointBuffer.position(2)
-        glVertexAttribPointer(a_TextureCoordinates, 2, GL_FLOAT, false, 4 * 4, mPointBuffer)
+        glVertexAttribPointer(a_TextureCoordinates, 2, GL_FLOAT, false, 4 * 4, 2 * 4)
         glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffers[1])
         glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_2D, mTextures[0])
@@ -195,12 +194,11 @@ class RendererT6 : GLSurfaceView.Renderer {
         glDisableVertexAttribArray(a_TextureCoordinates)
 
         // 纵向模糊，画到fb2
+        glBindBuffer(GL_ARRAY_BUFFER, mArrayBuffers[1])
         glEnableVertexAttribArray(a_Position)
+        glVertexAttribPointer(a_Position, 2, GL_FLOAT, false, 4 * 4, 0)
         glEnableVertexAttribArray(a_TextureCoordinates)
-        mPointBuffer2.position(0)
-        glVertexAttribPointer(a_Position, 2, GL_FLOAT, false, 4 * 4, mPointBuffer2)
-        mPointBuffer2.position(2)
-        glVertexAttribPointer(a_TextureCoordinates, 2, GL_FLOAT, false, 4 * 4, mPointBuffer2)
+        glVertexAttribPointer(a_TextureCoordinates, 2, GL_FLOAT, false, 4 * 4, 2 * 4)
         glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffers[2])
         glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_2D, mTextures[1])
@@ -215,15 +213,14 @@ class RendererT6 : GLSurfaceView.Renderer {
         glDisableVertexAttribArray(a_TextureCoordinates)
 
         // fb2的结果通过texture画到屏幕上
+        glBindBuffer(GL_ARRAY_BUFFER, mArrayBuffers[1])
         glEnableVertexAttribArray(a_Position)
+        glVertexAttribPointer(a_Position, 2, GL_FLOAT, false, 4 * 4, 0)
         glEnableVertexAttribArray(a_TextureCoordinates)
-        mPointBuffer2.position(0)
-        glVertexAttribPointer(a_Position, 2, GL_FLOAT, false, 4 * 4, mPointBuffer2)
-        mPointBuffer2.position(2)
-        glVertexAttribPointer(a_TextureCoordinates, 2, GL_FLOAT, false, 4 * 4, mPointBuffer2)
+        glVertexAttribPointer(a_TextureCoordinates, 2, GL_FLOAT, false, 4 * 4, 2 * 4)
         glBindFramebuffer(GL_FRAMEBUFFER, 0)
         glActiveTexture(GL_TEXTURE0)
-        glBindTexture(GL_TEXTURE_2D, mTextures[2])
+        glBindTexture(GL_TEXTURE_2D, mTextures[0])
         glUniform1i(u_TextureUnit, 0)
         glUniform1i(u_IsDrawOrigin, 1)
         glViewport(mRect.left, mRect.top, mRect.right, mRect.bottom)
