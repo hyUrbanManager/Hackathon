@@ -18,7 +18,7 @@ class RendererT6 : GLSurfaceView.Renderer {
     companion object {
         private const val TAG = "@OpenGl RendererT6"
 
-        // OpenGL、Android y坐标相反，bitmap加载为纹理，使用y坐标为相反值。
+        // OpenGL、Android y坐标相反，bitmap画到纹理上，使用y坐标为相反值。
         private val POINTS = floatArrayOf(
                 // triangle1, st.
                 -1.0F, -1.0F, 0.0F, 1.0F,
@@ -42,7 +42,7 @@ class RendererT6 : GLSurfaceView.Renderer {
                 -1.0F, 1.0F, 0.0F, 1.0F
         )
 
-        // fbo，相反，使用y坐标为相反值。
+        // texture画到Android屏幕上，使用正交投影产生的值。
         private val POINTS3 = floatArrayOf(
                 // triangle1, st.
                 -1.0F, -1.0F, 0.0F, 0.0F,
@@ -50,13 +50,13 @@ class RendererT6 : GLSurfaceView.Renderer {
                 1.0F, 1.0F, 1.0F, 1.0F,
                 // triangle2
                 -1.0F, -1.0F, 0.0F, 0.0F,
-                1.0F, 1.0F, 0.5F, 0.5F,
-                -1.0F, 1.0F, 0.0F, 0.5F
+                1.0F, 1.0F, 1.0F, 1.0F,
+                -1.0F, 1.0F, 0.0F, 1.0F
         )
     }
 
-    private var a_Position = 0
-    private var a_TextureCoordinates = 0
+    private val a_Position = 0
+    private val a_TextureCoordinates = 1
     private var u_TextureUnit = 0
     private var u_Radius = 0
     private var u_WidthOffset = 0
@@ -105,24 +105,29 @@ class RendererT6 : GLSurfaceView.Renderer {
         glBufferData(GL_ARRAY_BUFFER, 24 * 4, mPointBuffer2, GL_STATIC_DRAW)
         glBindBuffer(GL_ARRAY_BUFFER, mArrayBuffers[2])
         glBufferData(GL_ARRAY_BUFFER, 24 * 4, mPointBuffer3, GL_STATIC_DRAW)
+        glEnableVertexAttribArray(0)
 
         // picture texture, draw texture 1, draw texture 2.
         glGenTextures(3, mTextures, 0)
         glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_2D, mTextures[0])
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
         GLUtils.texImage2D(GL_TEXTURE_2D, 0, readScaledBitmap(R.drawable.peppers), 0)
         glGenerateMipmap(GL_TEXTURE_2D) // importance.
         glBindTexture(GL_TEXTURE_2D, mTextures[1])
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+        // framebuffer、texture绑定问题。大小设置。
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1200, 800, 0, GL_RGBA, GL_UNSIGNED_BYTE, null)
 //        GLUtils.texImage2D(GL_TEXTURE_2D, 0, readBitmap(R.drawable.peppers), 0)
         glGenerateMipmap(GL_TEXTURE_2D)
         glBindTexture(GL_TEXTURE_2D, mTextures[2])
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
@@ -150,8 +155,8 @@ class RendererT6 : GLSurfaceView.Renderer {
                 == GL_FRAMEBUFFER_COMPLETE} ")
 
         // var
-        a_Position = glGetAttribLocation(program, "a_Position")
-        a_TextureCoordinates = glGetAttribLocation(program, "a_TextureCoordinates")
+        glBindAttribLocation(program, a_Position, "a_Position")
+        glBindAttribLocation(program, a_TextureCoordinates, "a_TextureCoordinates")
 
         // 不需要给fragment shader传递纹理单元，传0，绑定当前texture即可。
         u_TextureUnit = glGetUniformLocation(program, "u_TextureUnit")
@@ -162,71 +167,69 @@ class RendererT6 : GLSurfaceView.Renderer {
 
         glBindTexture(GL_TEXTURE_2D, 0)
 
-        Log.d(TAG, "textures: ${Arrays.toString(mTextures)}, framebuffers: ${Arrays.toString(mFrameBuffers)}")
+        Log.d(TAG, "arraybuffers: ${Arrays.toString(mArrayBuffers)}, textures: ${Arrays.toString(mTextures)}, framebuffers: ${Arrays.toString(mFrameBuffers)}," +
+                "$a_Position, $a_TextureCoordinates, $u_TextureUnit, $u_Radius, $u_WidthOffset, $u_HeightOffset, " +
+                "$u_IsDrawOrigin")
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
         val rect = Rect(0, 0, width, height)
         glViewport(rect.left, rect.top, rect.right, rect.bottom)
         mRect.set(rect)
+        Log.d(TAG, mRect.toShortString())
     }
 
     override fun onDrawFrame(gl: GL10?) {
         glClear(GL_COLOR_BUFFER_BIT)
 
+        glEnableVertexAttribArray(1)
+
         // 横向模糊，画到fb1
         glBindBuffer(GL_ARRAY_BUFFER, mArrayBuffers[0])
-        glEnableVertexAttribArray(a_Position)
         glVertexAttribPointer(a_Position, 2, GL_FLOAT, false, 4 * 4, 0)
-        glEnableVertexAttribArray(a_TextureCoordinates)
         glVertexAttribPointer(a_TextureCoordinates, 2, GL_FLOAT, false, 4 * 4, 2 * 4)
         glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffers[1])
+        // view port，绑定framebuffer后要调整为framebuffer大小。framebuffer大小即texture大小。
+        glViewport(mRect.left, mRect.top, 1200, 800)
         glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_2D, mTextures[0])
         glUniform1i(u_TextureUnit, 0)
-        glUniform1i(u_Radius, 50)
+        glUniform1i(u_Radius, 100)
         glUniform1f(u_WidthOffset, 1F / 1200)
         glUniform1f(u_HeightOffset, 0F)
         glUniform1i(u_IsDrawOrigin, 0)
-        glViewport(mRect.left, mRect.top, mRect.right, mRect.bottom)
         glDrawArrays(GL_TRIANGLES, 0, 6)
-        glDisableVertexAttribArray(a_Position)
-        glDisableVertexAttribArray(a_TextureCoordinates)
 
         // 纵向模糊，画到fb2
         glBindBuffer(GL_ARRAY_BUFFER, mArrayBuffers[1])
-        glEnableVertexAttribArray(a_Position)
         glVertexAttribPointer(a_Position, 2, GL_FLOAT, false, 4 * 4, 0)
-        glEnableVertexAttribArray(a_TextureCoordinates)
         glVertexAttribPointer(a_TextureCoordinates, 2, GL_FLOAT, false, 4 * 4, 2 * 4)
         glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffers[2])
+        // view port，绑定framebuffer后要调整为framebuffer大小。framebuffer大小即texture大小。
+        glViewport(mRect.left, mRect.top, 1200, 800)
         glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_2D, mTextures[1])
         glUniform1i(u_TextureUnit, 0)
-        glUniform1i(u_Radius, 50)
+        glUniform1i(u_Radius, 100)
         glUniform1f(u_WidthOffset, 0F)
         glUniform1f(u_HeightOffset, 1F / 800)
         glUniform1i(u_IsDrawOrigin, 0)
-        glViewport(mRect.left, mRect.top, mRect.right, mRect.bottom)
         glDrawArrays(GL_TRIANGLES, 0, 6)
-        glDisableVertexAttribArray(a_Position)
-        glDisableVertexAttribArray(a_TextureCoordinates)
 
         // fb2的结果通过texture画到屏幕上
-        glBindBuffer(GL_ARRAY_BUFFER, mArrayBuffers[1])
-        glEnableVertexAttribArray(a_Position)
+        glBindBuffer(GL_ARRAY_BUFFER, mArrayBuffers[2])
         glVertexAttribPointer(a_Position, 2, GL_FLOAT, false, 4 * 4, 0)
-        glEnableVertexAttribArray(a_TextureCoordinates)
         glVertexAttribPointer(a_TextureCoordinates, 2, GL_FLOAT, false, 4 * 4, 2 * 4)
         glBindFramebuffer(GL_FRAMEBUFFER, 0)
+        // view port 恢复为屏幕大小。
+        glViewport(mRect.left, mRect.top, mRect.right, mRect.bottom)
         glActiveTexture(GL_TEXTURE0)
-        glBindTexture(GL_TEXTURE_2D, mTextures[0])
+        glBindTexture(GL_TEXTURE_2D, mTextures[2])
         glUniform1i(u_TextureUnit, 0)
         glUniform1i(u_IsDrawOrigin, 1)
-        glViewport(mRect.left, mRect.top, mRect.right, mRect.bottom)
         glDrawArrays(GL_TRIANGLES, 0, 6)
-        glDisableVertexAttribArray(a_Position)
-        glDisableVertexAttribArray(a_TextureCoordinates)
+
+        glDisableVertexAttribArray(1)
     }
 
     private fun checkShaderCompile(shader: Int) {
