@@ -53,6 +53,9 @@ class RendererT6 : GLSurfaceView.Renderer {
                 1.0F, 1.0F, 1.0F, 1.0F,
                 -1.0F, 1.0F, 0.0F, 1.0F
         )
+
+        private const val TEX_WIDTH = 1200 / 20
+        private const val TEX_HEIGHT = 800 / 20
     }
 
     private val a_Position = 0
@@ -123,7 +126,7 @@ class RendererT6 : GLSurfaceView.Renderer {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
         // framebuffer、texture绑定问题。大小设置。
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1200, 800, 0, GL_RGBA, GL_UNSIGNED_BYTE, null)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEX_WIDTH, TEX_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, null)
 //        GLUtils.texImage2D(GL_TEXTURE_2D, 0, readBitmap(R.drawable.peppers), 0)
         glGenerateMipmap(GL_TEXTURE_2D)
         glBindTexture(GL_TEXTURE_2D, mTextures[2])
@@ -131,7 +134,7 @@ class RendererT6 : GLSurfaceView.Renderer {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1200, 800, 0, GL_RGBA, GL_UNSIGNED_BYTE, null)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEX_WIDTH, TEX_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, null)
 //        GLUtils.texImage2D(GL_TEXTURE_2D, 0, readBitmap(R.drawable.peppers), 0)
         glGenerateMipmap(GL_TEXTURE_2D)
         glBindTexture(GL_TEXTURE_2D, 0)
@@ -190,11 +193,11 @@ class RendererT6 : GLSurfaceView.Renderer {
         glVertexAttribPointer(a_TextureCoordinates, 2, GL_FLOAT, false, 4 * 4, 2 * 4)
         glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffers[1])
         // view port，绑定framebuffer后要调整为framebuffer大小。framebuffer大小即texture大小。
-        glViewport(mRect.left, mRect.top, 1200, 800)
+        glViewport(0, 0, TEX_WIDTH, TEX_HEIGHT)
         glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_2D, mTextures[0])
         glUniform1i(u_TextureUnit, 0)
-        glUniform1i(u_Radius, 100)
+        glUniform1i(u_Radius, 20)
         glUniform1f(u_WidthOffset, 1F / 1200)
         glUniform1f(u_HeightOffset, 0F)
         glUniform1i(u_IsDrawOrigin, 0)
@@ -206,11 +209,11 @@ class RendererT6 : GLSurfaceView.Renderer {
         glVertexAttribPointer(a_TextureCoordinates, 2, GL_FLOAT, false, 4 * 4, 2 * 4)
         glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffers[2])
         // view port，绑定framebuffer后要调整为framebuffer大小。framebuffer大小即texture大小。
-        glViewport(mRect.left, mRect.top, 1200, 800)
+        glViewport(0, 0, TEX_WIDTH, TEX_HEIGHT)
         glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_2D, mTextures[1])
         glUniform1i(u_TextureUnit, 0)
-        glUniform1i(u_Radius, 100)
+        glUniform1i(u_Radius, 20)
         glUniform1f(u_WidthOffset, 0F)
         glUniform1f(u_HeightOffset, 1F / 800)
         glUniform1i(u_IsDrawOrigin, 0)
