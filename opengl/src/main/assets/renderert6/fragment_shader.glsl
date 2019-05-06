@@ -15,6 +15,11 @@ uniform float u_HeightOffset;
 uniform int u_IsDrawOrigin;
 
 void main() {
+    if (u_IsDrawOrigin == 1) {
+        gl_FragColor = texture2D(u_TextureUnit, v_TextureCoordinates);
+        return;
+    }
+
     int diameter = 2 * u_Radius + 1;
     vec4 sampleTex;
     vec3 color = vec3(0, 0, 0);
@@ -29,10 +34,6 @@ void main() {
         weightSum += boxWeight;
     }
     gl_FragColor = vec4(color / weightSum, sampleTex.a);
-
-    if (u_IsDrawOrigin == 1) {
-        gl_FragColor = texture2D(u_TextureUnit, v_TextureCoordinates);
-    }
 }
 // 均值模糊
 //        float boxWeight = float(1.0) / float(diameter);

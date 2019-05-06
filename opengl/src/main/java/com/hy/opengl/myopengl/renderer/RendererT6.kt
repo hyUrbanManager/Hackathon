@@ -54,8 +54,10 @@ class RendererT6 : GLSurfaceView.Renderer {
                 -1.0F, 1.0F, 0.0F, 1.0F
         )
 
-        private const val TEX_WIDTH = 1200 / 20
-        private const val TEX_HEIGHT = 800 / 20
+        private const val BLUR_RADIUS = 50
+        private const val SCALE = 50
+        private const val TEX_WIDTH = 1200 / SCALE
+        private const val TEX_HEIGHT = 800 / SCALE
     }
 
     private val a_Position = 0
@@ -119,7 +121,6 @@ class RendererT6 : GLSurfaceView.Renderer {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
         GLUtils.texImage2D(GL_TEXTURE_2D, 0, readScaledBitmap(R.drawable.peppers), 0)
-        glGenerateMipmap(GL_TEXTURE_2D) // importance.
         glBindTexture(GL_TEXTURE_2D, mTextures[1])
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
@@ -128,7 +129,6 @@ class RendererT6 : GLSurfaceView.Renderer {
         // framebuffer、texture绑定问题。大小设置。
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEX_WIDTH, TEX_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, null)
 //        GLUtils.texImage2D(GL_TEXTURE_2D, 0, readBitmap(R.drawable.peppers), 0)
-        glGenerateMipmap(GL_TEXTURE_2D)
         glBindTexture(GL_TEXTURE_2D, mTextures[2])
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
@@ -136,7 +136,6 @@ class RendererT6 : GLSurfaceView.Renderer {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEX_WIDTH, TEX_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, null)
 //        GLUtils.texImage2D(GL_TEXTURE_2D, 0, readBitmap(R.drawable.peppers), 0)
-        glGenerateMipmap(GL_TEXTURE_2D)
         glBindTexture(GL_TEXTURE_2D, 0)
 
         // captrue framebuffer. draw framebuffer 1, draw framebuffer 2
@@ -197,7 +196,7 @@ class RendererT6 : GLSurfaceView.Renderer {
         glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_2D, mTextures[0])
         glUniform1i(u_TextureUnit, 0)
-        glUniform1i(u_Radius, 20)
+        glUniform1i(u_Radius, BLUR_RADIUS)
         glUniform1f(u_WidthOffset, 1F / 1200)
         glUniform1f(u_HeightOffset, 0F)
         glUniform1i(u_IsDrawOrigin, 0)
@@ -213,7 +212,7 @@ class RendererT6 : GLSurfaceView.Renderer {
         glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_2D, mTextures[1])
         glUniform1i(u_TextureUnit, 0)
-        glUniform1i(u_Radius, 20)
+        glUniform1i(u_Radius, BLUR_RADIUS)
         glUniform1f(u_WidthOffset, 0F)
         glUniform1f(u_HeightOffset, 1F / 800)
         glUniform1i(u_IsDrawOrigin, 0)
@@ -258,3 +257,6 @@ class RendererT6 : GLSurfaceView.Renderer {
 
 
 }
+//        glGenerateMipmap(GL_TEXTURE_2D) // importance. no need.
+//        glGenerateMipmap(GL_TEXTURE_2D)
+//        glGenerateMipmap(GL_TEXTURE_2D)
