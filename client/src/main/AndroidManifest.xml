@@ -11,11 +11,10 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
-        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".LayerDrawableActivity" />
         <activity
             android:name=".WelcomeActivity"
             android:theme="@style/backgroundTheme">
@@ -27,9 +26,7 @@
         </activity>
         <activity android:name=".ContentPCActivity" />
         <activity android:name=".LoadJPEGActivity" />
-        <activity android:name=".ViewStubActivity" />
-
-        <!-- 使用url外部链接打开的Activity -->
+        <activity android:name=".ViewStubActivity" /> <!-- 使用url外部链接打开的Activity -->
         <activity android:name=".AppLinkActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -39,14 +36,10 @@
 
                 <data android:scheme="hyclient" />
             </intent-filter>
-        </activity>
-
-        <!-- 生成二维码 -->
+        </activity> <!-- 生成二维码 -->
         <activity
             android:name=".QRCodeActivity"
-            android:label="二维码" />
-
-        <!-- qq分享 -->
+            android:label="二维码" /> <!-- qq分享 -->
         <activity android:name=".QQShareActivity" />
         <activity
             android:name="com.tencent.tauth.AuthActivity"
@@ -73,19 +66,22 @@
         <activity android:name=".NfcActivity" />
         <activity
             android:name=".WebActivity"
+            android:label="测试打开web"
             android:theme="@style/webTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.MONKEY" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".X5WebActivity"
+            android:label="测试打开web x5"
             android:theme="@style/webTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -95,6 +91,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="com.hy.client.fast_start" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>

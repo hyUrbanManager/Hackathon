@@ -24,6 +24,11 @@ android工程如下：
     + applink打开app。
     + 生成二维码。
     + 深入探索View绘画滑动机制。
+    + canvas。
+    + lottie动画。
+    + 原生webview内核。
+    + 腾讯x5内核。
+    + layerDrawable动态使用。
 
 + 数据库提供者。
     + 提供ContentProvider的数据库app。

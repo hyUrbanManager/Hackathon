@@ -78,6 +78,9 @@ public class WelcomeActivity extends AppCompatActivity {
         activities.add(WebActivity.class);
         titles.add("腾讯x5 webView内核");
 
+        activities.add(LayerDrawableActivity.class);
+        titles.add("layerDrawable代码生成");
+
         ToastUtil.init(getApplicationContext());
 
         // 初始化数据。
