@@ -3,12 +3,11 @@ cmake_minimum_required(VERSION 3.4.1)
 
 project(hackathon_cpp)
 
-# Add header file include directories
-include_directories(
-        ./demo
-)
+# demo
+aux_source_directory(demo DIR_DEMO_SRCS)
+add_executable(demo ${DIR_DEMO_SRCS})
 
-# Add block directories
-add_subdirectory(
-        demo
-)
+# syntax
+aux_source_directory(syntax DIR_SYNTAX_SRCS)
+add_executable(syntax ${DIR_SYNTAX_SRCS})
+

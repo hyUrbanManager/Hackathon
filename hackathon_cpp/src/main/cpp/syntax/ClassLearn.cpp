@@ -7,6 +7,8 @@
 using namespace std;
 
 int main() {
-    cout << "hello, world. cpp" << endl;
+    cout << "class" << endl;
+
+
     return 0;
 }

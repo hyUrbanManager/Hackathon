@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-# 运行
-src=`pwd`
-cd ../../../../build
+project=`pwd`
 
-cmake ${src}
+cd build
+cmake ${project}/src/main/cpp
+
 make
 
 echo =========================================
-./executable
+./demo
