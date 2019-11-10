@@ -6,9 +6,26 @@
 
 using namespace std;
 
-int main() {
-    cout << "class" << endl;
+class A {
 
+public:
+
+    int mem;
+
+    void doSomething() {
+        cout << "do something" << endl;
+    }
+
+};
+
+int main() {
+    A a;
+    cout << &a << endl;
+    a.doSomething();
+
+    A *pa;
+    pa->doSomething();
+    cout << pa->mem << endl;
 
     return 0;
 }

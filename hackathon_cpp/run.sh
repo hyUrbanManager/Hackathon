@@ -8,4 +8,4 @@ cmake ${project}/src/main/cpp
 make
 
 echo =========================================
-./demo
+./syntax
