@@ -2,17 +2,17 @@ package com.hy.security;
 
 import org.junit.Test;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.Base64;
 
@@ -237,4 +237,99 @@ public class RSACryptTest {
         System.out.println(new String(dd));
     }
 
+    @Test
+    public void sshKeyTest() throws Exception {
+        // data
+        String rawText = "hello, world!";
+
+        // key file
+//        String head = "gitlab_cvte_huangye";
+        String head = "github";
+        String keyPath = "/Users/huangye/.ssh/" + head + "_id_rsa";
+        FileReader fileReader = new FileReader(keyPath);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        String line;
+        StringBuilder sb = new StringBuilder();
+        while ((line = bufferedReader.readLine()) != null) {
+            if (line.startsWith("-")) {
+                continue;
+            }
+            sb.append(line.trim());
+        }
+        String base64key = sb.toString();
+        bufferedReader.close();
+        fileReader.close();
+
+        String pubPath = "/Users/huangye/.ssh/" + head + "_id_rsa.pub";
+        fileReader = new FileReader(pubPath);
+        bufferedReader = new BufferedReader(fileReader);
+        String base64pub = bufferedReader.readLine().split(" ")[1];
+        bufferedReader.close();
+        fileReader.close();
+
+        System.out.println("key: " + base64key);
+
+        byte[] key = Base64.getDecoder().decode(base64key);
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(key);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        RSAPrivateKey privateKey = (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
+
+        // 加密。
+        Cipher cipher = Cipher.getInstance("RSA");
+        cipher.init(Cipher.ENCRYPT_MODE, privateKey);
+        byte[] encryptBytes = cipher.doFinal(rawText.getBytes());
+        byte[] encryptText = Base64.getEncoder().encode(encryptBytes);
+
+        System.out.println("encrypt: " + new String(encryptText));
+
+        System.out.println("pub: " + base64pub);
+        byte[] pub = Base64.getDecoder().decode(base64pub);
+        keySpec = new PKCS8EncodedKeySpec(pub);
+        keyFactory = KeyFactory.getInstance("RSA");
+        RSAPublicKey publicKey = (RSAPublicKey) keyFactory.generatePrivate(keySpec);
+
+        // 加密。
+        cipher.init(Cipher.DECRYPT_MODE, publicKey);
+        byte[] dd = cipher.doFinal(myEncryptData.getBytes());
+
+        System.out.println("decrypt: " + new String(dd));
+    }
+
+    @Test
+    public void sshKeyTest2() throws Exception {
+        // data
+        String rawText = "hello, world!";
+
+        // key file
+        String base64key = base64PrivateKey;
+        String base64pub = base64PublicKey;
+
+        System.out.println("key: " + base64key);
+
+        byte[] key = Base64.getDecoder().decode(base64key);
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(key);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        RSAPrivateKey privateKey = (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
+
+        // 加密。
+        Cipher cipher = Cipher.getInstance("RSA");
+        cipher.init(Cipher.ENCRYPT_MODE, privateKey);
+        byte[] encryptBytes = cipher.doFinal(rawText.getBytes());
+        byte[] encryptText = Base64.getEncoder().encode(encryptBytes);
+
+        System.out.println("encrypt: " + new String(encryptText));
+
+        System.out.println("pub: " + base64pub);
+        byte[] pub = Base64.getDecoder().decode(base64pub);
+        keySpec = new PKCS8EncodedKeySpec(pub);
+        keyFactory = KeyFactory.getInstance("RSA");
+        RSAPublicKey publicKey = (RSAPublicKey) keyFactory.generatePrivate(keySpec);
+
+        // 加密。
+        cipher = Cipher.getInstance("RSA");
+        cipher.init(Cipher.DECRYPT_MODE, publicKey);
+        byte[] dd = cipher.doFinal(myEncryptData.getBytes());
+
+        System.out.println("decrypt: " + new String(dd));
+    }
 }
