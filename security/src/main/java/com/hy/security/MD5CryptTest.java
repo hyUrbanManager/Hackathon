@@ -24,6 +24,7 @@ public class MD5CryptTest {
     public void calMD5Test() throws Exception {
         MessageDigest digest = MessageDigest.getInstance("md5");
         byte[] result = digest.digest(rawText.getBytes());
+        System.out.println(result.length);
 
         System.out.println(Formatter.toHexStringArray2(result));
     }
