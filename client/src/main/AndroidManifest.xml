@@ -86,6 +86,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ViewPagerActivity" />
+
         <receiver
             android:name=".FastStartBroadcast"
             android:exported="true">

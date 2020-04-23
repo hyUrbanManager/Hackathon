@@ -81,6 +81,9 @@ public class WelcomeActivity extends AppCompatActivity {
         activities.add(LayerDrawableActivity.class);
         titles.add("layerDrawable代码生成");
 
+        activities.add(ViewPagerActivity.class);
+        titles.add("ViewPager更换数据源");
+
         ToastUtil.init(getApplicationContext());
 
         // 初始化数据。

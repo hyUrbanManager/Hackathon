@@ -29,6 +29,7 @@ android工程如下：
     + 原生webview内核。
     + 腾讯x5内核。
     + layerDrawable动态使用。
+    + ViewPager动态更新数据源方法案例。
 
 + 数据库提供者。
     + 提供ContentProvider的数据库app。
