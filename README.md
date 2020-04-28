@@ -30,6 +30,7 @@ android工程如下：
     + 腾讯x5内核。
     + layerDrawable动态使用。
     + ViewPager动态更新数据源方法案例。
+    + OkhttpClient访问测试案例。 
 
 + 数据库提供者。
     + 提供ContentProvider的数据库app。

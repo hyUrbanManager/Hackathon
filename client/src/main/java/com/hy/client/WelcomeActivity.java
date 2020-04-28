@@ -84,6 +84,9 @@ public class WelcomeActivity extends AppCompatActivity {
         activities.add(ViewPagerActivity.class);
         titles.add("ViewPager更换数据源");
 
+        activities.add(OkhttpActivity.class);
+        titles.add("Okhttp测试请求");
+
         ToastUtil.init(getApplicationContext());
 
         // 初始化数据。

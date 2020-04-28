@@ -87,6 +87,7 @@
         </activity>
 
         <activity android:name=".ViewPagerActivity" />
+        <activity android:name=".OkhttpActivity" />
 
         <receiver
             android:name=".FastStartBroadcast"
