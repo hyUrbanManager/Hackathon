@@ -1,10 +1,13 @@
 package com.hy.client;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -125,6 +128,10 @@ public class WelcomeActivity extends AppCompatActivity {
         int height = outMetrics.heightPixels;
         if (width > height) {
             mGridView.setNumColumns(6);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);
         }
     }
 
