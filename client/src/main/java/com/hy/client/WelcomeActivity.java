@@ -90,6 +90,9 @@ public class WelcomeActivity extends AppCompatActivity {
         activities.add(OkhttpActivity.class);
         titles.add("Okhttp测试请求");
 
+        activities.add(SurfaceViewActivity.class);
+        titles.add("SurfaceView测试");
+
         ToastUtil.init(getApplicationContext());
 
         // 初始化数据。
