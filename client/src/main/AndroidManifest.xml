@@ -89,6 +89,7 @@
         <activity android:name=".ViewPagerActivity" />
         <activity android:name=".OkhttpActivity" />
         <activity android:name=".SurfaceViewActivity" />
+        <activity android:name=".InfiniteActivity" />
 
         <receiver
             android:name=".FastStartBroadcast"

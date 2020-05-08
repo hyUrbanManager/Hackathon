@@ -93,6 +93,9 @@ public class WelcomeActivity extends AppCompatActivity {
         activities.add(SurfaceViewActivity.class);
         titles.add("SurfaceView测试");
 
+        activities.add(InfiniteActivity.class);
+        titles.add("无限打开Activity");
+
         ToastUtil.init(getApplicationContext());
 
         // 初始化数据。
