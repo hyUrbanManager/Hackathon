@@ -49,9 +49,8 @@ public class SurfaceViewActivity extends AppCompatActivity {
             }
         });
 
-//        mSurfaceView.setZOrderOnTop(true);
-        mSurfaceView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
-//        mSurfaceView.getHolder().setFormat(PixelFormat.RGB_565);
+        mSurfaceView.setZOrderMediaOverlay(true);
+        mSurfaceView.getHolder().setFormat(PixelFormat.OPAQUE);
     }
 
 }
