@@ -1,6 +1,7 @@
 package com.hy.client;
 
 import android.graphics.Canvas;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -47,6 +48,10 @@ public class SurfaceViewActivity extends AppCompatActivity {
                 Log.d(TAG, "surfaceDestroyed");
             }
         });
+
+//        mSurfaceView.setZOrderOnTop(true);
+        mSurfaceView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
+//        mSurfaceView.getHolder().setFormat(PixelFormat.RGB_565);
     }
 
 }
