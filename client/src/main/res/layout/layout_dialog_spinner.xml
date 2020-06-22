@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="600dp"
+    android:layout_width="240dp"
     android:layout_height="wrap_content"
-    android:minHeight="600dp"
+    android:minHeight="120dp"
     android:orientation="vertical"
     tools:ignore="HardcodedText">
 
@@ -57,16 +57,26 @@
                     android:text="text 3"
                     android:textSize="24sp" />
 
+                <EditText
+                    android:id="@+id/edit_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="edit text" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="text 4"
                     android:textSize="24sp" />
 
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="check box" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:text="text 5"
                     android:textSize="24sp" />
 
@@ -92,6 +102,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="text 9"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="text 10"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="text 11"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="text 12"
                     android:textSize="24sp" />
 
             </LinearLayout>
