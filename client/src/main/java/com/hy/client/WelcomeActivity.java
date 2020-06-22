@@ -96,6 +96,9 @@ public class WelcomeActivity extends AppCompatActivity {
         activities.add(InfiniteActivity.class);
         titles.add("无限打开Activity");
 
+        activities.add(DialogShowActivity.class);
+        titles.add("Dialog Spinner测试");
+
         ToastUtil.init(getApplicationContext());
 
         // 初始化数据。

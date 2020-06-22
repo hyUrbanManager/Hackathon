@@ -33,6 +33,7 @@ android工程如下：
     + OkhttpClient访问测试案例。 
     + SurfaceView测试 
     + 无限打开Activity
+    + dialog scrollview spinner滑动效果问题
 
 + 数据库提供者。
     + 提供ContentProvider的数据库app。

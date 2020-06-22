@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="vpn_types">
+        <item>type 1</item>
+        <item>type 2</item>
+        <item>type 3</item>
+        <item>type 4</item>
+        <item>type 5</item>
+    </string-array>
+</resources>

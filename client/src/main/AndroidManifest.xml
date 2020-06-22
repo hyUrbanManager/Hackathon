@@ -100,6 +100,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".InfiniteActivity" />
+        <activity android:name=".DialogShowActivity" />
 
         <receiver
             android:name=".FastStartBroadcast"
