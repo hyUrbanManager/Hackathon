@@ -99,6 +99,9 @@ public class WelcomeActivity extends AppCompatActivity {
         activities.add(DialogShowActivity.class);
         titles.add("Dialog Spinner测试");
 
+        activities.add(RecyclerViewActivity.class);
+        titles.add("RecyclerView测试");
+
         ToastUtil.init(getApplicationContext());
 
         // 初始化数据。

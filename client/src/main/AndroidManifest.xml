@@ -67,40 +67,21 @@
         <activity
             android:name=".WebActivity"
             android:label="测试打开web"
-            android:theme="@style/webTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.MONKEY" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/webTheme" />
         <activity
             android:name=".X5WebActivity"
             android:label="测试打开web x5"
-            android:theme="@style/webTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
+            android:theme="@style/webTheme" />
         <activity android:name=".ViewPagerActivity" />
         <activity android:name=".OkhttpActivity" />
         <activity
             android:name=".SurfaceViewActivity"
-            android:label="SurfaceViewActivity测试"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:theme="@style/notTitleTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:label="SurfaceViewActivity测试"
+            android:theme="@style/notTitleTheme" />
         <activity android:name=".InfiniteActivity" />
         <activity android:name=".DialogShowActivity" />
+        <activity android:name=".RecyclerViewActivity" />
 
         <receiver
             android:name=".FastStartBroadcast"
