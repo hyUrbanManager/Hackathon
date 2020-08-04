@@ -12,7 +12,6 @@ package com.hy.self;
  * 4
  * <p>
  * 记录大小变化，O(n)。O(n^2)算法减分。
- * [3,2,3,1,2,3,2,1,2,3]
  *
  * @author huangye
  */
