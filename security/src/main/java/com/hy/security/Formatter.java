@@ -67,6 +67,35 @@ public class Formatter {
      * @param a the array whose string representation to return
      * @return a string representation of <tt>a</tt>
      */
+    public static String toHexString(byte[] a) {
+        if (a == null)
+            return "null";
+        int iMax = a.length - 1;
+        if (iMax == -1)
+            return "[]";
+
+        StringBuilder b = new StringBuilder();
+        for (byte x : a) {
+            char h = tables[(x >> 4) & 0x0f];
+            char l = tables[x & 0x0f];
+            b.append(h);
+            b.append(l);
+        }
+        return b.toString();
+    }
+
+    /**
+     * Returns a string representation of the contents of the specified array.
+     * The string representation consists of a list of the array's elements,
+     * enclosed in square brackets (<tt>"[]"</tt>).  Adjacent elements
+     * are separated by the characters <tt>", "</tt> (a comma followed
+     * by a space).  Elements are converted to strings as by
+     * <tt>String.valueOf(byte)</tt>.  Returns <tt>"null"</tt> if
+     * <tt>a</tt> is <tt>null</tt>.
+     *
+     * @param a the array whose string representation to return
+     * @return a string representation of <tt>a</tt>
+     */
     public static String toHexStringArray2(byte[] a) {
         if (a == null)
             return "null";
@@ -85,6 +114,7 @@ public class Formatter {
                 return b.toString();
         }
     }
+
     /**
      * 转换字符。
      *
@@ -137,4 +167,18 @@ public class Formatter {
         return d1 | d2 | d3 | d4;
     }
 
+    public static byte[] hexStringToBytes(String hexString) {
+        hexString = hexString.toLowerCase();
+        final byte[] byteArray = new byte[hexString.length() >> 1];
+        int index = 0;
+        for (int i = 0; i < hexString.length(); i++) {
+            if (index > hexString.length() - 1)
+                return byteArray;
+            byte highDit = (byte) (Character.digit(hexString.charAt(index), 16) & 0xFF);
+            byte lowDit = (byte) (Character.digit(hexString.charAt(index + 1), 16) & 0xFF);
+            byteArray[i] = (byte) (highDit << 4 | lowDit);
+            index += 2;
+        }
+        return byteArray;
+    }
 }

@@ -2,7 +2,6 @@ package com.hy.security;
 
 import org.junit.Test;
 
-import java.security.InvalidKeyException;
 import java.util.Base64;
 
 import javax.crypto.Cipher;
@@ -37,8 +36,10 @@ public class DESCryptTest {
         Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, desKey, new IvParameterSpec(padding.getBytes()));
 
+        // 加密一次
 //        byte[] result = cipher.doFinal(rawText.getBytes());
 
+        // 加密三次
         byte[] last = rawText.getBytes();
         byte[] result;
         for (int i = 0; i < 3; i++) {
@@ -47,6 +48,7 @@ public class DESCryptTest {
         result = last;
 
         System.out.println(new String(result));
+        System.out.println(Formatter.toHexString(result));
         System.out.println(new String(Base64.getEncoder().encode(result)));
     }
 
@@ -59,8 +61,10 @@ public class DESCryptTest {
         Cipher cipher = Cipher.getInstance("dEs/cBc/PkCs5pAdDiNg");
         cipher.init(Cipher.DECRYPT_MODE, desKey, new IvParameterSpec(padding.getBytes()));
 
+        // 解密一次
 //        byte[] result = cipher.doFinal(Base64.getDecoder().decode(encryptedText.getBytes()));
 
+        // 解密三次
         byte[] last = Base64.getDecoder().decode(encryptedText2.getBytes());
         byte[] result;
         for (int i = 0; i < 3; i++) {
@@ -68,8 +72,8 @@ public class DESCryptTest {
         }
         result = last;
 
-
         System.out.println(new String(result));
+        System.out.println(Formatter.toHexString(result));
         System.out.println(new String(Base64.getEncoder().encode(result)));
     }
 

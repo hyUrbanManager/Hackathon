@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.security.PublicKey;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -18,7 +17,8 @@ import java.util.Base64;
  */
 public class CertificateTest {
 
-    public static final String BAIDU_CERTIFICATE_PATH = "E:\\密钥证书\\baidu.cer";
+    //    public static final String BAIDU_CERTIFICATE_PATH = "E:\\密钥证书\\baidu.cer";
+    public static final String BAIDU_CERTIFICATE_PATH = "/Users/huangye/tmp/baidu.com.cer";
 
     @Test
     public void readCertificate1() throws Exception {
