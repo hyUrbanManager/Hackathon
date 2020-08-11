@@ -7,3 +7,7 @@
 /captures
 .externalNativeBuild
 .cxx
+
+encrypt_article.txt
+decrypt_article.txt
+rainbowTable.dat
