@@ -20,7 +20,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class AESCryptAdvancedDemo {
 
     // 固定的key
-    public static final String aesKey = "6ed59130d1a3077e5ca3de7e141487d1e2ca65a267a49e91ec3d8236c58440cf";
+    public static final String aesKey = "xmvSi2WyXZUe2CUt9U8dG97HVHuMS1WFesrVeoRNS24=";
 
     @Test
     public void genKey() throws Exception {
@@ -28,12 +28,12 @@ public class AESCryptAdvancedDemo {
         KeyGenerator generator = KeyGenerator.getInstance("AES");
         generator.init(256);
         SecretKey geneKey = generator.generateKey();
-        System.out.println("gen key: " + Formatter.toHexString(geneKey.getEncoded()));
+        System.out.println("gen key: " + Base64.getEncoder().encodeToString(geneKey.getEncoded()));
     }
 
     @Test
     public void encrypt() throws Exception {
-        SecretKeySpec key = new SecretKeySpec(Formatter.hexStringToBytes(aesKey), "AES");
+        SecretKeySpec key = new SecretKeySpec(Base64.getDecoder().decode(aesKey), "AES");
 
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.ENCRYPT_MODE, key);
@@ -56,7 +56,7 @@ public class AESCryptAdvancedDemo {
 
     @Test
     public void decrypt() throws Exception {
-        SecretKeySpec key = new SecretKeySpec(Formatter.hexStringToBytes(aesKey), "AES");
+        SecretKeySpec key = new SecretKeySpec(Base64.getDecoder().decode(aesKey), "AES");
 
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.DECRYPT_MODE, key);
