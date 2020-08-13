@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="EditTextPassword">
+        <attr name="Mode">
+            <enum name="text" value="0" />
+            <enum name="password" value="1" />
+            <enum name="numberSinged" value="2" />
+            <enum name="number" value="3" />
+        </attr>
+        <attr name="MaxLength" format="integer" />
+        <attr name="Hint" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="EditText">
+        <attr name="tagMode">
+            <enum name="clearAndCheck" value="0" />
+            <enum name="clear" value="1" />
+            <enum name="none" value="2" />
+        </attr>
+        <attr name="iconFlagClear" format="reference" />
+        <attr name="iconFlagRight" format="reference" />
+        <attr name="iconFlagError" format="reference" />
+        <attr name="iconFlagInfoHelp" format="reference" />
+        <attr name="showInfoHelp" format="boolean" />
+        <attr name="supportSpace" format="boolean" />
+        <attr name="supportSpecialChar" format="boolean" />
+        <attr name="helpImage" format="reference" />
+    </declare-styleable>
+
+
+    <declare-styleable name="LimitHeightScrollView">
+        <attr name="needPlaySound" format="boolean"/>
+        <attr name="needLimitHeight" format="boolean"/>
+        <attr name="android:maxHeight"/>
+        <attr name="android:layout_marginTop"/>
+        <attr name="android:layout_marginBottom"/>
+    </declare-styleable>
+
+    <declare-styleable name="TagGroup">
+        <!-- Whether the tag group is in append mode. -->
+        <attr name="atg_isAppendMode" format="boolean" />
+        <!-- If the tag group is in append mode, what the hint of input tag. -->
+        <attr name="atg_inputHint" format="string" />
+
+        <!-- The tag view outline border color. -->
+        <attr name="atg_borderColor" format="color" />
+        <!-- The tag view text color. -->
+        <attr name="atg_textColor" format="color" />
+        <!-- The tag view background color. -->
+        <attr name="atg_backgroundColor" format="color" />
+
+        <!-- The dash outline border color, when in append mode. -->
+        <attr name="atg_dashBorderColor" format="color" />
+        <!-- The input tag hint text color, when in append mode. -->
+        <attr name="atg_inputHintColor" format="color" />
+        <!-- The input tag type text color, when in append mode. -->
+        <attr name="atg_inputTextColor" format="color" />
+
+        <!-- The checked tag view outline border color. -->
+        <attr name="atg_checkedBorderColor" format="color" />
+        <!-- The checked text color. -->
+        <attr name="atg_checkedTextColor" format="color" />
+        <!-- The checked marker color. -->
+        <attr name="atg_checkedMarkerColor" format="color" />
+        <!-- The checked tag view background color. -->
+        <attr name="atg_checkedBackgroundColor" format="color" />
+
+        <!-- The tag view background color, when the tag view is being pressed. -->
+        <attr name="atg_pressedBackgroundColor" format="color" />
+
+        <!-- The tag view outline border stroke width. -->
+        <attr name="atg_borderStrokeWidth" format="dimension" />
+        <!-- The tag view text size. -->
+        <attr name="atg_textSize" format="dimension" />
+
+        <attr name="atg_horizontalSpacing" format="dimension" />
+        <attr name="atg_verticalSpacing" format="dimension" />
+        <attr name="atg_horizontalPadding" format="dimension" />
+        <attr name="atg_verticalPadding" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="Themes">
+        <attr name="tagGroupStyle" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="MarqueeView">
+        <attr name="textColor" format="color" />
+        <attr name="textSize" format="dimension" />
+        <attr name="repeatCount" format="integer" />
+        <attr name="speed" format="integer" />
+        <attr name="startPoint" format="integer">
+            <enum name="start" value="0" />
+            <enum name="end" value="1" />
+        </attr>
+        <attr name="direction" format="integer">
+            <enum name="left" value="0" />
+            <enum name="right" value="1" />
+        </attr>
+    </declare-styleable>
+</resources>

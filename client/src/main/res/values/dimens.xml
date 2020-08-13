@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="broadcast_content_end">1800px</dimen>
+    <dimen name="broadcast_layout_height">66dp</dimen>
+    <dimen name="broadcast_content_margin_start">0dp</dimen>
+    <dimen name="broadcast_content_margin_end">0dp</dimen>
+    <dimen name="broadcast_text_size">21.3sp</dimen>
+</resources>

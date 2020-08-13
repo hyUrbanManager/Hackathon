@@ -82,6 +82,7 @@
         <activity android:name=".InfiniteActivity" />
         <activity android:name=".DialogShowActivity" />
         <activity android:name=".RecyclerViewActivity" />
+        <activity android:name=".MarqueeActivity" />
 
         <receiver
             android:name=".FastStartBroadcast"

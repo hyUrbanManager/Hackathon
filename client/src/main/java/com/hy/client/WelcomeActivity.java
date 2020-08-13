@@ -102,6 +102,9 @@ public class WelcomeActivity extends AppCompatActivity {
         activities.add(RecyclerViewActivity.class);
         titles.add("RecyclerView测试");
 
+        activities.add(MarqueeActivity.class);
+        titles.add("跑马灯测试");
+
         ToastUtil.init(getApplicationContext());
 
         // 初始化数据。
