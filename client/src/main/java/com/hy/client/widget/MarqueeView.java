@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.os.SystemClock;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -19,7 +20,7 @@ import com.hy.client.R;
 
 
 /**
- * SurfaceView使用绘制。在8386可能有问题，8386系统本身问题。
+ * SurfaceView使用绘制。
  * <p>
  * 1、线程绘制时间尽可能快
  * 2、字符串占用内存优化、绘制次数优化。传入超长字符、超多次数也能正常运行。
@@ -31,6 +32,8 @@ public class MarqueeView extends SurfaceView implements SurfaceHolder.Callback {
     private static final int SCROLL_FROM_LEFT_TO_RIGHT = 1;
     private static final int SCROLL_START = 0;
     private static final int SCROLL_END = 1;
+    // 每个字符从进入屏幕到离开屏幕需要的时间，30s
+    private static final int MOVE_WHOLE_SCREEN_TIME = 30000;
 
     private static final int INTERVAL_STRING_LEN = 40;
 
@@ -43,10 +46,8 @@ public class MarqueeView extends SurfaceView implements SurfaceHolder.Callback {
     private int mStartPoint;
     // 滚动方向 0 向左滚动   1 向右滚动
     private int mDirection;
-    private float mSpeedXStep;
     private int mSpeed;
 
-    private SurfaceHolder mSurfaceHolder;
     private TextPaint mTextPaint;
     private MarqueeViewThread mThread;
     private String mMarqueeString;
@@ -56,6 +57,10 @@ public class MarqueeView extends SurfaceView implements SurfaceHolder.Callback {
     private float mTextBlankWidth;
     private float mCurrentX;
     private float mTextAreaEndX;
+    private float mBaselineY;
+
+    private boolean mThreadIsRun = true;
+    private boolean mIsNeedDraw;
 
     public MarqueeView(Context context) {
         this(context, null);
@@ -72,18 +77,22 @@ public class MarqueeView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        this.mSurfaceHolder = holder;
+        Log.d(TAG, "surfaceCreated, create thread");
+        mThread = new MarqueeViewThread("MarqueeViewThread");
+        mThread.start();
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        this.mSurfaceHolder = holder;
+        // do nothing.
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        Log.d(TAG, "surfaceDestroyed, destroy thread");
+        mThreadIsRun = false;
         if (mThread != null) {
-            mThread.mIsRun = false;
+            mThread.interrupt();
         }
     }
 
@@ -98,8 +107,8 @@ public class MarqueeView extends SurfaceView implements SurfaceHolder.Callback {
         mSpeed = a.getInt(R.styleable.MarqueeView_speed, 20);
         a.recycle();
 
-        mSurfaceHolder = this.getHolder();
-        mSurfaceHolder.addCallback(this);
+        mLayoutHeight = getContext().getResources().getDimension(R.dimen.broadcast_layout_height);
+
         mTextPaint = new TextPaint();
         mTextPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setTextAlign(Paint.Align.LEFT);
@@ -107,25 +116,23 @@ public class MarqueeView extends SurfaceView implements SurfaceHolder.Callback {
         mTextPaint.setColor(mTextColor);
         mTextPaint.setTypeface(Typeface.SANS_SERIF);
         mTextPaint.setFakeBoldText(true);
-        mLayoutHeight = getContext().getResources().getDimension(R.dimen.broadcast_layout_height);
-        setZOrderOnTop(true);
-        getHolder().setFormat(PixelFormat.TRANSLUCENT);
+
+        Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();
+        float textHeight = fontMetrics.bottom - fontMetrics.top;
+        mBaselineY = (mLayoutHeight - textHeight) / 2 + textHeight - fontMetrics.descent;
+        Log.d(TAG, "mBaselineY: " + mBaselineY + ". fontMetrics: " + fontMetrics.descent);
 
         mTextAreaEndX = getContext().getResources().getDimension(R.dimen.broadcast_content_end);
-        mSpeedXStep = mTextAreaEndX * 0.001f;
-        Log.d(TAG, "init: step: " + mSpeedXStep);
-    }
 
-    protected void measurementsText(String msg) {
-        mMarqueeString = msg;
-        mTextWidth = mTextPaint.measureText(mMarqueeString);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < INTERVAL_STRING_LEN; i++) {
             sb.append(' ');
         }
         mTextBlankWidth = mTextPaint.measureText(sb.toString());
-        Log.d(TAG, "mTextWidth: " + mTextWidth + ". mTextBlankWidth: " + mTextBlankWidth);
-        resetScrollStartPosition();
+
+        setZOrderOnTop(true);
+        getHolder().addCallback(this);
+        getHolder().setFormat(PixelFormat.TRANSLUCENT);
     }
 
     private void resetScrollStartPosition() {
@@ -140,52 +147,53 @@ public class MarqueeView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void startScroll(String msg, int loopTime) {
-        mRepeatCounts = loopTime;
-        if (!TextUtils.isEmpty(msg)) {
-            measurementsText(msg);
+        if (TextUtils.isEmpty(msg)) {
+            Log.i(TAG, "startScroll msg is null");
+            return;
         }
+        synchronized (getHolder()) {
+            mRepeatCounts = loopTime;
+            mMarqueeString = msg;
+            mTextWidth = mTextPaint.measureText(mMarqueeString);
+            Log.d(TAG, "mTextWidth: " + mTextWidth + ". mTextBlankWidth: " + mTextBlankWidth);
+            resetScrollStartPosition();
 
-        if (mThread != null && mThread.mIsRun) {
-            mThread.mIsRun = false;
-            mThread.interrupt();
+            mIsNeedDraw = true;
+            if (mThread != null) {
+                mThread.resetDrawingValue();
+                mThread.interrupt();
+            }
         }
-        mThread = new MarqueeViewThread(mSurfaceHolder);
-        mThread.mIsRun = true;
-        mThread.start();
     }
 
     public boolean isScrolling() {
-        return mThread != null && mThread.mIsRun;
+        return mIsNeedDraw;
     }
 
     public void stopScroll() {
-        if (mThread != null) {
-            mThread.mIsRun = false;
-            mThread.interrupt();
+        synchronized (getHolder()) {
+            mIsNeedDraw = false;
+            if (mThread != null) {
+                mThread.interrupt();
+            }
         }
-        mThread = null;
     }
 
     private class MarqueeViewThread extends Thread {
-        private final SurfaceHolder mHolder;
-        private boolean mIsRun;
-        private float mBaselineY;
+
+        private long mLastDrawTime;
         private int mLastIndex;
 
-        MarqueeViewThread(SurfaceHolder holder) {
-            this.mHolder = holder;
-            Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();
-            float textHeight = fontMetrics.bottom - fontMetrics.top;
-            mBaselineY = (mLayoutHeight - textHeight) / 2 + textHeight - fontMetrics.descent;
-            Log.d(TAG, "mBaselineY: " + mBaselineY + ". fontMetrics: " + fontMetrics.descent);
+        MarqueeViewThread(String name) {
+            super(name);
         }
 
         private void onDraw() {
             Canvas canvas = null;
-            synchronized (mHolder) {
-                try {
-                    canvas = mHolder.lockCanvas();
-                    if (canvas != null) {
+            try {
+                canvas = getHolder().lockCanvas();
+                if (canvas != null) {
+                    synchronized (getHolder()) {
                         calculateCurrentPosition();
                         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
                         boolean hasDraw = false;
@@ -211,51 +219,73 @@ public class MarqueeView extends SurfaceView implements SurfaceHolder.Callback {
                         }
                         if (!hasDraw) {
                             Log.d(TAG, "nothing draw, end.");
-                            if (mIsRun) {
-                                chargeScrollComplete();
+                            if (mThreadIsRun && mIsNeedDraw) {
+                                mIsNeedDraw = false;
+                                notifyListenerEnd();
                             } else {
                                 Log.w(TAG, getName() + " thread is canceled. not notify.");
                             }
                         }
                     }
-                    Log.v(TAG, "onDraw");
-                } catch (Exception e) {
-                    Log.e(TAG, "onDraw error. " + e.getMessage());
-                } finally {
-                    if (canvas != null) {
-                        try {
-                            mHolder.unlockCanvasAndPost(canvas);
-                        } catch (Exception e) {
-                            Log.e(TAG, "unlockCanvasAndPost error. " + e.getMessage());
-                        }
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "onDraw error. " + e.getMessage());
+            } finally {
+                if (canvas != null) {
+                    try {
+                        getHolder().unlockCanvasAndPost(canvas);
+                    } catch (Exception e) {
+                        Log.e(TAG, "unlockCanvasAndPost error. " + e.getMessage());
                     }
                 }
             }
         }
 
         private void calculateCurrentPosition() {
+            long now = SystemClock.uptimeMillis();
+            long delta = now - mLastDrawTime;
+            mLastDrawTime = now;
+            // 过滤掉无效时间。
+            if (delta <= 0 || delta >= 2000) {
+                delta = 50;
+            }
+            float step = mTextAreaEndX * delta / MOVE_WHOLE_SCREEN_TIME;
+            Log.v(TAG, "onDraw. interval time: " + delta + ", step: " + step);
             if (mDirection == SCROLL_FROM_RIGHT_TO_LEFT) {
-                mCurrentX -= mSpeedXStep;
+                mCurrentX -= step;
             } else if (mDirection == SCROLL_FROM_LEFT_TO_RIGHT) {
-                mCurrentX += mSpeedXStep;
+                mCurrentX += step;
             }
         }
 
         @Override
         public void run() {
-            while (mIsRun) {
-                onDraw();
+            while (mThreadIsRun) {
+                if (mIsNeedDraw) {
+                    onDraw();
+                } else {
+                    try {
+                        Log.d(TAG, getName() + " forever sleep, wait for new draw.");
+                        Thread.sleep(Long.MAX_VALUE);
+                    } catch (InterruptedException ignore) {
+                    }
+                }
             }
+            Log.i(TAG, getName() + " exit.");
         }
-    }
 
-    private void chargeScrollComplete() {
-        post(() -> {
-            stopScroll();
-            if (mOnMarqueeListener != null) {
-                mOnMarqueeListener.onRollOver();
-            }
-        });
+        private void notifyListenerEnd() {
+            post(() -> {
+                if (mOnMarqueeListener != null) {
+                    mOnMarqueeListener.onRollOver();
+                }
+            });
+        }
+
+        public void resetDrawingValue() {
+            mLastDrawTime = SystemClock.uptimeMillis();
+            mLastIndex = 0;
+        }
     }
 
     public interface OnMarqueeListener {

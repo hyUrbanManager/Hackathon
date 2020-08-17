@@ -21,7 +21,7 @@ public class MarqueeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_marquee);
         ButterKnife.bind(this);
 
-        mMarqueeView.startScroll("hello, world. 布尔沃曾经说过，要掌握书，莫被书掌握；" +
+        mMarqueeView.startScroll("布尔沃曾经说过，要掌握书，莫被书掌握；" +
                 "要为生而读，莫为读而生。我希望诸位也能好好地体会这句话。", Integer.MAX_VALUE);
     }
 }
