@@ -62,8 +62,8 @@ class RendererT7 : GLSurfaceView.Renderer {
         private const val TEX_HEIGHT = 800 / SCALE
     }
 
-    private val a_Position = 0
-    private val a_TextureCoordinates = 1
+    private var a_Position = 0
+    private var a_TextureCoordinates = 1
     private var u_TextureUnit = 0
     private var u_Radius = 0
     private var u_WidthOffset = 0
@@ -157,8 +157,12 @@ class RendererT7 : GLSurfaceView.Renderer {
                 == GL_FRAMEBUFFER_COMPLETE} ")
 
         // var
-        glBindAttribLocation(program, a_Position, "a_Position")
-        glBindAttribLocation(program, a_TextureCoordinates, "a_TextureCoordinates")
+        // 重要
+        // glGetAttribLocation函数在9950上运行不成功，必须使用glGetAttribLocation.
+        a_Position = glGetAttribLocation(program, "a_Position")
+        a_TextureCoordinates = glGetAttribLocation(program, "a_TextureCoordinates")
+//        glBindAttribLocation(program, a_Position, "a_Position")
+//        glBindAttribLocation(program, a_TextureCoordinates, "a_TextureCoordinates")
 
         // 不需要给fragment shader传递纹理单元，传0，绑定当前texture即可。
         u_TextureUnit = glGetUniformLocation(program, "u_TextureUnit")

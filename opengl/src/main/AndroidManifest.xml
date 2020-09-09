@@ -10,7 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,MissingApplicationIcon">
-        <activity android:name=".blursimple.BlueSimpleMainActivity">
+        <activity android:name=".blursimple.BlueSimpleMainActivity"
+            android:label="blur c++">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
