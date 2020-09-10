@@ -2,6 +2,7 @@ package com.hy.opengl.myopengl
 
 import android.app.ActivityManager
 import android.content.Context
+import android.opengl.GLSurfaceView
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -40,7 +41,7 @@ class OpenGLEntryActivity : AppCompatActivity() {
 
         // renderer
         gl_surface_view.setRenderer(RendererT7())
-
+        gl_surface_view.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
     }
 
     /**
