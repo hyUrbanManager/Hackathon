@@ -40,7 +40,7 @@ class OpenGLEntryActivity : AppCompatActivity() {
         gl_surface_view.setEGLContextClientVersion(2)
 
         // renderer
-        gl_surface_view.setRenderer(RendererT7())
+        gl_surface_view.setRenderer(RendererT8())
         gl_surface_view.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
     }
 
