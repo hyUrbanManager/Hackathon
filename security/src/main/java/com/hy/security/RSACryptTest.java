@@ -210,7 +210,7 @@ public class RSACryptTest {
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         RSAPrivateKey privateKey = (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
 
-        // 加密。
+        // 加密。117个字节以内。一次加密0-117都会输出成172个字节。
         Cipher cipher = Cipher.getInstance("RSA");
         cipher.init(Cipher.ENCRYPT_MODE, privateKey);
         byte[] dd = cipher.doFinal(myData.getBytes());
@@ -331,5 +331,46 @@ public class RSACryptTest {
         byte[] dd = cipher.doFinal(myEncryptData.getBytes());
 
         System.out.println("decrypt: " + new String(dd));
+    }
+
+    // has字符加密。
+    @Test
+    public void myHashEncrypt() throws Exception {
+        final String myHashData = "c793aed65b9fb0e8b15015e6f7cf6bc3";
+
+        byte[] keyA = Base64.getDecoder().decode(base64PrivateKey);
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyA);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        RSAPrivateKey privateKey = (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
+
+        // 加密。117个字节以内。一次加密0-117都会输出成172个字节。
+        Cipher cipher = Cipher.getInstance("RSA");
+        cipher.init(Cipher.ENCRYPT_MODE, privateKey);
+//        byte[] b = new byte[myData.getBytes().length * 3];
+//        for (int i = 0; i < 3; i++) {
+//            System.arraycopy(myData.getBytes(), 0, b, i * myData.getBytes().length,
+//                    myData.getBytes().length);
+//        }
+//        System.out.println(Arrays.toString(b));
+//        byte[] dd = cipher.doFinal(b);
+        byte[] dd = cipher.doFinal(myHashData.getBytes());
+
+        byte[] bbb = Base64.getEncoder().encode(dd);
+        System.out.println(new String(bbb));
+        System.out.println(new String(bbb).length());
+
+
+        byte[] keyB = Base64.getDecoder().decode(base64PublicKey);
+        keySpec = new PKCS8EncodedKeySpec(keyB);
+        keyFactory = KeyFactory.getInstance("RSA");
+        RSAPublicKey publicKey = (RSAPublicKey) keyFactory.generatePrivate(keySpec);
+
+        // 加密。
+        cipher = Cipher.getInstance("RSA");
+        cipher.init(Cipher.DECRYPT_MODE, publicKey);
+        byte[] ob = cipher.doFinal(bbb);
+
+        System.out.println(Arrays.toString(ob));
+        System.out.println(new String(ob));
     }
 }

@@ -18,7 +18,8 @@ public class MD5CryptTest {
 
     public static final String rawText = "145935";
 
-    public static final String filePath = "E:\\安装包\\pycharm-community-2017.2.4.exe";
+//    public static final String filePath = "E:\\安装包\\pycharm-community-2017.2.4.exe";
+    public static final String filePath = "/Users/huangye/Downloads/WidgetCalendar.apk";
 
     @Test
     public void calMD5Test() throws Exception {
