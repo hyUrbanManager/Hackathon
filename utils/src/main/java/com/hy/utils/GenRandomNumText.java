@@ -27,7 +27,7 @@ public class GenRandomNumText {
         folder.mkdir();
 
         for (int i = 0; i < 10; i++) {
-            try (FileWriter fw = new FileWriter(new File("random/random" + i + ".txt"))) {
+            try (FileWriter fw = new FileWriter(new File("random/light_random_" + i + ".txt"))) {
                 for (int j = 0; j < 200; j++) {
                     fw.append("no." + j + "\n{\n");
                     for (int k = 0; k < 20; k++) {
@@ -50,6 +50,28 @@ public class GenRandomNumText {
                         fw.append("\n");
                     }
                     fw.append("}\n\n");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (int i = 0; i < 10; i++) {
+            try (FileWriter fw = new FileWriter(new File("random/speed_random_" + i + ".txt"))) {
+                for (int j = 0; j < 200; j++) {
+                    fw.append("no." + j + "\n{\n");
+                    for (int l = 0; l < 10; l++) {
+                        int r = random.nextInt(30) + 15;
+
+                        fw.append(String.valueOf(r));
+
+                        if (l == 9) {
+                            fw.append("   ");
+                        } else {
+                            fw.append(",  ");
+                        }
+                    }
+                    fw.append("\n}\n\n");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
