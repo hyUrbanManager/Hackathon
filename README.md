@@ -93,4 +93,5 @@ android工程如下：
     + 生成javadoc。
     + groovy语法练习。
 
-
++ utils工具
+    + 生成随机数文本工具。
