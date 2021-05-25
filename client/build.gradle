@@ -5,7 +5,7 @@ android {
     buildToolsVersion buildToolsVersion
 
     defaultConfig {
-        applicationId "com.hy.client"
+        applicationId "com.hy.client.old"
 
         minSdkVersion appMinSdkVersion
         targetSdkVersion targetSdkVersion
