@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.security.PublicKey;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
 import java.util.Base64;
 
@@ -37,6 +38,25 @@ public class CertificateTest {
         System.out.println(Base64.getEncoder().encodeToString(publicKey.getEncoded()));
 
         fis.close();
+    }
+
+    // 理解base64的证书文件pem里面的到底什么内容什么意思
+    @Test
+    public void readCertificate2() throws Exception {
+        File file = new File("/Users/huangye/work/remote/cert/mitmproxy-ca-cert.pem");
+
+        CertificateFactory factory = CertificateFactory.getInstance("X.509");
+        X509Certificate certificate = (X509Certificate) factory.generateCertificate(new FileInputStream(file));
+        PublicKey publicKey = certificate.getPublicKey();
+        System.out.println("publicKey class: \n" + publicKey.getClass());
+
+        RSAPublicKey rsaPublicKey = (RSAPublicKey) publicKey;
+        System.out.println("publicKey: \n" + rsaPublicKey);
+
+        byte[] bs = rsaPublicKey.getEncoded();
+        System.out.println("bs: \n" + bs.length);
+
+        System.out.println("publicKey: \n" + Base64.getEncoder().encodeToString(rsaPublicKey.getEncoded()));
     }
 
 
