@@ -105,6 +105,9 @@ public class WelcomeActivity extends AppCompatActivity {
         activities.add(MarqueeActivity.class);
         titles.add("跑马灯测试");
 
+        activities.add(HttpServerActivity.class);
+        titles.add("http文件服务器");
+
         ToastUtil.init(getApplicationContext());
 
         // 初始化数据。

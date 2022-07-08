@@ -83,6 +83,7 @@
         <activity android:name=".DialogShowActivity" />
         <activity android:name=".RecyclerViewActivity" />
         <activity android:name=".MarqueeActivity" />
+        <activity android:name=".HttpServerActivity" />
 
         <receiver
             android:name=".FastStartBroadcast"

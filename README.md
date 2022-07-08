@@ -36,6 +36,7 @@ android工程如下：
     + dialog scrollview spinner滑动效果问题
     + RecyclerView按键底部item滑动2次问题
     + 跑马灯控件卡顿问题
+    + AndroidAsync http服务器提供文件下载
 
 + 数据库提供者。
     + 提供ContentProvider的数据库app。
