@@ -43,7 +43,7 @@ public class HMacTest {
         System.out.println(mRaw + ": " + result);
     }
 
-    private static final String KEY = "seewo";
+    private static final String KEY = "hy";
     private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
     private static final String ENCODING = "UTF-8";
 
