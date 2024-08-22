@@ -2,8 +2,11 @@ include ':activities'
 include ':androidlib'
 include ':bluetoothdemo'
 include ':captures'
-include ':client'
-include ':client2'
+
+// 过时配置，注释掉
+//include ':client'
+//include ':client2'
+
 include ':database'
 include ':hackathon1'
 include ':hackathon2'

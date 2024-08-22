@@ -7,7 +7,7 @@ tasks.withType(JavaCompile) {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'junit:junit:4.12'
-    compile 'org.jetbrains.anko:anko-sdk15:0.8.3'
+//    compile 'org.jetbrains.anko:anko-sdk15:0.8.3'
 }
 
 sourceCompatibility = "1.8"
